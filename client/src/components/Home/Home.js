@@ -1,23 +1,23 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useContext, useEffect } from "react";
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { ReactComponent as Logo } from "../../assets/trailSync.svg";
-import { CurrentAppContext } from "../contexts/Trails.context";
-import CircularProgress from "@material-ui/core/CircularProgress";
+// import CircularProgress from "@material-ui/core/CircularProgress";
 import SpotifyLogo from "../../assets/spotify.png";
-import Create from "../Create";
 const Home = () => {
-  const { currentAppState } = useContext(CurrentAppContext);
-
-  console.log(currentAppState);
+  let loggedIn = window.localStorage.getItem("isLoggedIn");
+  console.log(loggedIn);
 
   return (
     <>
-      {currentAppState.isLoggedIn ? (
-        <Create />
-      ) : (
-        <Wrapper>
-          <h1 style={{ color: "white" }}>Welcome to</h1>
-          <BrandImage>Logo</BrandImage>
+      <Wrapper>
+        <h1 style={{ color: "white" }}>Welcome to</h1>
+        <BrandImage>Logo</BrandImage>
+        {loggedIn ? (
+          <a href="http://localhost:8888/login">
+            <Button>Let's explore</Button>
+          </a>
+        ) : (
           <a href="http://localhost:8888/login">
             <Button>
               Login With Spotify{" "}
@@ -25,11 +25,12 @@ const Home = () => {
                 style={{ marginLeft: "15px" }}
                 src={SpotifyLogo}
                 width={20}
+                alt="logo"
               />
             </Button>
           </a>
-        </Wrapper>
-      )}
+        )}
+      </Wrapper>
     </>
   );
 };

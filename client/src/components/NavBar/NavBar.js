@@ -1,7 +1,5 @@
 import React, { useContext } from "react";
 import styled from "styled-components";
-import ShoppingCartOutlinedIcon from "@material-ui/icons/ShoppingCartOutlined";
-import AccountCircleOutlinedIcon from "@material-ui/icons/AccountCircleOutlined";
 import LanguageOutlinedIcon from "@material-ui/icons/LanguageOutlined";
 import ExitToAppOutlinedIcon from "@material-ui/icons/ExitToAppOutlined";
 import SearchOutlinedIcon from "@material-ui/icons/SearchOutlined";
@@ -11,60 +9,54 @@ import { CurrentAppContext } from "../contexts/Trails.context";
 import { ReactComponent as Logo } from "../../assets/trailSync-black.svg";
 import { useHistory } from "react-router-dom";
 
-// import AssignmentIndOutlinedIcon from '@material-ui/icons/AssignmentIndOutlined';
-
 const NavBar = () => {
   const history = useHistory();
   const {
     currentAppState,
     actions: { logout },
   } = useContext(CurrentAppContext);
+  let avatar;
+
+  if (currentAppState.storage || localStorage.getItem("currentUser")) {
+    avatar = JSON.parse(localStorage.getItem("currentUser"));
+  }
 
   return (
     <>
       <Wrapper data-css="Wrapper">
-        <Link to={"/create"}>
+        <Link to={"/map"}>
           <ContainerLeft data-css="ContainerLeft">
             <BrandImage>Logo</BrandImage>
           </ContainerLeft>
         </Link>
         <ContainerRight data-css="ContainerRigth">
-          <SearchNav
-            // onClick={() => logout()}
-            data-css="SearchNav"
-          >
+          <SearchNav data-css="SearchNav">
             <SearchOutlinedIcon />
           </SearchNav>
           <IconNav data-css="IconNav">
             <LanguageOutlinedIcon />
           </IconNav>
-          {currentAppState.currentUser ? (
-            <Link to="#">
-              <IconNav data-css="IconNav">
-                <Avatar
-                  src={currentAppState.currentUser.data.images[0].url}
-                  alt="avatar"
-                />
+          {currentAppState.currentUser || localStorage.getItem("isLoggedIn") ? (
+            <>
+              <Link to="#">
+                <IconNav data-css="IconNav">
+                  <Avatar src={avatar.data.images[0].url} alt="avatar" />
+                </IconNav>
+              </Link>
+              <IconNav
+                onClick={() => {
+                  logout();
+                  history.push("/");
+                }}
+                data-css="IconNav"
+              >
+                <ExitToAppOutlinedIcon />
               </IconNav>
-            </Link>
+            </>
           ) : (
             <p></p>
           )}
-          {currentAppState.isLoggedIn && (
-            <IconNav
-              onClick={() => {
-                logout();
-                history.push("/");
-              }}
-              data-css="IconNav"
-            >
-              <ExitToAppOutlinedIcon />
-            </IconNav>
-          )}
-          <MenuNav
-            // onClick={() => logout()}
-            data-css="MenuNav"
-          >
+          <MenuNav data-css="MenuNav">
             <MenuIcon />
           </MenuNav>
         </ContainerRight>
@@ -91,22 +83,6 @@ const Wrapper = styled.div`
   }
 `;
 
-const NumItemCart = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: absolute;
-  background-color: red;
-  border-radius: 50%;
-  color: white;
-  font-size: 0.7em;
-  height: 20px;
-  width: 20px;
-  padding-top: 2px;
-  text-align: center;
-  top: 18px;
-  right: 18px;
-`;
 const Avatar = styled.img`
   width: 30px;
   height: 30px;
@@ -161,17 +137,11 @@ const SearchNav = styled.div`
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  /* display: none; */
   transition: all 0.2s ease-in;
   &:hover {
     background-color: #f4f7f6;
   }
-  /* @media (max-width: 990px) {
-    display: block;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  } */
+
   @media (max-width: 700px) {
     display: none;
   }

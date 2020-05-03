@@ -5,27 +5,28 @@ const initialState = {
   currentUser: null,
   isLoggedIn: false,
   isLoaded: false,
+  isImages: false,
   trails: [],
   images: [],
+  storage: false,
 };
 
 function currentAppReducer(state, action) {
   switch (action.type) {
     case "loggin-spotify":
-      localStorage.setItem("user", state);
       return {
         ...state,
         currentUser: action.user,
         isLoggedIn: true,
       };
     case "loading-app":
-      // localStorage.setItem("trails", state);
       return { ...state, trails: action.trails.payload, isLoaded: true };
     case "loading-images":
-      // localStorage.setItem("images", state);
-      return { ...state, images: action.images.payload };
+      return { ...state, images: action.images.payload, isImages: true };
+    case "save-storage":
+      return { ...state, storage: true };
     case "logout":
-      // localStorage.setItem("trails", state);
+      window.localStorage.clear();
       return {
         ...state,
         currentUser: null,
@@ -33,6 +34,7 @@ function currentAppReducer(state, action) {
         trails: [],
         isLoaded: false,
         images: [],
+        storage: false,
       };
     default:
       throw new Error("Should not get there!");
@@ -62,6 +64,12 @@ export function CurrentAppProvider({ children }) {
       user: { data },
     });
   };
+  const saveLocalStorage = () => {
+    dispatch({
+      type: "save-storage",
+    });
+  };
+
   const logout = () => {
     dispatch({
       type: "logout",
@@ -76,6 +84,7 @@ export function CurrentAppProvider({ children }) {
           handleFetchTrail,
           handleFetchImages,
           handlelogginUser,
+          saveLocalStorage,
           logout,
         },
       }}
