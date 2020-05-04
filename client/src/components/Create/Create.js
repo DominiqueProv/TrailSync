@@ -10,11 +10,9 @@ const Create = () => {
   const createPlaylist = () => {
     fetch("/createplaylist")
       .then((res) => res.json())
-      .then((data) => {
-        console.log(data);
-        window.localStorage.setItem("playlistInfo", JSON.stringify(data));
-      })
-      .then(fetch("/addsongs"));
+      .then((res) => {
+        console.log(res);
+      });
   };
   return (
     <>

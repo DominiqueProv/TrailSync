@@ -22,7 +22,6 @@ function App() {
   if (currentAppState.storage || localStorage.getItem("isLoggedIn")) {
     isLoggedIn = JSON.parse(localStorage.getItem("isLoggedIn"));
     storage = JSON.parse(localStorage.getItem("storage"));
-    console.log(storage);
   }
   return (
     <Router>
@@ -36,7 +35,7 @@ function App() {
           <Init />
         </Route>
         <Route path="/trail/:trailId" exact>
-          <Trail />
+          {storage && <Trail />}
         </Route>
         <Route path="/map" exact>
           {storage && <Maps />}

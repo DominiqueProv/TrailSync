@@ -10,7 +10,6 @@ const {
   handleCreatePlaylist,
   handleUserInfo,
   handleRefreshToken,
-  handleAddSongs,
 } = require("./hanlders");
 
 app
@@ -22,9 +21,8 @@ app
   .get("/images", handleImagesData)
   .get("/login", handleLogin)
   .get("/callback", handleCallBack)
-  .get("/createplaylist", handleCreatePlaylist)
-  .get("/addsongs", handleAddSongs)
-  .get("/refresh_token/:token", handleRefreshToken);
+  .get("/refresh_token/:token", handleRefreshToken)
+  .get("/recommendations", handleCreatePlaylist);
 
 console.log("Listening on 8888");
 app.listen(8888);

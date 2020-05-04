@@ -15,10 +15,10 @@ const NavBar = () => {
     currentAppState,
     actions: { logout },
   } = useContext(CurrentAppContext);
-  let avatar;
+  let user;
 
   if (currentAppState.storage || localStorage.getItem("currentUser")) {
-    avatar = JSON.parse(localStorage.getItem("currentUser"));
+    user = JSON.parse(localStorage.getItem("currentUser"));
   }
 
   return (
@@ -40,7 +40,8 @@ const NavBar = () => {
             <>
               <Link to="#">
                 <IconNav data-css="IconNav">
-                  <Avatar src={avatar.data.images[0].url} alt="avatar" />
+                  <Name>{user.data.display_name}</Name>
+                  <Avatar src={user.data.images[0].url} alt="avatar" />
                 </IconNav>
               </Link>
               <IconNav
@@ -81,6 +82,12 @@ const Wrapper = styled.div`
   h2 {
     font-weight: 400;
   }
+`;
+
+const Name = styled.p`
+  font-size: 0.8em;
+  font-weight: 400;
+  padding-right: 15px;
 `;
 
 const Avatar = styled.img`

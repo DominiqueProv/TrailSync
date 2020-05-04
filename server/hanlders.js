@@ -3,15 +3,21 @@ require("dotenv").config();
 const trails = require("../server/data/parc-sepaq.json");
 const querystring = require("querystring");
 const request = require("request");
+const rp = require("request-promise");
 const client_id = process.env.CLIENT_ID;
 const client_secret = process.env.CLIENT_SECRET;
 const redirect_uri = "http://localhost:8888/callback";
 const pixabay_key = process.env.PIXABAY_KEY;
 const stateKey = "spotify_auth_state";
 let userInfo;
-let userId = userInfo && userInfo.id ? unserInfo.id : "";
+let userId;
 let access_token;
 let playlist_id;
+let arrId = [];
+
+if (userInfo && userInfo.id) {
+  console.log(userId);
+}
 
 const generateRandomString = function (length) {
   var text = "";
@@ -87,7 +93,7 @@ const handleCallBack = (req, res) => {
       if (!error && response.statusCode === 200) {
         (access_token = body.access_token),
           (refresh_token = body.refresh_token);
-
+        console.log("<<<<", access_token);
         var options = {
           url: "https://api.spotify.com/v1/me",
           headers: { Authorization: "Bearer " + access_token },
@@ -98,6 +104,7 @@ const handleCallBack = (req, res) => {
         request.get(options, function (error, response, body) {
           console.log(body);
           userInfo = body;
+          userId = body.id;
           // console.log(userId);
           // we can also pass the token to the browser to make requests from there
           //res.send instead of redirect
@@ -110,7 +117,7 @@ const handleCallBack = (req, res) => {
             //             refresh_token: refresh_token,
             // })
           );
-          return userId;
+          // return userId;
         });
       } else {
         res.redirect(
@@ -123,49 +130,51 @@ const handleCallBack = (req, res) => {
     });
   }
 };
-const handleCreatePlaylist = (req, res) => {
-  var createPlaylist = {
-    method: "POST",
-    url: "https://api.spotify.com/v1/users/12121769867/playlists",
-    headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
-      Authorization: "Bearer " + access_token,
-    },
-    body: {
-      name: "New Playlist",
-      description: "New playlist description",
-      public: false,
-    },
-    json: true,
-  };
+// const handleCreatePlaylist = (req, res) => {
 
-  request(createPlaylist, function (error, response, body) {
-    // playlist_id = body.id;
-    res.send(body);
-    console.log("<<<<<<<", body.id);
-    playlist_id = body.id;
-    return playlist_id;
-  });
-};
-const handleAddSongs = (req, res) => {
-  const addsongs = {
-    method: "POST",
-    url: `https://api.spotify.com/v1/playlists/${playlist_id}/tracks`,
-    qs: {
-      uris:
-        "spotify:track:4iV5W9uYEdYUVa79Axb7Rh,spotify:track:1301WleyT98MSxVHPZCA6M",
-    },
-    headers: {
-      authorization: "Bearer " + access_token,
-      accept: "application/json",
-    },
-  };
+//   var createPlaylist = {
+//     method: "POST",
+//     url: "https://api.spotify.com/v1/users/12121769867/playlists",
+//     headers: {
+//       Accept: "application/json",
+//       "Content-Type": "application/json",
+//       Authorization: "Bearer " + access_token,
+//     },
+//     body: {
+//       name: "New Playlist",
+//       description: "New playlist description",
+//       public: false,
+//     },
+//     json: true,
+//   };
 
-  request(addsongs, function (error, response, body) {
-    res.send(body);
-  });
-};
+//   request(createPlaylist, function (error, response, body) {
+//     // playlist_id = body.id;
+//     res.send(body);
+//     console.log("<<<<<<<", body.id);
+//     playlist_id = body.id;
+//     return playlist_id;
+//   });
+
+// };
+// const handleAddSongs = (req, res) => {
+//   const addsongs = {
+//     method: "POST",
+//     url: `https://api.spotify.com/v1/playlists/${playlist_id}/tracks`,
+//     qs: {
+//       uris: `${arrId}`,
+//     },
+//     headers: {
+//       authorization: "Bearer " + access_token,
+//       accept: "application/json",
+//     },
+//   };
+
+//   request(addsongs, function (error, response, body) {
+//     res.send(body);
+//   });
+// };
+
 const handleUserInfo = (req, res) => {
   return res.json(userInfo);
 };
@@ -198,13 +207,88 @@ const handleRefreshToken = (req, res) => {
   });
 };
 
+const handleCreatePlaylist = (req, res) => {
+  var recommendations = {
+    url: "https://api.spotify.com/v1/recommendations",
+    method: "GET",
+    qs: {
+      limit: "2",
+      seed_genres: "rock",
+      min_acousticness: ".2",
+      max_acousticness: ".4",
+      min_danceability: ".5",
+      max_danceability: "1",
+      min_energy: "0.4",
+      target_energy: ".6",
+      min_popularity: "50",
+      min_tempo: ".7",
+      target_tempo: ".7",
+    },
+    headers: {
+      authorization: "Bearer " + access_token,
+      accept: "application/json",
+    },
+    json: true,
+  };
+
+  rp(recommendations)
+    .then((body) => {
+      body.tracks.map((song) => {
+        arrId.push(song.uri);
+      });
+      console.log(arrId);
+      // return arrId;
+    })
+    .then(() => {
+      console.log(userId);
+      var createPlaylist = {
+        url: `https://api.spotify.com/v1/users/${userId}/playlists`,
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + access_token,
+        },
+        body: {
+          name: "New Playlist",
+          description: "New playlist description",
+          public: false,
+        },
+        json: true,
+      };
+      rp(createPlaylist)
+        .then((body) => {
+          playlist_id = body.id;
+          console.log(body);
+          return playlist_id;
+        })
+        .then(() => {
+          const addsongs = {
+            method: "POST",
+            url: `https://api.spotify.com/v1/playlists/${playlist_id}/tracks`,
+            qs: {
+              uris: `${arrId}`,
+            },
+            headers: {
+              authorization: "Bearer " + access_token,
+              accept: "application/json",
+            },
+          };
+
+          rp(addsongs).then((body) => {
+            res.send(body);
+            console.log(body);
+          });
+        });
+    });
+};
+
 module.exports = {
   handleTrailsData,
   handleImagesData,
   handleLogin,
   handleCallBack,
   handleCreatePlaylist,
-  handleAddSongs,
   handleUserInfo,
   handleRefreshToken,
 };
