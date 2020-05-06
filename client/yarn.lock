@@ -1798,6 +1798,11 @@
     semver "^6.3.0"
     tsutils "^3.17.1"
 
+"@urbica/react-map-gl-cluster@^0.2.0":
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/@urbica/react-map-gl-cluster/-/react-map-gl-cluster-0.2.0.tgz#0999e09b37be6182a7ba39668468c2e374de897c"
+  integrity sha512-/ibJS+ZiQd9Cc2MeeIfXXUh/husiVqDLFU1rT9dKWNyoo3+srX8TMWbnF58oN1XpxpYLBa764PH9cbOoROT6Cw==
+
 "@urbica/react-map-gl@^1.13.1":
   version "1.13.1"
   resolved "https://registry.yarnpkg.com/@urbica/react-map-gl/-/react-map-gl-1.13.1.tgz#4aba488a48dea3e06aadfe9877871d7b3b0a91f6"
@@ -7036,7 +7041,7 @@ map-visit@^1.0.0:
   dependencies:
     object-visit "^1.0.0"
 
-mapbox-gl@^1.0.0:
+mapbox-gl@^1.0.0, mapbox-gl@^1.10.0:
   version "1.10.0"
   resolved "https://registry.yarnpkg.com/mapbox-gl/-/mapbox-gl-1.10.0.tgz#c33e74d1f328e820e245ff8ed7b5dbbbc4be204f"
   integrity sha512-SrJXcR9s5yEsPuW2kKKumA1KqYW9RrL8j7ZcIh6glRQ/x3lwNMfwz/UEJAJcVNgeX+fiwzuBoDIdeGB/vSkZLQ==

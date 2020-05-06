@@ -9,7 +9,9 @@
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
     "@urbica/react-map-gl": "^1.13.1",
+    "@urbica/react-map-gl-cluster": "^0.2.0",
     "geojson-pick": "^1.0.0",
+    "mapbox-gl": "^1.10.0",
     "new-component": "^1.0.1",
     "prettier": "^2.0.5",
     "react": "^16.13.1",
@@ -17,7 +19,8 @@
     "react-map-gl": "^5.2.5",
     "react-router-dom": "^5.1.2",
     "react-scripts": "3.4.1",
-    "styled-components": "^5.1.0"
+    "styled-components": "^5.1.0",
+    "supercluster": "^7.0.0"
   },
   "scripts": {
     "start": "react-scripts start",

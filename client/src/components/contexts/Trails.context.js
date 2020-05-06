@@ -5,9 +5,7 @@ const initialState = {
   currentUser: null,
   isLoggedIn: false,
   isLoaded: false,
-  isImages: false,
   trails: [],
-  images: [],
   storage: false,
 };
 
@@ -19,10 +17,9 @@ function currentAppReducer(state, action) {
         currentUser: action.user,
         isLoggedIn: true,
       };
-    case "loading-app":
+    case "loading-success":
+      console.log(action.trails.payload);
       return { ...state, trails: action.trails.payload, isLoaded: true };
-    case "loading-images":
-      return { ...state, images: action.images.payload, isImages: true };
     case "save-storage":
       return { ...state, storage: true };
     case "logout":
@@ -33,7 +30,6 @@ function currentAppReducer(state, action) {
         isLoggedIn: false,
         trails: [],
         isLoaded: false,
-        images: [],
         storage: false,
       };
     default:
@@ -48,14 +44,8 @@ export function CurrentAppProvider({ children }) {
   );
   const handleFetchTrail = (payload) => {
     dispatch({
-      type: "loading-app",
+      type: "loading-success",
       trails: { payload },
-    });
-  };
-  const handleFetchImages = (payload) => {
-    dispatch({
-      type: "loading-images",
-      images: { payload },
     });
   };
   const handlelogginUser = (data) => {
@@ -82,7 +72,6 @@ export function CurrentAppProvider({ children }) {
         currentAppState,
         actions: {
           handleFetchTrail,
-          handleFetchImages,
           handlelogginUser,
           saveLocalStorage,
           logout,

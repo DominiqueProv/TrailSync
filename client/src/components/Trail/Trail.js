@@ -1,108 +1,149 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { CurrentAppContext } from "../contexts/Trails.context";
+import dotenv from "dotenv";
+// import { CurrentAppContext } from "../contexts/Trails.context";
 import styled from "styled-components";
 import Create from "../Create";
-import Slider from "@material-ui/core/Slider";
-import { withStyles } from "@material-ui/core/styles";
+import "mapbox-gl/dist/mapbox-gl.css";
+import CircularProgress from "@material-ui/core/CircularProgress";
+import ReactMapGL, {
+  Marker,
+  FullscreenControl,
+  // GeolocateControl,
+  Source,
+  Layer,
+  // SVGOverlay,
+  // HTMLOverlay,
+  NavigationControl,
+  // LinearInterpolator,
+  // CanvasOverlay,
+  Popup,
+} from "@urbica/react-map-gl";
+dotenv.config();
+
+// let trailGeo;
 
 const Trail = () => {
-  // const { currentAppState } = useContext(CurrentAppContext);
+  const [trailGeoData, setTrailGeoData] = useState(null);
+  const [trailInfo, setTrailInfo] = useState(null);
   const { trailId } = useParams();
-  // trailId = trailId.Number();
-  console.log(typeof trailId);
 
-  let images;
-  let trails;
-  trails = JSON.parse(localStorage.getItem("trails"));
-  images = JSON.parse(localStorage.getItem("images"));
-  images = images.hits;
-  console.log(trails);
-  console.log(images);
+  useEffect(() => {
+    fetch("/trailgeo", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        id: trailId,
+      }),
+      json: true,
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        // console.log(data.trailGeo.geometry.coordinates);
+        setTrailGeoData(data);
+      });
 
-  const PrettoSlider = withStyles({
-    root: {
-      color: "#52af77",
-      height: 8,
-    },
-    thumb: {
-      height: 24,
-      width: 24,
-      backgroundColor: "#fff",
-      border: "2px solid currentColor",
-      marginTop: -8,
-      marginLeft: -12,
-      "&:focus, &:hover, &$active": {
-        boxShadow: "inherit",
-      },
-    },
-    active: {},
-    valueLabel: {
-      left: "calc(-50% + 4px)",
-    },
-    track: {
-      height: 8,
-      borderRadius: 4,
-    },
-    rail: {
-      height: 8,
-      borderRadius: 4,
-    },
-  })(Slider);
+    fetch("/trailinfo", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        id: trailId,
+      }),
+      json: true,
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setTrailInfo(data);
+      });
+  }, []);
+
+  const [viewport, setViewport] = useState({
+    latitude: 47.837752,
+    longitude: -69.539082,
+    zoom: 6,
+  });
 
   return (
-    <Wrapper>
-      <TrailInfo>
-        {trails
-          .filter((trail) => trail.id === Number(trailId))
-          .map((trail) => (
-            <>
-              <ImgWrapper>
-                <img
-                  src={
-                    images[Math.floor(Math.random() * images.length)]
-                      .webformatURL
-                  }
-                />
-              </ImgWrapper>
-              <h2>
-                {trail.properties.Reseau} {trail.properties.Nom_etab}
-              </h2>
-              <h3>Trail: {trail.properties.Toponyme1}</h3>
-              <h4>Niveau de difficulté : {trail.properties.Niv_diff}</h4>
-              <h4>Length : {Math.trunc(trail.properties.Shape_Leng)} m.</h4>
-              {trail.properties.Secteur == " " ? (
-                <p></p>
-              ) : (
-                <h4>Secteur : {trail.properties.Secteur}</h4>
-              )}
-            </>
-          ))}
-      </TrailInfo>
-      <SpotifyInfo>
-        <p>Hello Spotify</p>
-
-        <PrettoSlider
-          valueLabelDisplay="auto"
-          aria-label="pretto slider"
-          defaultValue={20}
-        />
-
-        <form></form>
-        <Create />
-      </SpotifyInfo>
-    </Wrapper>
+    <MainWrapper>
+      {trailGeoData &&
+      trailInfo &&
+      trailGeoData.trailGeo.geometry.coordinates ? (
+        <>
+          <TrailInfo>
+            <ReactMapGL
+              style={{ width: "100%", height: "300px" }}
+              {...viewport}
+              accessToken={process.env.REACT_APP_MAPBOX_TOKEN}
+              mapStyle="mapbox://styles/dominiqueprov/ck9mwpfn702ee1inr2yibugcp"
+              // latitude={37.83381888486939}
+              // longitude={-122.48369693756104}
+              latitude={trailGeoData.trailGeo.geometry.coordinates[1][1]}
+              longitude={trailGeoData.trailGeo.geometry.coordinates[1][0]}
+              zoom={15}
+              onViewportChange={setViewport}
+            >
+              <Source id="route" type="geojson" data={trailGeoData.trailGeo} />
+              <Layer
+                id="route"
+                type="line"
+                source="route"
+                layout={{
+                  "line-join": "round",
+                  "line-cap": "round",
+                }}
+                paint={{
+                  "line-color": "green",
+                  "line-width": 6,
+                }}
+              />
+            </ReactMapGL>
+            <h2>
+              {trailInfo.trailGeo.properties.Reseau}{" "}
+              {trailInfo.trailGeo.properties.Nom_etab}
+            </h2>
+            <h3>Trail: {trailInfo.trailGeo.properties.Toponyme1}</h3>
+            <h4>
+              Niveau de difficulté : {trailInfo.trailGeo.properties.Niv_diff}
+            </h4>
+            <h4>
+              Length : {Math.trunc(trailInfo.trailGeo.properties.Shape_Leng)} m.
+            </h4>
+            {trailInfo.trailGeo.properties.Secteur == "" ? (
+              <p>Secteur Québec</p>
+            ) : (
+              <h4>Secteur : {trailInfo.trailGeo.properties.Secteur}</h4>
+            )}
+          </TrailInfo>
+          <SpotifyInfo>
+            <Create info={trailInfo.trailGeo.properties} />
+          </SpotifyInfo>
+        </>
+      ) : (
+        <Wrapper>
+          <CircularProgress />
+        </Wrapper>
+      )}
+    </MainWrapper>
   );
 };
 
+const MainWrapper = styled.div`
+  width: 100%;
+  height: calc(100vh - 60px);
+  display: flex;
+`;
+
 const Wrapper = styled.div`
   width: 100%;
+  height: 100vh;
   display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 const TrailInfo = styled.div`
   width: 50%;
-  background: lightblue;
+  background: #eaeaea;
   padding: 40px;
   h2 {
     margin-bottom: 30px;
@@ -116,16 +157,9 @@ const TrailInfo = styled.div`
   }
 `;
 
-const ImgWrapper = styled.div`
-  width: 100%;
-  height: 300px;
-  overflow: hidden;
-  margin-bottom: 30px;
-`;
-
 const SpotifyInfo = styled.div`
   width: 50%;
-  background: lightgreen;
+  background: lightblue;
   padding: 40px;
 `;
 

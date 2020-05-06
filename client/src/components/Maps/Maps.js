@@ -6,7 +6,8 @@ import RoomOutlinedIcon from "@material-ui/icons/RoomOutlined";
 // import { SvgIcon } from "@material-ui/core";
 import { useHistory } from "react-router-dom";
 import "mapbox-gl/dist/mapbox-gl.css";
-
+import Cluster from "@urbica/react-map-gl-cluster";
+import CircularProgress from "@material-ui/core/CircularProgress";
 import ReactMapGL, {
   Marker,
   FullscreenControl,
@@ -25,20 +26,66 @@ dotenv.config();
 
 const Maps = () => {
   const { currentAppState } = useContext(CurrentAppContext);
-
   let trails;
-  let images;
+  let history = useHistory();
 
   if (currentAppState.storage || localStorage.getItem("isLoggedIn")) {
     trails = JSON.parse(localStorage.getItem("trails"));
-    images = JSON.parse(localStorage.getItem("images"));
-    images = images.hits;
+    trails = trails.trails;
   }
 
-  let history = useHistory();
+  const ClusterMarker = ({ longitude, latitude, pointCount }) => (
+    <Marker longitude={longitude} latitude={latitude}>
+      {pointCount > 50 && pointCount < 100 && (
+        <div
+          style={{
+            ...style,
+            background: "white",
+            width: "40px",
+            height: "40px",
+          }}
+        >
+          {pointCount}
+        </div>
+      )}
+      {pointCount < 50 && pointCount > 30 && (
+        <div
+          style={{
+            ...style,
+            background: "white",
+            width: "30px",
+            height: "30px",
+          }}
+        >
+          {pointCount}
+        </div>
+      )}
+      {pointCount > 100 && (
+        <div
+          style={{
+            ...style,
+            background: "white",
+            width: "50px",
+            height: "50px",
+          }}
+        >
+          {pointCount}
+        </div>
+      )}
+    </Marker>
+  );
 
-  // const trails = currentAppState.trails;
-  // const images = currentAppState.images.hits;
+  const style = {
+    width: "20px",
+    height: "20px",
+    color: "dodgerblue",
+    background: "#ffffff",
+    borderRadius: "50%",
+    textAlign: "center",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+  };
 
   const [viewport, setViewport] = useState({
     latitude: 47.837752,
@@ -46,39 +93,8 @@ const Maps = () => {
     zoom: 6,
   });
 
-  const data = {
-    type: "Feature",
-    // id: 1,
-    geometry: {
-      type: "LineString",
-      coordinates: [
-        [-122.48369693756104, 37.83381888486939],
-        [-122.48348236083984, 37.83317489144141],
-        [-122.48339653015138, 37.83270036637107],
-        [-122.48356819152832, 37.832056363179625],
-        [-122.48404026031496, 37.83114119107971],
-        [-122.48404026031496, 37.83049717427869],
-        [-122.48348236083984, 37.829920943955045],
-        [-122.48356819152832, 37.82954808664175],
-        [-122.48507022857666, 37.82944639795659],
-        [-122.48610019683838, 37.82880236636284],
-        [-122.48695850372314, 37.82931081282506],
-        [-122.48700141906738, 37.83080223556934],
-        [-122.48751640319824, 37.83168351665737],
-        [-122.48803138732912, 37.832158048267786],
-        [-122.48888969421387, 37.83297152392784],
-        [-122.48987674713133, 37.83263257682617],
-        [-122.49043464660643, 37.832937629287755],
-        [-122.49125003814696, 37.832429207817725],
-        [-122.49163627624512, 37.832564787218985],
-        [-122.49223709106445, 37.83337825839438],
-        [-122.49378204345702, 37.83368330777276],
-      ],
-    },
-
-  };
-
   const [selectedTrail, setSelectedTrail] = useState(null);
+  const [trailGeoData, setTrailGeoData] = useState(null);
 
   useEffect(() => {
     const listener = (ev) => {
@@ -87,7 +103,7 @@ const Maps = () => {
       }
       if (ev.mousedown) {
         ev.preventDefault();
-        history.push(`/trail/${selectedTrail.id}`);
+        history.push(`/trail/${selectedTrail._id}`);
       }
     };
     window.addEventListener("keydown", listener);
@@ -100,7 +116,11 @@ const Maps = () => {
     <>
       {trails && (
         <ReactMapGL
-          style={{ width: "100%", height: "100vh", position: "relative" }}
+          style={{
+            width: "100%",
+            height: "calc(100vh - 60px)",
+            position: "relative",
+          }}
           {...viewport}
           accessToken={process.env.REACT_APP_MAPBOX_TOKEN}
           mapStyle="mapbox://styles/dominiqueprov/ck9mwpfn702ee1inr2yibugcp"
@@ -109,84 +129,123 @@ const Maps = () => {
           zoom={viewport.zoom}
           onViewportChange={setViewport}
         >
-          <Source id="route" type="geojson" data={data} />
-          <Layer
-            id="route"
-            type="line"
-            source="route"
-            layout={{
-              "line-join": "round",
-              "line-cap": "round",
-            }}
-            paint={{
-              "line-color": "#ffffff",
-              "line-width": 30,
-            }}
-          />
           <WrapperControle>
             <FullScreenCtl data-css="FullscreenControl" />
             <NavCtl data-css="NavigationControl" showCompass showZoom />
           </WrapperControle>
-
-          {trails.map((trail) => (
-            <Marker
-              key={trail.id}
-              latitude={trail.geometry.coordinates[0]}
-              longitude={trail.geometry.coordinates[1]}
+          <>
+            <Cluster
+              radius={40}
+              extent={300}
+              nodeSize={100}
+              component={ClusterMarker}
+              maxZoom={8}
+              minZoom={7}
             >
-              <ButtonPin
-                onClick={(ev) => {
-                  ev.preventDefault();
-                  setSelectedTrail(trail);
-                }}
-              >
-                <RoomOutlinedIcon
-                  htmlColor="#63FD84"
-                  style={{ fontSize: 30 }}
-                />
-              </ButtonPin>
-            </Marker>
-          ))}
+              {trails.map((trail) => (
+                <Marker
+                  key={trail._id}
+                  latitude={trail.startingpoint[1]}
+                  longitude={trail.startingpoint[0]}
+                >
+                  <ButtonPin
+                    onClick={(ev) => {
+                      let num = trail._id;
+                      let trailId = num.toString();
+                      ev.preventDefault();
+                      fetch("/trailgeo", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({
+                          id: trailId,
+                        }),
+                        json: true,
+                      })
+                        .then((res) => res.json())
+                        .then((data) => {
+                          console.log(data.trailGeo.geometry.coordinates);
 
-          {selectedTrail && images && (
+                          setTrailGeoData(data);
+                        });
+                      setSelectedTrail(trail);
+                    }}
+                  >
+                    {/* <RoomOutlinedIcon
+                      htmlColor="#63FD84"
+                      style={{ fontSize: 30 }}
+                    /> */}
+                  </ButtonPin>
+                </Marker>
+              ))}
+            </Cluster>
+          </>
+          {selectedTrail && (
             <>
               <WrapperPopUp
                 closeOnClick={false}
-                latitude={selectedTrail.geometry.coordinates[0]}
-                longitude={selectedTrail.geometry.coordinates[1]}
+                latitude={selectedTrail.startingpoint[1]}
+                longitude={selectedTrail.startingpoint[0]}
                 onClose={() => {
                   setSelectedTrail(null);
                 }}
               >
                 <div>
-                  <ReactMapGL
-                    style={{ width: "100%", height: "200px" }}
-                    // {...viewport}
-                    accessToken={process.env.REACT_APP_MAPBOX_TOKEN}
-                    mapStyle="mapbox://styles/dominiqueprov/ck9mwpfn702ee1inr2yibugcp"
-                    latitude={48.360562}
-                    longitude={-68.808637}
-                    zoom={10}
-                    onViewportChange={setViewport}
-                  ></ReactMapGL>
-                  {/* <Image
-                    src={
-                      images[Math.floor(Math.random() * images.length)]
-                        .previewURL
-                    }
-                  /> */}
+                  {trailGeoData &&
+                  trailGeoData.trailGeo.geometry.coordinates ? (
+                    <ReactMapGL
+                      style={{ width: "100%", height: "300px" }}
+                      {...viewport}
+                      accessToken={process.env.REACT_APP_MAPBOX_TOKEN}
+                      mapStyle="mapbox://styles/dominiqueprov/ck9mwpfn702ee1inr2yibugcp"
+                      // latitude={37.83381888486939}
+                      // longitude={-122.48369693756104}
+                      latitude={
+                        trailGeoData.trailGeo.geometry.coordinates[1][1]
+                      }
+                      longitude={
+                        trailGeoData.trailGeo.geometry.coordinates[1][0]
+                      }
+                      zoom={17}
+
+                      // onViewportChange={setViewport}
+                    >
+                      <Source
+                        id="route"
+                        type="geojson"
+                        data={trailGeoData.trailGeo}
+                      />
+                      <Layer
+                        id="route"
+                        type="line"
+                        source="route"
+                        layout={{
+                          "line-join": "round",
+                          "line-cap": "round",
+                        }}
+                        paint={{
+                          "line-color": "green",
+                          "line-width": 6,
+                        }}
+                      />
+                    </ReactMapGL>
+                  ) : (
+                    <Wrapper>
+                      <CircularProgress />
+                    </Wrapper>
+                  )}
                   <h2>
                     {selectedTrail.properties.Reseau}{" "}
                     {selectedTrail.properties.Nom_etab}
                   </h2>
-                  <h3>{selectedTrail.properties.Toponyme1}</h3>
+                  <h3>Trail: {selectedTrail.properties.Toponyme1}</h3>
                   <h4>
                     Niveau de difficulté : {selectedTrail.properties.Niv_diff}
                   </h4>
                   <Button
                     onClick={(ev) => {
                       ev.preventDefault();
-                      history.push(`/trail/${selectedTrail.id}`);
+
+                      history.push(`/trail/${selectedTrail._id}`);
                     }}
                   >
                     Select this trail
@@ -220,24 +279,20 @@ const NavCtl = styled(NavigationControl)`
 `;
 
 const ButtonPin = styled.button`
-  background: transparent;
+  background: #63fd84;
   border: none;
   outline: none;
   cursor: pointer;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
 `;
 
 const WrapperPopUp = styled(Popup)`
-  width: 400px;
+  width: 600px;
   padding: 10px;
 `;
 
-const Image = styled.img`
-  width: 100%;
-  height: auto;
-  background-color: lightgray;
-  margin-bottom: 20px;
-  border-radius: 10px;
-`;
 const Button = styled.button`
   color: white;
   display: flex;
@@ -255,6 +310,14 @@ const Button = styled.button`
   &:hover {
     background-color: #2593d8;
   }
+`;
+
+const Wrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 300px;
 `;
 
 export default Maps;

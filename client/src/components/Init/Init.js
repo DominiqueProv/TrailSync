@@ -8,21 +8,8 @@ import styled from "styled-components";
 const Init = () => {
   const {
     currentAppState,
-    actions: {
-      handlelogginUser,
-      handleFetchTrail,
-      handleFetchImages,
-      saveLocalStorage,
-    },
+    actions: { handlelogginUser, handleFetchTrail, saveLocalStorage },
   } = useContext(CurrentAppContext);
-
-  if (
-    currentAppState.isLoggedIn &&
-    currentAppState.images !== [] &&
-    currentAppState.isLoaded
-  ) {
-    console.log(currentAppState);
-  }
 
   useEffect(() => {
     fetch("/getUserInfo")
@@ -35,57 +22,40 @@ const Init = () => {
       .then((payload) => {
         handleFetchTrail(payload);
       });
-    fetch("/images")
-      .then((res) => res.json())
-      .then((payload) => {
-        handleFetchImages(payload);
-      });
   }, []);
 
-  let localstorageCompleted;
-
-  if (
-    currentAppState.isLoggedIn &&
-    currentAppState.isImages &&
-    currentAppState.isLoaded
-  ) {
+  if (currentAppState.isLoggedIn && currentAppState.isLoaded) {
     handleSetData();
-
-    console.log(currentAppState);
+    // console.log(currentAppState);
   }
 
-  function handleSetData() {
-    window.localStorage.setItem(
-      "currentUser",
-      JSON.stringify(currentAppState.currentUser)
-    );
-    window.localStorage.setItem(
-      "isLoggedIn",
-      JSON.stringify(currentAppState.isLoggedIn)
-    );
-    window.localStorage.setItem(
-      "isImages",
-      JSON.stringify(currentAppState.isImages)
-    );
-    window.localStorage.setItem(
-      "trails",
-      JSON.stringify(currentAppState.trails)
-    );
-    window.localStorage.setItem(
-      "images",
-      JSON.stringify(currentAppState.images)
-    );
-    window.localStorage.setItem(
-      "storage",
-      JSON.stringify(currentAppState.storage)
-    );
+  async function handleSetData() {
+    try {
+      await window.localStorage.setItem(
+        "currentUser",
+        JSON.stringify(currentAppState.currentUser)
+      );
+      await window.localStorage.setItem(
+        "isLoggedIn",
+        JSON.stringify(currentAppState.isLoggedIn)
+      );
+      await window.localStorage.setItem(
+        "trails",
+        JSON.stringify(currentAppState.trails)
+      );
+      await window.localStorage.setItem(
+        "storage",
+        JSON.stringify(currentAppState.storage)
+      );
+      await window.localStorage.setItem(
+        "storage",
+        JSON.stringify(currentAppState.storage)
+      );
+    } catch (err) {
+      return console.log(err);
+    }
     saveLocalStorage();
   }
-
-  // const history = useHistory();
-  // if (currentAppState.storage) {
-  //   history.push("/map");
-  // }
 
   if (currentAppState.storage) {
     return (

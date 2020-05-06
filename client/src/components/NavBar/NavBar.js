@@ -8,6 +8,7 @@ import { Link } from "react-router-dom";
 import { CurrentAppContext } from "../contexts/Trails.context";
 import { ReactComponent as Logo } from "../../assets/trailSync-black.svg";
 import { useHistory } from "react-router-dom";
+import ExploreIcon from "@material-ui/icons/Explore";
 
 const NavBar = () => {
   const history = useHistory();
@@ -33,9 +34,11 @@ const NavBar = () => {
           <SearchNav data-css="SearchNav">
             <SearchOutlinedIcon />
           </SearchNav>
-          <IconNav data-css="IconNav">
-            <LanguageOutlinedIcon />
-          </IconNav>
+          <Link to="/map">
+            <IconNav data-css="IconNav">
+              <ExploreIcon />
+            </IconNav>
+          </Link>
           {currentAppState.currentUser || localStorage.getItem("isLoggedIn") ? (
             <>
               <Link to="#">

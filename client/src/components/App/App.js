@@ -19,6 +19,7 @@ function App() {
   const { currentAppState } = useContext(CurrentAppContext);
   let isLoggedIn;
   let storage;
+
   if (currentAppState.storage || localStorage.getItem("isLoggedIn")) {
     isLoggedIn = JSON.parse(localStorage.getItem("isLoggedIn"));
     storage = JSON.parse(localStorage.getItem("storage"));
