@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import styled from "styled-components";
 import LanguageOutlinedIcon from "@material-ui/icons/LanguageOutlined";
 import ExitToAppOutlinedIcon from "@material-ui/icons/ExitToAppOutlined";
@@ -9,6 +9,7 @@ import { CurrentAppContext } from "../contexts/Trails.context";
 import { ReactComponent as Logo } from "../../assets/trailSync-hor-05.svg";
 import { useHistory } from "react-router-dom";
 import ExploreIcon from "@material-ui/icons/Explore";
+import SearchBar from "../SearchBar";
 
 const NavBar = () => {
   const history = useHistory();
@@ -17,7 +18,10 @@ const NavBar = () => {
     actions: { logout },
   } = useContext(CurrentAppContext);
   let user;
-
+  const [searchModalOpenFlag, setSearchModalOpenFlag] = useState(false);
+  const ToggleModal = () => {
+    setSearchModalOpenFlag(!searchModalOpenFlag);
+  };
   if (currentAppState.storage || localStorage.getItem("currentUser")) {
     user = JSON.parse(localStorage.getItem("currentUser"));
   }
@@ -31,7 +35,7 @@ const NavBar = () => {
           </ContainerLeft>
         </Link>
         <ContainerRight data-css="ContainerRigth">
-          <SearchNav data-css="SearchNav">
+          <SearchNav data-css="SearchNav" onClick={() => ToggleModal()}>
             <SearchOutlinedIcon />
           </SearchNav>
           <Link to="/map">
@@ -65,6 +69,7 @@ const NavBar = () => {
           </MenuNav>
         </ContainerRight>
       </Wrapper>
+      <SearchBar open={searchModalOpenFlag} toggle={ToggleModal} />
     </>
   );
 };

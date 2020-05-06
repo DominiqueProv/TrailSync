@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { ReactComponent as Logo } from "../../assets/trailSync.svg";
 // import CircularProgress from "@material-ui/core/CircularProgress";
-import SpotifyLogo from "../../assets/spotify.png";
+import SpotifyLogo from "../../assets/spotify-red.png";
 const Home = () => {
   let loggedIn = window.localStorage.getItem("isLoggedIn");
   console.log(loggedIn);
@@ -14,7 +14,7 @@ const Home = () => {
         <h1 style={{ color: "#ff0000" }}>Welcome to</h1>
         <BrandImage>Logo</BrandImage>
         {loggedIn ? (
-          <a href="http://localhost:8888/login">
+          <a href="http://localhost:3000/map">
             <Button>Let's explore</Button>
           </a>
         ) : (

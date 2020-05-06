@@ -87,7 +87,7 @@ async function handleTrailInfo(req, res) {
   }
 }
 
-async function saveUserPlaylistInfo(playlist) {
+async function saveUserPlaylistInfo(req, res, playlistInfo) {
   const URI = process.env.URI;
   const client = new MongoClient(URI, {
     useNewUrlParser: true,
@@ -99,7 +99,7 @@ async function saveUserPlaylistInfo(playlist) {
     const result = await client
       .db("trailSync")
       .collection("userplaylist")
-      .insertOne({ playlist });
+      .insertOne({ playlistInfo });
     if (result) {
       let confirmation = result;
       console.log(confirmation);
@@ -393,8 +393,8 @@ const handleCreatePlaylist = (req, res) => {
         .then((body) => {
           playlist_id = body.id;
           playlist = body;
-          console.log(body);
-          return playlist_id;
+          // res.json();
+          // playlist_id;
         })
         .then(() => {
           const addsongs = {
@@ -408,10 +408,27 @@ const handleCreatePlaylist = (req, res) => {
               accept: "application/json",
             },
           };
-          rp(addsongs).then((body) => {
-            res.send(body);
-            console.log(body);
-          });
+          rp(addsongs)
+            // .then((res) => {
+            //   return res.json();
+            // })
+            .then(() => {
+              console.log("<<<<<<<<<", playlist_id);
+              const getplaylistInfo = {
+                url: `https://api.spotify.com/v1/playlists/${playlist_id}`,
+                headers: {
+                  authorization: "Bearer " + access_token,
+                  accept: "application/json",
+                },
+                json: true,
+              };
+              rp(getplaylistInfo)
+                // .then((res) => res.json())
+                .then((res) => saveUserPlaylistInfo(res));
+            });
+          // .then((payload) => res.send(payload))
+
+          // .then(() => saveUserPlaylistInfo());
         });
     });
 };

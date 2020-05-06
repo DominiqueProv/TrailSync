@@ -21,7 +21,6 @@ import ReactMapGL, {
   Popup,
 } from "@urbica/react-map-gl";
 dotenv.config();
-
 // let trailGeo;
 
 const Trail = () => {
@@ -93,8 +92,6 @@ const Trail = () => {
               {...viewport}
               accessToken={process.env.REACT_APP_MAPBOX_TOKEN}
               mapStyle="mapbox://styles/dominiqueprov/ck9usv5wd0e011ipbweu3fvp3"
-              // latitude={37.83381888486939}
-              // longitude={-122.48369693756104}
               latitude={trailGeoData.trailGeo.geometry.coordinates[1][1]}
               longitude={trailGeoData.trailGeo.geometry.coordinates[1][0]}
               zoom={14}
@@ -116,22 +113,28 @@ const Trail = () => {
               />
             </ReactMapGL>
             <div style={{ display: "flex" }}>
-              <div style={{ width: "50%" }}>
-                <h3>Trail: {trailInfo.trailGeo.properties.Toponyme1}</h3>
-                <h4>
-                  Niveau de difficulté :{" "}
-                  {trailInfo.trailGeo.properties.Niv_diff}
-                </h4>
-                <h4>
-                  Length :{" "}
-                  {Math.trunc(trailInfo.trailGeo.properties.Shape_Leng)} m.
-                </h4>
-                {trailInfo.trailGeo.properties.Secteur == "" ? (
-                  <p>Secteur Québec</p>
+              <DetailWrapper style={{ width: "50%" }}>
+                {trailInfo.trailGeo.properties.Toponyme1 === "" ? (
+                  <h4 style={{ marginBottom: "25px", marginTop: "10px" }}>
+                    <span style={{ fontSize: "1.5em" }}>Awsome trail</span>
+                  </h4>
                 ) : (
-                  <h4>Secteur : {trailInfo.trailGeo.properties.Secteur}</h4>
+                  <h4>
+                    <span>{trailInfo.trailGeo.properties.Toponyme1}</span>
+                  </h4>
                 )}
-              </div>
+
+                <h4>Level: {trailInfo.trailGeo.properties.Niv_diff}</h4>
+                <h4>
+                  Length: {Math.trunc(trailInfo.trailGeo.properties.Shape_Leng)}{" "}
+                  m.
+                </h4>
+                {trailInfo.trailGeo.properties.Secteur === "" ? (
+                  <h4>Secteur: Québec</h4>
+                ) : (
+                  <h4>Zone: {trailInfo.trailGeo.properties.Secteur}</h4>
+                )}
+              </DetailWrapper>
               <div
                 style={{
                   display: "flex",
@@ -145,7 +148,10 @@ const Trail = () => {
             </div>
           </TrailInfo>
           <SpotifyInfo>
-            <Create info={trailInfo.trailGeo.properties} />
+            <Create
+              info={trailInfo.trailGeo.properties}
+              trailName={"Awsome trail"}
+            />
           </SpotifyInfo>
         </>
       ) : (
@@ -156,6 +162,13 @@ const Trail = () => {
     </MainWrapper>
   );
 };
+
+const DetailWrapper = styled.div`
+  h4 {
+    font-weight: 400;
+    margin-bottom: 15px;
+  }
+`;
 
 const BrandImage = styled(Logo)`
   width: 150px;
@@ -184,9 +197,6 @@ const TrailInfo = styled.div`
     font-size: 3vw;
   }
   h3 {
-    margin-bottom: 30px;
-  }
-  h4 {
     margin-bottom: 30px;
   }
 `;

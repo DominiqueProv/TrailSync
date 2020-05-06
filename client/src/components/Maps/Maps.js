@@ -35,7 +35,7 @@ const Maps = () => {
   if (currentAppState.storage || localStorage.getItem("isLoggedIn")) {
     trails = JSON.parse(localStorage.getItem("trails"));
     trails = trails.trails;
-    console.log(trails);
+    // console.log(trails);
   }
 
   const ClusterMarker = ({ longitude, latitude, pointCount }) => (

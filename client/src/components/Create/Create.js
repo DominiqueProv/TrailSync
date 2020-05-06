@@ -7,7 +7,7 @@ import { withStyles } from "@material-ui/core/styles";
 import Slider from "@material-ui/core/Slider";
 import SpotifyLogo from "../../assets/spotify.png";
 
-const Create = ({ info }) => {
+const Create = ({ info, trailName }) => {
   const { Niv_diff, Shape_Leng, Usager, Toponyme1 } = info;
 
   let acousticness;
@@ -16,7 +16,6 @@ const Create = ({ info }) => {
   let tempo;
   let songLength;
   let limit = {};
-
   songLength = Number(Shape_Leng);
   songLength = Math.trunc(songLength);
 
@@ -219,7 +218,7 @@ const Create = ({ info }) => {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        name: Toponyme1,
+        name: Toponyme1 === "" ? trailName : Toponyme1,
         qs: newGenre,
         json: true,
       }),
@@ -291,7 +290,7 @@ const Create = ({ info }) => {
           <p style={{ fontSize: ".8em", fontWeigth: "400" }}>Playlist setup</p>
         </div>
         <h2 style={{ fontSize: "3vw", marginBottom: "30px" }}>
-          Get creative with Spotify !
+          Get creative with Spotify!
         </h2>
 
         <form style={{ width: "400px" }} onSubmit={(ev) => createPlaylist(ev)}>
@@ -304,7 +303,7 @@ const Create = ({ info }) => {
             }}
           >
             We made a custom playlist based on the lenght and the difficutly of
-            your hike. Feel free to make it you own
+            your hike. Feel free to make it you own!
           </p>
           <label>
             <p>Choose a genre</p>
