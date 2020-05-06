@@ -2,10 +2,10 @@ import React, { useEffect, useContext, useState } from "react";
 // import { useParams, Redirect } from "react-router-dom";
 import { CurrentAppContext } from "../contexts/Trails.context";
 import _ from "lodash";
-import mapValues from "lodash/mapValues";
 import styled from "styled-components";
 import { withStyles } from "@material-ui/core/styles";
 import Slider from "@material-ui/core/Slider";
+import SpotifyLogo from "../../assets/spotify.png";
 
 const Create = ({ info }) => {
   const { Niv_diff, Shape_Leng, Usager, Toponyme1 } = info;
@@ -204,43 +204,6 @@ const Create = ({ info }) => {
   }, []);
 
   if (genre !== null) {
-    // let newGenre = _.mapValues(genre, (value) => {
-    //   if (typeof value === "number") {
-    //     return value.toString();
-    //   } else {
-    //     return value;
-    //   }
-    // });
-
-    // console.log(newGenre);
-    // const entries = Object.entries(genre);
-    // console.log(entries);
-    // let value;
-
-    // let entries = Object.entries(genre);
-    // console.log(entries);
-    let newObj = mapValues(genre, (value, key) => {
-      return {};
-    });
-
-    // for (let [key, value] of Object.entries(genre)) {
-    //   if (typeof value === "number") {
-    //     value.toString();
-    //   }
-    //   console.log(genre);
-    //   // console.log(key, genre[(key, value)]);
-    //   // console.log(genre);
-    // }
-
-    // for (let value of genre) {
-    //   if (typeof value === "number") {
-    //     value.toString();
-    //   }
-    // return genre;
-    // }
-
-    // console.log(genre);
-    // itemstoString();
   }
 
   const createPlaylist = (ev) => {
@@ -310,10 +273,42 @@ const Create = ({ info }) => {
   return (
     <>
       <Wrapper>
-        <form onSubmit={(ev) => createPlaylist(ev)}>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            marginBottom: "30px",
+          }}
+        >
+          <div
+            style={{
+              width: "30px",
+              borderBottom: "1px solid black",
+              height: "1px",
+              marginRight: " 10px",
+            }}
+          ></div>
+          <p style={{ fontSize: ".8em", fontWeigth: "400" }}>Playlist setup</p>
+        </div>
+        <h2 style={{ fontSize: "3vw", marginBottom: "30px" }}>
+          Get creative with Spotify !
+        </h2>
+
+        <form style={{ width: "400px" }} onSubmit={(ev) => createPlaylist(ev)}>
+          <p
+            style={{
+              fontWeight: "400",
+              fontSize: ".9em",
+              marginBottom: "30px",
+              lineHeight: "1.8em",
+            }}
+          >
+            We made a custom playlist based on the lenght and the difficutly of
+            your hike. Feel free to make it you own
+          </p>
           <label>
-            <p>Genre</p>
-            <select
+            <p>Choose a genre</p>
+            <Select
               labelid="select-genre"
               id="genre"
               value={genre.seed_genres ? genre.seed_genres : ""}
@@ -334,15 +329,18 @@ const Create = ({ info }) => {
               <option value="pop">Pop</option>
               <option value="rock">Rock</option>
               <option value="electropop">Electropop</option>
-            </select>
+            </Select>
           </label>
-          <p>Acousticness</p>
+          <p style={{ marginBottom: "20px" }}>Personalize your mood</p>
+          <p style={{ fontWeight: "400", paddingBottom: "5px" }}>
+            Acousticness
+          </p>
           <PrettoSlider
             valueLabelDisplay="off"
             aria-label="pretto slider"
             max={100}
             min={0}
-            marks={marks}
+            // marks={marks}
             step={10}
             value={
               genre.target_acousticness ? genre.target_acousticness * 100 : 0
@@ -356,14 +354,22 @@ const Create = ({ info }) => {
             }}
           />
 
-          <p>Danceability</p>
+          <p
+            style={{
+              fontWeight: "400",
+              paddingBottom: "5px",
+              paddingTop: "10px",
+            }}
+          >
+            Danceability
+          </p>
 
           <PrettoSlider
             valueLabelDisplay="off"
             aria-label="pretto slider"
             max={100}
             min={0}
-            marks={marks}
+            // marks={marks}
             step={10}
             value={
               genre.target_danceability ? genre.target_danceability * 100 : 0
@@ -377,13 +383,21 @@ const Create = ({ info }) => {
             }}
           />
 
-          <p>Energy</p>
+          <p
+            style={{
+              fontWeight: "400",
+              paddingBottom: "5px",
+              paddingTop: "10px",
+            }}
+          >
+            Energy
+          </p>
 
           <PrettoSlider
             valueLabelDisplay="off"
             aria-label="pretto slider"
             max={100}
-            marks={marks}
+            // marks={marks}
             step={10}
             min={0}
             value={genre.target_energy ? genre.target_energy * 100 : 0}
@@ -397,12 +411,20 @@ const Create = ({ info }) => {
             }}
           />
 
-          <p>Tempo</p>
+          <p
+            style={{
+              fontWeight: "400",
+              paddingBottom: "5px",
+              paddingTop: "10px",
+            }}
+          >
+            Tempo
+          </p>
 
           <PrettoSlider
             valueLabelDisplay="off"
             aria-label="pretto slider"
-            marks={marks}
+            // marks={marks}
             max={100}
             step={10}
             min={0}
@@ -423,9 +445,30 @@ const Create = ({ info }) => {
   );
 };
 
+const Select = styled.select`
+  width: 100%;
+  height: 35px;
+  background: white;
+  color: gray;
+  padding-left: 5px;
+  font-size: 14px;
+  border: none;
+  margin: 15px 0 35px;
+  outline: none;
+
+  option {
+    color: black;
+    background: white;
+    font-weight: small;
+    display: flex;
+    white-space: pre;
+    min-height: 20px;
+    padding: 0px 2px 1px;
+  }
+`;
 const PrettoSlider = withStyles({
   root: {
-    color: "dodgerblue",
+    color: "red",
     height: 4,
   },
   thumb: {
@@ -456,24 +499,23 @@ const PrettoSlider = withStyles({
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
+  padding: 20px;
 `;
 const ButtonInput = styled.input`
-  color: white;
+  color: dodgerblue;
   display: flex;
   align-items: center;
-  background-color: #2aa9e0;
-  padding: 10px 50px 10px 40px;
+  background-color: white;
+  padding: 10px 30px 10px 25px;
   border-radius: 30px;
-  border: none;
-  margin-top: 50px;
+  border: 1px solid #ff0000;
+  margin-top: 40px;
   font-size: 1em;
   font-weight: 700;
   outline: none;
   cursor: pointer;
+  box-shadow: 11px 10px 9px -6px rgba(0, 0, 0, 0.12);
   transition: background-color 0.2s ease-in;
-  &:hover {
-    background-color: #2593d8;
-  }
 `;
 
 export default Create;

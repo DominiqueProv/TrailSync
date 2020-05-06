@@ -11,7 +11,7 @@ const Home = () => {
   return (
     <>
       <Wrapper>
-        <h1 style={{ color: "white" }}>Welcome to</h1>
+        <h1 style={{ color: "#ff0000" }}>Welcome to</h1>
         <BrandImage>Logo</BrandImage>
         {loggedIn ? (
           <a href="http://localhost:8888/login">
@@ -20,7 +20,7 @@ const Home = () => {
         ) : (
           <a href="http://localhost:8888/login">
             <Button>
-              Login With Spotify{" "}
+              Login with Spotify{" "}
               <img
                 style={{ marginLeft: "15px" }}
                 src={SpotifyLogo}
@@ -36,12 +36,12 @@ const Home = () => {
 };
 
 const Wrapper = styled.div`
-  background: rgb(0, 152, 172);
-  background: linear-gradient(
+  background: #ebf5ff;
+  /* background: linear-gradient(
     63deg,
     rgba(0, 152, 172, 1) 0%,
     rgba(0, 16, 255, 1) 100%
-  );
+  ); */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -59,21 +59,19 @@ const BrandImage = styled(Logo)`
 `;
 
 const Button = styled.button`
-  color: white;
+  color: dodgerblue;
   display: flex;
   align-items: center;
-  background-color: #2aa9e0;
-  padding: 10px 50px 10px 40px;
+  background-color: white;
+  padding: 10px 30px 10px 25px;
   border-radius: 30px;
-  border: none;
-  margin-top: 50px;
+  border: 1px solid #ff0000;
+  margin-top: 30px;
   font-size: 1em;
   font-weight: 700;
   outline: none;
   cursor: pointer;
+  box-shadow: 11px 10px 9px -6px rgba(0, 0, 0, 0.12);
   transition: background-color 0.2s ease-in;
-  &:hover {
-    background-color: #2593d8;
-  }
 `;
 export default Home;

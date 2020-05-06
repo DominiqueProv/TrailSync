@@ -6,7 +6,7 @@ import SearchOutlinedIcon from "@material-ui/icons/SearchOutlined";
 import MenuIcon from "@material-ui/icons/Menu";
 import { Link } from "react-router-dom";
 import { CurrentAppContext } from "../contexts/Trails.context";
-import { ReactComponent as Logo } from "../../assets/trailSync-black.svg";
+import { ReactComponent as Logo } from "../../assets/trailSync-hor-05.svg";
 import { useHistory } from "react-router-dom";
 import ExploreIcon from "@material-ui/icons/Explore";
 
@@ -100,7 +100,7 @@ const Avatar = styled.img`
 `;
 
 const BrandImage = styled(Logo)`
-  width: 60px;
+  width: 150px;
 `;
 
 const IconNav = styled.div`

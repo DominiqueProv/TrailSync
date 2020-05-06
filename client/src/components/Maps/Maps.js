@@ -8,6 +8,9 @@ import { useHistory } from "react-router-dom";
 import "mapbox-gl/dist/mapbox-gl.css";
 import Cluster from "@urbica/react-map-gl-cluster";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import DirectionsBikeIcon from "@material-ui/icons/DirectionsBike";
+import DirectionsWalkIcon from "@material-ui/icons/DirectionsWalk";
+
 import ReactMapGL, {
   Marker,
   FullscreenControl,
@@ -32,6 +35,7 @@ const Maps = () => {
   if (currentAppState.storage || localStorage.getItem("isLoggedIn")) {
     trails = JSON.parse(localStorage.getItem("trails"));
     trails = trails.trails;
+    console.log(trails);
   }
 
   const ClusterMarker = ({ longitude, latitude, pointCount }) => (
@@ -85,6 +89,8 @@ const Maps = () => {
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
+    border: "1px solid #ff0000",
+    boxShadow: "11px 10px 9px -6px rgba(0,0,0,0.12)",
   };
 
   const [viewport, setViewport] = useState({
@@ -123,7 +129,7 @@ const Maps = () => {
           }}
           {...viewport}
           accessToken={process.env.REACT_APP_MAPBOX_TOKEN}
-          mapStyle="mapbox://styles/dominiqueprov/ck9mwpfn702ee1inr2yibugcp"
+          mapStyle="mapbox://styles/dominiqueprov/ck9usv5wd0e011ipbweu3fvp3"
           latitude={viewport.latitude}
           longitude={viewport.longitude}
           zoom={viewport.zoom}
@@ -139,7 +145,7 @@ const Maps = () => {
               extent={300}
               nodeSize={100}
               component={ClusterMarker}
-              maxZoom={8}
+              maxZoom={9}
               minZoom={7}
             >
               {trails.map((trail) => (
@@ -170,6 +176,11 @@ const Maps = () => {
                       setSelectedTrail(trail);
                     }}
                   >
+                    {trail.Usager === "Piste cyclable" ? (
+                      <DirectionsBikeIcon style={{ color: "dodgerblue" }} />
+                    ) : (
+                      <DirectionsWalkIcon style={{ color: "dodgerblue" }} />
+                    )}
                     {/* <RoomOutlinedIcon
                       htmlColor="#63FD84"
                       style={{ fontSize: 30 }}
@@ -193,10 +204,15 @@ const Maps = () => {
                   {trailGeoData &&
                   trailGeoData.trailGeo.geometry.coordinates ? (
                     <ReactMapGL
-                      style={{ width: "100%", height: "300px" }}
+                      style={{
+                        width: "100%",
+                        height: "200px",
+                        marginBottom: "10px",
+                      }}
                       {...viewport}
                       accessToken={process.env.REACT_APP_MAPBOX_TOKEN}
-                      mapStyle="mapbox://styles/dominiqueprov/ck9mwpfn702ee1inr2yibugcp"
+                      mapStyle="mapbox://styles/dominiqueprov/ck9usv5wd0e011ipbweu3fvp3"
+                      // mapStyle="mapbox://styles/dominiqueprov/ck9mwpfn702ee1inr2yibugcp"
                       // latitude={37.83381888486939}
                       // longitude={-122.48369693756104}
                       latitude={
@@ -205,7 +221,7 @@ const Maps = () => {
                       longitude={
                         trailGeoData.trailGeo.geometry.coordinates[1][0]
                       }
-                      zoom={17}
+                      zoom={14}
 
                       // onViewportChange={setViewport}
                     >
@@ -223,7 +239,7 @@ const Maps = () => {
                           "line-cap": "round",
                         }}
                         paint={{
-                          "line-color": "green",
+                          "line-color": "dodgerblue",
                           "line-width": 6,
                         }}
                       />
@@ -233,6 +249,8 @@ const Maps = () => {
                       <CircularProgress />
                     </Wrapper>
                   )}
+                </div>
+                <div>
                   <h2>
                     {selectedTrail.properties.Reseau}{" "}
                     {selectedTrail.properties.Nom_etab}
@@ -279,19 +297,19 @@ const NavCtl = styled(NavigationControl)`
 `;
 
 const ButtonPin = styled.button`
-  background: #63fd84;
-  border: none;
+  background: #fff;
+  border: 1px solid #ff0000;
   outline: none;
   cursor: pointer;
   border-radius: 50%;
-  width: 20px;
-  height: 20px;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
-const WrapperPopUp = styled(Popup)`
-  width: 600px;
-  padding: 10px;
-`;
+const WrapperPopUp = styled(Popup)``;
 
 const Button = styled.button`
   color: white;
@@ -317,7 +335,7 @@ const Wrapper = styled.div`
   justify-content: center;
   align-items: center;
   width: 100%;
-  height: 300px;
+  height: 200px;
 `;
 
 export default Maps;

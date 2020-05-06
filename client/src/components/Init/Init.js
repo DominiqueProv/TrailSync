@@ -70,7 +70,7 @@ const Init = () => {
   return (
     <>
       <Wrapper>
-        <CircularProgress />
+        <CircularProgress style={{ color: "dodgerblue" }} />
       </Wrapper>
     </>
   );

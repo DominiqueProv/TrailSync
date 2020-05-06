@@ -6,6 +6,7 @@ import styled from "styled-components";
 import Create from "../Create";
 import "mapbox-gl/dist/mapbox-gl.css";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import { ReactComponent as Logo } from "../../assets/logo_sepaq.svg";
 import ReactMapGL, {
   Marker,
   FullscreenControl,
@@ -70,16 +71,33 @@ const Trail = () => {
       trailGeoData.trailGeo.geometry.coordinates ? (
         <>
           <TrailInfo>
+            <div style={{ display: "flex", alignItems: "center" }}>
+              <div
+                style={{
+                  width: "30px",
+                  borderBottom: "1px solid black",
+                  height: "1px",
+                  marginRight: " 10px",
+                }}
+              ></div>
+              <p style={{ fontSize: ".8em", fontWeigth: "400" }}>
+                Your hike selection
+              </p>
+            </div>
+            <h2 style={{ marginTop: "30px" }}>
+              {trailInfo.trailGeo.properties.Reseau}{" "}
+              {trailInfo.trailGeo.properties.Nom_etab}
+            </h2>
             <ReactMapGL
-              style={{ width: "100%", height: "300px" }}
+              style={{ width: "100%", height: "350px", marginBottom: "30px" }}
               {...viewport}
               accessToken={process.env.REACT_APP_MAPBOX_TOKEN}
-              mapStyle="mapbox://styles/dominiqueprov/ck9mwpfn702ee1inr2yibugcp"
+              mapStyle="mapbox://styles/dominiqueprov/ck9usv5wd0e011ipbweu3fvp3"
               // latitude={37.83381888486939}
               // longitude={-122.48369693756104}
               latitude={trailGeoData.trailGeo.geometry.coordinates[1][1]}
               longitude={trailGeoData.trailGeo.geometry.coordinates[1][0]}
-              zoom={15}
+              zoom={14}
               onViewportChange={setViewport}
             >
               <Source id="route" type="geojson" data={trailGeoData.trailGeo} />
@@ -92,27 +110,39 @@ const Trail = () => {
                   "line-cap": "round",
                 }}
                 paint={{
-                  "line-color": "green",
+                  "line-color": "dodgerblue",
                   "line-width": 6,
                 }}
               />
             </ReactMapGL>
-            <h2>
-              {trailInfo.trailGeo.properties.Reseau}{" "}
-              {trailInfo.trailGeo.properties.Nom_etab}
-            </h2>
-            <h3>Trail: {trailInfo.trailGeo.properties.Toponyme1}</h3>
-            <h4>
-              Niveau de difficulté : {trailInfo.trailGeo.properties.Niv_diff}
-            </h4>
-            <h4>
-              Length : {Math.trunc(trailInfo.trailGeo.properties.Shape_Leng)} m.
-            </h4>
-            {trailInfo.trailGeo.properties.Secteur == "" ? (
-              <p>Secteur Québec</p>
-            ) : (
-              <h4>Secteur : {trailInfo.trailGeo.properties.Secteur}</h4>
-            )}
+            <div style={{ display: "flex" }}>
+              <div style={{ width: "50%" }}>
+                <h3>Trail: {trailInfo.trailGeo.properties.Toponyme1}</h3>
+                <h4>
+                  Niveau de difficulté :{" "}
+                  {trailInfo.trailGeo.properties.Niv_diff}
+                </h4>
+                <h4>
+                  Length :{" "}
+                  {Math.trunc(trailInfo.trailGeo.properties.Shape_Leng)} m.
+                </h4>
+                {trailInfo.trailGeo.properties.Secteur == "" ? (
+                  <p>Secteur Québec</p>
+                ) : (
+                  <h4>Secteur : {trailInfo.trailGeo.properties.Secteur}</h4>
+                )}
+              </div>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "flex-end",
+                  width: "50%",
+                  alignItems: "flex-start",
+                }}
+              >
+                <BrandImage>Logo</BrandImage>
+              </div>
+            </div>
           </TrailInfo>
           <SpotifyInfo>
             <Create info={trailInfo.trailGeo.properties} />
@@ -120,12 +150,17 @@ const Trail = () => {
         </>
       ) : (
         <Wrapper>
-          <CircularProgress />
+          <CircularProgress style={{ color: "dodgerblue" }} />
         </Wrapper>
       )}
     </MainWrapper>
   );
 };
+
+const BrandImage = styled(Logo)`
+  width: 150px;
+  text-align: right;
+`;
 
 const MainWrapper = styled.div`
   width: 100%;
@@ -143,11 +178,10 @@ const Wrapper = styled.div`
 
 const TrailInfo = styled.div`
   width: 50%;
-  background: #eaeaea;
-  padding: 40px;
+  padding: 60px;
   h2 {
     margin-bottom: 30px;
-    font-size: 5vw;
+    font-size: 3vw;
   }
   h3 {
     margin-bottom: 30px;
@@ -159,7 +193,7 @@ const TrailInfo = styled.div`
 
 const SpotifyInfo = styled.div`
   width: 50%;
-  background: lightblue;
+  background: #f4f4f4;
   padding: 40px;
 `;
 
