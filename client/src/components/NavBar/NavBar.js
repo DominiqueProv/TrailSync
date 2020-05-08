@@ -32,6 +32,7 @@ const NavBar = () => {
         <Link to={"/map"}>
           <ContainerLeft data-css="ContainerLeft">
             <BrandImage>Logo</BrandImage>
+            <h1>Custom playlists on the go </h1>
           </ContainerLeft>
         </Link>
         <ContainerRight data-css="ContainerRigth">
@@ -45,7 +46,7 @@ const NavBar = () => {
           </Link>
           {currentAppState.currentUser || localStorage.getItem("isLoggedIn") ? (
             <>
-              <Link to="#">
+              <Link to="/Profile">
                 <IconNav data-css="IconNav">
                   <Name>{user.data.display_name}</Name>
                   <Avatar src={user.data.images[0].url} alt="avatar" />
@@ -119,7 +120,7 @@ const IconNav = styled.div`
   &:hover {
     background-color: #f4f7f6;
   }
-  @media (max-width: 700px) {
+  @media (max-width: 750px) {
     display: none;
   }
 `;
@@ -136,7 +137,7 @@ const MenuNav = styled.div`
   &:hover {
     background-color: #f4f7f6;
   }
-  @media (max-width: 700px) {
+  @media (max-width: 750px) {
     display: block;
     display: flex;
     align-items: center;
@@ -157,15 +158,20 @@ const SearchNav = styled.div`
     background-color: #f4f7f6;
   }
 
-  @media (max-width: 700px) {
+  @media (max-width: 750px) {
     display: none;
   }
 `;
 
 const ContainerLeft = styled.div`
   display: flex;
-  align-items: center;
+  align-items: flex-end;
+  /* justify-content: flex-end; */
   cursor: pointer;
+  h1 {
+    padding-left: 15px;
+    font-size: 0.8em;
+  }
 `;
 const ContainerRight = styled.div`
   display: flex;

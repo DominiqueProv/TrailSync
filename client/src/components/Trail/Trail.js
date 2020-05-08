@@ -7,6 +7,7 @@ import Create from "../Create";
 import "mapbox-gl/dist/mapbox-gl.css";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import { ReactComponent as Logo } from "../../assets/logo_sepaq.svg";
+import Footer from "../Footer";
 import ReactMapGL, {
   Marker,
   FullscreenControl,
@@ -64,102 +65,109 @@ const Trail = () => {
   });
 
   return (
-    <MainWrapper>
-      {trailGeoData &&
-      trailInfo &&
-      trailGeoData.trailGeo.geometry.coordinates ? (
-        <>
-          <TrailInfo>
-            <div style={{ display: "flex", alignItems: "center" }}>
-              <div
-                style={{
-                  width: "30px",
-                  borderBottom: "1px solid black",
-                  height: "1px",
-                  marginRight: " 10px",
-                }}
-              ></div>
-              <p style={{ fontSize: ".8em", fontWeigth: "400" }}>
-                Your hike selection
-              </p>
-            </div>
-            <h2 style={{ marginTop: "30px" }}>
-              {trailInfo.trailGeo.properties.Reseau}{" "}
-              {trailInfo.trailGeo.properties.Nom_etab}
-            </h2>
-            <ReactMapGL
-              style={{ width: "100%", height: "350px", marginBottom: "30px" }}
-              {...viewport}
-              accessToken={process.env.REACT_APP_MAPBOX_TOKEN}
-              mapStyle="mapbox://styles/dominiqueprov/ck9usv5wd0e011ipbweu3fvp3"
-              latitude={trailGeoData.trailGeo.geometry.coordinates[1][1]}
-              longitude={trailGeoData.trailGeo.geometry.coordinates[1][0]}
-              zoom={14}
-              onViewportChange={setViewport}
-            >
-              <Source id="route" type="geojson" data={trailGeoData.trailGeo} />
-              <Layer
-                id="route"
-                type="line"
-                source="route"
-                layout={{
-                  "line-join": "round",
-                  "line-cap": "round",
-                }}
-                paint={{
-                  "line-color": "dodgerblue",
-                  "line-width": 6,
-                }}
-              />
-            </ReactMapGL>
-            <div style={{ display: "flex" }}>
-              <DetailWrapper style={{ width: "50%" }}>
-                {trailInfo.trailGeo.properties.Toponyme1 === "" ? (
-                  <h4 style={{ marginBottom: "25px", marginTop: "10px" }}>
-                    <span style={{ fontSize: "1.5em" }}>Awsome trail</span>
-                  </h4>
-                ) : (
-                  <h4>
-                    <span>{trailInfo.trailGeo.properties.Toponyme1}</span>
-                  </h4>
-                )}
-
-                <h4>Level: {trailInfo.trailGeo.properties.Niv_diff}</h4>
-                <h4>
-                  Length: {Math.trunc(trailInfo.trailGeo.properties.Shape_Leng)}{" "}
-                  m.
-                </h4>
-                {trailInfo.trailGeo.properties.Secteur === "" ? (
-                  <h4>Secteur: Québec</h4>
-                ) : (
-                  <h4>Zone: {trailInfo.trailGeo.properties.Secteur}</h4>
-                )}
-              </DetailWrapper>
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "flex-end",
-                  width: "50%",
-                  alignItems: "flex-start",
-                }}
-              >
-                <BrandImage>Logo</BrandImage>
+    <>
+      <MainWrapper>
+        {trailGeoData &&
+        trailInfo &&
+        trailGeoData.trailGeo.geometry.coordinates ? (
+          <>
+            <TrailInfo>
+              <div style={{ display: "flex", alignItems: "center" }}>
+                <div
+                  style={{
+                    width: "30px",
+                    borderBottom: "1px solid black",
+                    height: "1px",
+                    marginRight: " 10px",
+                  }}
+                ></div>
+                <p style={{ fontSize: ".8em", fontWeigth: "400" }}>
+                  Your hike selection
+                </p>
               </div>
-            </div>
-          </TrailInfo>
-          <SpotifyInfo>
-            <Create
-              info={trailInfo.trailGeo.properties}
-              trailName={"Awsome trail"}
-            />
-          </SpotifyInfo>
-        </>
-      ) : (
-        <Wrapper>
-          <CircularProgress style={{ color: "dodgerblue" }} />
-        </Wrapper>
-      )}
-    </MainWrapper>
+              <h2 style={{ marginTop: "30px" }}>
+                {trailInfo.trailGeo.properties.Reseau}{" "}
+                {trailInfo.trailGeo.properties.Nom_etab}
+              </h2>
+              <ReactMapGL
+                style={{ width: "100%", height: "350px", marginBottom: "30px" }}
+                {...viewport}
+                accessToken={process.env.REACT_APP_MAPBOX_TOKEN}
+                mapStyle="mapbox://styles/dominiqueprov/ck9usv5wd0e011ipbweu3fvp3"
+                latitude={trailGeoData.trailGeo.geometry.coordinates[1][1]}
+                longitude={trailGeoData.trailGeo.geometry.coordinates[1][0]}
+                zoom={14}
+                onViewportChange={setViewport}
+              >
+                <Source
+                  id="route"
+                  type="geojson"
+                  data={trailGeoData.trailGeo}
+                />
+                <Layer
+                  id="route"
+                  type="line"
+                  source="route"
+                  layout={{
+                    "line-join": "round",
+                    "line-cap": "round",
+                  }}
+                  paint={{
+                    "line-color": "dodgerblue",
+                    "line-width": 6,
+                  }}
+                />
+              </ReactMapGL>
+              <div style={{ display: "flex" }}>
+                <DetailWrapper style={{ width: "50%" }}>
+                  {trailInfo.trailGeo.properties.Toponyme1 === "" ? (
+                    <h4 style={{ marginBottom: "25px", marginTop: "10px" }}>
+                      <span style={{ fontSize: "1.5em" }}>Awsome trail</span>
+                    </h4>
+                  ) : (
+                    <h4>
+                      <span>{trailInfo.trailGeo.properties.Toponyme1}</span>
+                    </h4>
+                  )}
+
+                  <h4>Level: {trailInfo.trailGeo.properties.Niv_diff}</h4>
+                  <h4>
+                    Length:{" "}
+                    {Math.trunc(trailInfo.trailGeo.properties.Shape_Leng)} m.
+                  </h4>
+                  {trailInfo.trailGeo.properties.Secteur === "" ? (
+                    <h4>Secteur: Québec</h4>
+                  ) : (
+                    <h4>Zone: {trailInfo.trailGeo.properties.Secteur}</h4>
+                  )}
+                </DetailWrapper>
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "flex-end",
+                    width: "50%",
+                    alignItems: "flex-start",
+                  }}
+                >
+                  <BrandImage>Logo</BrandImage>
+                </div>
+              </div>
+            </TrailInfo>
+            <SpotifyInfo>
+              <Create
+                info={trailInfo.trailGeo.properties}
+                trailName={"Awsome trail"}
+              />
+            </SpotifyInfo>
+          </>
+        ) : (
+          <Wrapper>
+            <CircularProgress style={{ color: "dodgerblue" }} />
+          </Wrapper>
+        )}
+      </MainWrapper>
+      <Footer />
+    </>
   );
 };
 
@@ -177,8 +185,11 @@ const BrandImage = styled(Logo)`
 
 const MainWrapper = styled.div`
   width: 100%;
-  height: calc(100vh - 60px);
+  min-height: calc(100vh - 110px);
   display: flex;
+  @media (max-width: 750px) {
+    flex-direction: column;
+  }
 `;
 
 const Wrapper = styled.div`
@@ -199,12 +210,18 @@ const TrailInfo = styled.div`
   h3 {
     margin-bottom: 30px;
   }
+  @media (max-width: 750px) {
+    width: 100%;
+  }
 `;
 
 const SpotifyInfo = styled.div`
   width: 50%;
   background: #f4f4f4;
   padding: 40px;
+  @media (max-width: 750px) {
+    width: 100%;
+  }
 `;
 
 export default Trail;

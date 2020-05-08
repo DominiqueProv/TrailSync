@@ -70,7 +70,12 @@ const Init = () => {
   return (
     <>
       <Wrapper>
-        <CircularProgress style={{ color: "dodgerblue" }} />
+        <p>
+          Millions of songs,
+          <br /> thousands of hikes,
+          <br /> only one like you &trade;
+        </p>
+        <CircularProgress style={{ color: "dodgerblue" }} size={40} />
       </Wrapper>
     </>
   );
@@ -78,10 +83,17 @@ const Init = () => {
 
 const Wrapper = styled.div`
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   width: 100%;
   height: 100vh;
+  p {
+    font-size: 3vw;
+    padding-bottom: 30px;
+    text-align: center;
+    line-height: 1.5em;
+  }
 `;
 
 export default Init;

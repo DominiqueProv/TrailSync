@@ -24,7 +24,7 @@ time, mark, audio, video {
 	margin: 0;
 	padding: 0;
 	border: 0;
-	font-size: 100%;
+  font-size: 100%;
   vertical-align: baseline;
   box-sizing: border-box;
 }
@@ -34,8 +34,12 @@ footer, header, hgroup, menu, nav, section {
 	display: block;
 }
 body {
-	line-height: 1;
+  line-height: 1;
+  height: 100%;
 	/* overflow-x:hidden; */
+}
+html{
+  height: 100%;
 }
 ol, ul {
 	list-style: none;

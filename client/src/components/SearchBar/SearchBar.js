@@ -1,18 +1,28 @@
 import React, { useState, useRef, useEffect, useContext } from "react";
 import { CurrentAppContext } from "../contexts/Trails.context";
 import styled from "styled-components";
-import { typeaheadSuggestion } from "../../utils";
 import { useHistory } from "react-router-dom";
-import LocationOnIcon from "@material-ui/icons/LocationOn";
 import RoomOutlinedIcon from "@material-ui/icons/RoomOutlined";
 const SearchBar = ({ open, toggle }) => {
   const MAX_NUMBER_OF_SUGGESTIONS = 8;
   const { currentAppState } = useContext(CurrentAppContext);
-  // const typaheadItems = currentAppState.trails;
   const [suggestions, setSuggestions] = useState([]);
   const [searchInputVal, setSearchInputVal] = useState("");
-  console.log(searchInputVal);
   let history = useHistory();
+
+  const typeaheadSuggestion = (input, totalOptions) => {
+    const suggestions1 = [];
+    totalOptions.forEach((option) => {
+      if (
+        option.properties.Toponyme1.toLowerCase().includes(input.toLowerCase())
+      )
+        suggestions1.push({
+          id: option._id,
+          name: option.properties.Toponyme1,
+        });
+    });
+    return suggestions1;
+  };
 
   const handleClickOnItemInSuggestionDropdown = (ev, suggestion) => {
     ev.preventDefault();
@@ -20,8 +30,6 @@ const SearchBar = ({ open, toggle }) => {
     history.push(`/trail/${suggestion.id}`);
     toggle();
     window.location.reload(true);
-
-    // setSearchInputVal("");
   };
 
   useEffect(() => {
@@ -34,25 +42,21 @@ const SearchBar = ({ open, toggle }) => {
   if (currentAppState.storage || localStorage.getItem("trails")) {
     typaheadItems = JSON.parse(localStorage.getItem("trails"));
     typaheadItems = typaheadItems.trails;
-    console.log(typaheadItems);
   }
-  console.log(suggestions);
 
   const wrapperRef = useRef(null);
   return (
     <WrapperSearch ref={wrapperRef} data-css="Typehead-Wrapper" open={open}>
-      <SearchForm
-        // onSubmit={(event) => submitHandler(event)}
-        open={open}
-        autocomplete="off"
-      >
+      <SearchForm open={open}>
         <InputField
+          ref={(input) => input && input.focus()}
           type="text"
           placeholder="Search trail..."
+          autoFocus
           name="search"
           open={open}
           onChange={(event) => setSearchInputVal(event.target.value)}
-          autocomplete="off"
+          autoComplete="off"
           value={searchInputVal}
         />
         <TypeaheadSuggestions data-css="typeaheadDropDown">
@@ -87,14 +91,10 @@ const WrapperSearch = styled.div`
   height: calc(100vh - 60px);
   width: 100%;
   padding: 60px;
-  /* display: none; */
   position: fixed;
   display: flex;
   justify-content: flex-start;
-  /* z-index: 0; */
   display: none;
-  /* top: 0;
-  left: 0; */
   background-color: rgb(0, 0, 0);
   background-color: rgba(0, 0, 0, 0.85);
   transition: ease-in-out 0.2s all;
@@ -111,19 +111,16 @@ const SearchForm = styled.form`
 `;
 
 const Button = styled.button`
-  /* width: 20%; */
   padding: 15px;
   background: #ddd;
   font-size: 17px;
   border: none;
   display: none;
   cursor: pointer;
-  /* display: inline-block; */
   ${(props) => (props.open ? `display: block;` : `display: none;`)}
 `;
 
 const InputField = styled.input`
-  /* width: 100vw; */
   height: 15vh;
   margin-top: 30px;
   background: transparent;
@@ -137,7 +134,7 @@ const InputField = styled.input`
   ${(props) => (props.open ? `display: inline-block;` : `display: none;`)};
 
   ::placeholder {
-    color: #d3d3d3;
+    color: #595959;
     font-size: 7vw;
   }
 `;
@@ -146,10 +143,7 @@ const TypeaheadSuggestions = styled.div`
   position: absolute;
   padding-right: 120px;
   top: 300px;
-  /* left: 60px; */
-  /* width: 60vw; */
   background-color: transparent;
-  /* padding: 60px; */
   width: 100%;
   display: grid;
   gap: 2rem;
@@ -157,13 +151,6 @@ const TypeaheadSuggestions = styled.div`
   @media (max-width: 1024px) {
     grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
   }
-  /* @media (max-width: 1425px) {
-    margin-left: 6px;
-    width: 411px;
-    -webkit-box-shadow: 0px 19px 25px -12px rgba(0, 0, 0, 0.15);
-    -moz-box-shadow: 0px 19px 25px -12px rgba(0, 0, 0, 0.15);
-    box-shadow: 0px 19px 25px -12px rgba(0, 0, 0, 0.15);
-  } */
 `;
 
 const DropDownItem = styled.div`

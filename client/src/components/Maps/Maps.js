@@ -10,7 +10,7 @@ import Cluster from "@urbica/react-map-gl-cluster";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import DirectionsBikeIcon from "@material-ui/icons/DirectionsBike";
 import DirectionsWalkIcon from "@material-ui/icons/DirectionsWalk";
-
+import Footer from "../Footer";
 import ReactMapGL, {
   Marker,
   FullscreenControl,
@@ -24,7 +24,6 @@ import ReactMapGL, {
   // CanvasOverlay,
   Popup,
 } from "@urbica/react-map-gl";
-// } from "react-map-gl";
 dotenv.config();
 
 const Maps = () => {
@@ -35,7 +34,6 @@ const Maps = () => {
   if (currentAppState.storage || localStorage.getItem("isLoggedIn")) {
     trails = JSON.parse(localStorage.getItem("trails"));
     trails = trails.trails;
-    // console.log(trails);
   }
 
   const ClusterMarker = ({ longitude, latitude, pointCount }) => (
@@ -124,7 +122,7 @@ const Maps = () => {
         <ReactMapGL
           style={{
             width: "100%",
-            height: "calc(100vh - 60px)",
+            height: "calc(100vh - 110px)",
             position: "relative",
           }}
           {...viewport}
@@ -169,8 +167,6 @@ const Maps = () => {
                       })
                         .then((res) => res.json())
                         .then((data) => {
-                          console.log(data.trailGeo.geometry.coordinates);
-
                           setTrailGeoData(data);
                         });
                       setSelectedTrail(trail);
@@ -181,10 +177,6 @@ const Maps = () => {
                     ) : (
                       <DirectionsWalkIcon style={{ color: "dodgerblue" }} />
                     )}
-                    {/* <RoomOutlinedIcon
-                      htmlColor="#63FD84"
-                      style={{ fontSize: 30 }}
-                    /> */}
                   </ButtonPin>
                 </Marker>
               ))}
@@ -212,9 +204,6 @@ const Maps = () => {
                       {...viewport}
                       accessToken={process.env.REACT_APP_MAPBOX_TOKEN}
                       mapStyle="mapbox://styles/dominiqueprov/ck9usv5wd0e011ipbweu3fvp3"
-                      // mapStyle="mapbox://styles/dominiqueprov/ck9mwpfn702ee1inr2yibugcp"
-                      // latitude={37.83381888486939}
-                      // longitude={-122.48369693756104}
                       latitude={
                         trailGeoData.trailGeo.geometry.coordinates[1][1]
                       }
@@ -222,8 +211,6 @@ const Maps = () => {
                         trailGeoData.trailGeo.geometry.coordinates[1][0]
                       }
                       zoom={14}
-
-                      // onViewportChange={setViewport}
                     >
                       <Source
                         id="route"
@@ -262,7 +249,6 @@ const Maps = () => {
                   <Button
                     onClick={(ev) => {
                       ev.preventDefault();
-
                       history.push(`/trail/${selectedTrail._id}`);
                     }}
                   >
@@ -274,6 +260,7 @@ const Maps = () => {
           )}
         </ReactMapGL>
       )}
+      <Footer style={{ zIndex: "100" }} />
     </>
   );
 };

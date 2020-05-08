@@ -11,6 +11,8 @@ const {
   handleUserInfo,
   handleRefreshToken,
   handleTrailGeo,
+  handleGetHistorique,
+  handleGetPlaying,
 } = require("./hanlders");
 
 app
@@ -22,9 +24,11 @@ app
   .get("/getUserInfo", handleUserInfo)
   .get("/login", handleLogin)
   .get("/callback", handleCallBack)
-  .get("/refresh_token/:token", handleRefreshToken)
+  .get("/refresh_token", handleRefreshToken)
+  .get("/getcurrentlyplaying", handleGetPlaying)
   .post("/createplaylist", handleCreatePlaylist)
   .post("/trailgeo", handleTrailGeo)
-  .post("/trailinfo", handleTrailInfo);
+  .post("/trailinfo", handleTrailInfo)
+  .post("/getHistorique", handleGetHistorique);
 console.log("Listening on 8888");
 app.listen(8888);

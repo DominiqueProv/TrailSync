@@ -14,6 +14,7 @@ import { CurrentAppContext } from "../contexts/Trails.context";
 import NavBar from "../NavBar";
 import Init from "../Init";
 import Maps from "../Maps";
+import Profile from "../Profile";
 
 function App() {
   const { currentAppState } = useContext(CurrentAppContext);
@@ -34,6 +35,9 @@ function App() {
         </Route>
         <Route path="/init" exact>
           <Init />
+        </Route>
+        <Route path="/profile" exact>
+          {storage && <Profile />}
         </Route>
         <Route path="/trail/:trailId" exact>
           {storage && <Trail />}

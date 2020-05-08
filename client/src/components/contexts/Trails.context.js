@@ -18,7 +18,6 @@ function currentAppReducer(state, action) {
         isLoggedIn: true,
       };
     case "loading-success":
-      console.log(action.trails.payload);
       return { ...state, trails: action.trails.payload, isLoaded: true };
     case "save-storage":
       return { ...state, storage: true };

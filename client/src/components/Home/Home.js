@@ -2,7 +2,6 @@ import React, { useContext, useEffect } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { ReactComponent as Logo } from "../../assets/trailSync.svg";
-// import CircularProgress from "@material-ui/core/CircularProgress";
 import SpotifyLogo from "../../assets/spotify-red.png";
 const Home = () => {
   let loggedIn = window.localStorage.getItem("isLoggedIn");

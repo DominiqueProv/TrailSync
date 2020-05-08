@@ -6,10 +6,12 @@ import styled from "styled-components";
 import { withStyles } from "@material-ui/core/styles";
 import Slider from "@material-ui/core/Slider";
 import SpotifyLogo from "../../assets/spotify.png";
-
+import PopUpModalPlaylist from "../PopUpModalPlaylist";
 const Create = ({ info, trailName }) => {
   const { Niv_diff, Shape_Leng, Usager, Toponyme1 } = info;
-
+  // const { actions: handleModalOpen, handleModalClose } = useContext(
+  //   CurrentAppContext
+  // );
   let acousticness;
   let danceability;
   let energy;
@@ -18,7 +20,8 @@ const Create = ({ info, trailName }) => {
   let limit = {};
   songLength = Number(Shape_Leng);
   songLength = Math.trunc(songLength);
-
+  const [playlistInfo, setPlaylistInfo] = useState(null);
+  const [isOpen, setIsOpen] = useState(false);
   const [genre, setGenre] = useState({
     seed_genres: null,
     limit: null,
@@ -28,6 +31,9 @@ const Create = ({ info, trailName }) => {
     target_energy: null,
     target_tempo: null,
   });
+  const TogglePlaylistModal = () => {
+    setIsOpen(!isOpen);
+  };
 
   const analyseTrack = () => {
     let qs = {};
@@ -207,6 +213,7 @@ const Create = ({ info, trailName }) => {
 
   const createPlaylist = (ev) => {
     ev.preventDefault();
+    setIsOpen(true);
     let newGenre = _.mapValues(genre, (value) => {
       if (typeof value === "number") {
         return value.toString();
@@ -225,6 +232,7 @@ const Create = ({ info, trailName }) => {
     })
       .then((res) => res.json())
       .then((res) => {
+        setPlaylistInfo(res);
         console.log(res);
       });
   };
@@ -271,175 +279,188 @@ const Create = ({ info, trailName }) => {
 
   return (
     <>
-      <Wrapper>
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            marginBottom: "30px",
-          }}
-        >
+      {isOpen && (
+        <PopUpModalPlaylist
+          playlistInfo={playlistInfo}
+          toggle={TogglePlaylistModal}
+          open={isOpen}
+        />
+      )}
+      {genre && (
+        <Wrapper>
           <div
             style={{
-              width: "30px",
-              borderBottom: "1px solid black",
-              height: "1px",
-              marginRight: " 10px",
-            }}
-          ></div>
-          <p style={{ fontSize: ".8em", fontWeigth: "400" }}>Playlist setup</p>
-        </div>
-        <h2 style={{ fontSize: "3vw", marginBottom: "30px" }}>
-          Get creative with Spotify!
-        </h2>
-
-        <form style={{ width: "400px" }} onSubmit={(ev) => createPlaylist(ev)}>
-          <p
-            style={{
-              fontWeight: "400",
-              fontSize: ".9em",
+              display: "flex",
+              alignItems: "center",
               marginBottom: "30px",
-              lineHeight: "1.8em",
             }}
           >
-            We made a custom playlist based on the lenght and the difficutly of
-            your hike. Feel free to make it you own!
-          </p>
-          <label>
-            <p>Choose a genre</p>
-            <Select
-              labelid="select-genre"
-              id="genre"
-              value={genre.seed_genres ? genre.seed_genres : ""}
-              onChange={(ev) => {
-                ev.preventDefault();
-                handleChange(ev);
+            <div
+              style={{
+                width: "30px",
+                borderBottom: "1px solid black",
+                height: "1px",
+                marginRight: " 10px",
+              }}
+            ></div>
+            <p style={{ fontSize: ".8em", fontWeigth: "400" }}>
+              Playlist setup
+            </p>
+          </div>
+          <h2 style={{ fontSize: "3vw", marginBottom: "30px" }}>
+            Get creative with Spotify!
+          </h2>
+
+          <form
+            style={{ width: "400px" }}
+            onSubmit={(ev) => createPlaylist(ev)}
+          >
+            <p
+              style={{
+                fontWeight: "400",
+                fontSize: ".9em",
+                marginBottom: "30px",
+                lineHeight: "1.8em",
               }}
             >
-              <option defaultValue="rock,classical,hiphop,latin,edm">
-                Random
-              </option>
-              <option value="hiphop">Hip-Hop</option>
-              <option value="classical">Classical</option>
-              <option value="latin">Latin</option>
-              <option value="edm">Edm</option>
-              <option value="dance">Dance</option>
-              <option value="country">Country</option>
-              <option value="pop">Pop</option>
-              <option value="rock">Rock</option>
-              <option value="electropop">Electropop</option>
-            </Select>
-          </label>
-          <p style={{ marginBottom: "20px" }}>Personalize your mood</p>
-          <p style={{ fontWeight: "400", paddingBottom: "5px" }}>
-            Acousticness
-          </p>
-          <PrettoSlider
-            valueLabelDisplay="off"
-            aria-label="pretto slider"
-            max={100}
-            min={0}
-            // marks={marks}
-            step={10}
-            value={
-              genre.target_acousticness ? genre.target_acousticness * 100 : 0
-            }
-            onChange={(ev, val) => {
-              ev.preventDefault();
-              setGenre({
-                ...genre,
-                target_acousticness: val / 100,
-              });
-            }}
-          />
+              We made a custom playlist based on the length and the difficulty
+              of your hike. Feel free to make it your own!
+            </p>
+            <label>
+              <p>Choose a genre</p>
+              <Select
+                labelid="select-genre"
+                id="genre"
+                value={genre.seed_genres ? genre.seed_genres : ""}
+                onChange={(ev) => {
+                  ev.preventDefault();
+                  handleChange(ev);
+                }}
+              >
+                <option defaultValue="rock,classical,hiphop,latin,edm">
+                  Random
+                </option>
+                <option value="hiphop">Hip-Hop</option>
+                <option value="classical">Classical</option>
+                <option value="latin">Latin</option>
+                <option value="edm">Edm</option>
+                <option value="dance">Dance</option>
+                <option value="country">Country</option>
+                <option value="pop">Pop</option>
+                <option value="rock">Rock</option>
+                <option value="electropop">Electropop</option>
+              </Select>
+            </label>
+            <p style={{ marginBottom: "20px" }}>Personalize your mood</p>
+            <p style={{ fontWeight: "400", paddingBottom: "5px" }}>
+              Acousticness
+            </p>
+            <PrettoSlider
+              valueLabelDisplay="off"
+              aria-label="pretto slider"
+              max={100}
+              min={0}
+              step={10}
+              value={
+                genre.target_acousticness ? genre.target_acousticness * 100 : 0
+              }
+              onChange={(ev, val) => {
+                ev.preventDefault();
+                setGenre({
+                  ...genre,
+                  target_acousticness: val / 100,
+                });
+              }}
+            />
 
-          <p
-            style={{
-              fontWeight: "400",
-              paddingBottom: "5px",
-              paddingTop: "10px",
-            }}
-          >
-            Danceability
-          </p>
+            <p
+              style={{
+                fontWeight: "400",
+                paddingBottom: "5px",
+                paddingTop: "10px",
+              }}
+            >
+              Danceability
+            </p>
 
-          <PrettoSlider
-            valueLabelDisplay="off"
-            aria-label="pretto slider"
-            max={100}
-            min={0}
-            // marks={marks}
-            step={10}
-            value={
-              genre.target_danceability ? genre.target_danceability * 100 : 0
-            }
-            onChange={(ev, val) => {
-              ev.preventDefault();
-              setGenre({
-                ...genre,
-                target_danceability: val / 100,
-              });
-            }}
-          />
+            <PrettoSlider
+              valueLabelDisplay="off"
+              aria-label="pretto slider"
+              max={100}
+              min={0}
+              // marks={marks}
+              step={10}
+              value={
+                genre.target_danceability ? genre.target_danceability * 100 : 0
+              }
+              onChange={(ev, val) => {
+                ev.preventDefault();
+                setGenre({
+                  ...genre,
+                  target_danceability: val / 100,
+                });
+              }}
+            />
 
-          <p
-            style={{
-              fontWeight: "400",
-              paddingBottom: "5px",
-              paddingTop: "10px",
-            }}
-          >
-            Energy
-          </p>
+            <p
+              style={{
+                fontWeight: "400",
+                paddingBottom: "5px",
+                paddingTop: "10px",
+              }}
+            >
+              Energy
+            </p>
 
-          <PrettoSlider
-            valueLabelDisplay="off"
-            aria-label="pretto slider"
-            max={100}
-            // marks={marks}
-            step={10}
-            min={0}
-            value={genre.target_energy ? genre.target_energy * 100 : 0}
-            onChange={(ev, val) => {
-              ev.preventDefault();
-              console.log(val);
-              setGenre({
-                ...genre,
-                target_energy: val / 100,
-              });
-            }}
-          />
+            <PrettoSlider
+              valueLabelDisplay="off"
+              aria-label="pretto slider"
+              max={100}
+              // marks={marks}
+              step={10}
+              min={0}
+              value={genre.target_energy ? genre.target_energy * 100 : 0}
+              onChange={(ev, val) => {
+                ev.preventDefault();
+                console.log(val);
+                setGenre({
+                  ...genre,
+                  target_energy: val / 100,
+                });
+              }}
+            />
 
-          <p
-            style={{
-              fontWeight: "400",
-              paddingBottom: "5px",
-              paddingTop: "10px",
-            }}
-          >
-            Tempo
-          </p>
+            <p
+              style={{
+                fontWeight: "400",
+                paddingBottom: "5px",
+                paddingTop: "10px",
+              }}
+            >
+              Tempo
+            </p>
 
-          <PrettoSlider
-            valueLabelDisplay="off"
-            aria-label="pretto slider"
-            // marks={marks}
-            max={100}
-            step={10}
-            min={0}
-            value={genre.target_tempo ? genre.target_tempo * 100 : 0}
-            onChange={(ev, val) => {
-              ev.preventDefault();
-              console.log(val);
-              setGenre({
-                ...genre,
-                target_tempo: val / 100,
-              });
-            }}
-          />
-          <ButtonInput type="submit" value="Create your playlist" />
-        </form>
-      </Wrapper>
+            <PrettoSlider
+              valueLabelDisplay="off"
+              aria-label="pretto slider"
+              // marks={marks}
+              max={100}
+              step={10}
+              min={0}
+              value={genre.target_tempo ? genre.target_tempo * 100 : 0}
+              onChange={(ev, val) => {
+                ev.preventDefault();
+                console.log(val);
+                setGenre({
+                  ...genre,
+                  target_tempo: val / 100,
+                });
+              }}
+            />
+            <ButtonInput type="submit" value="Create your playlist" />
+          </form>
+        </Wrapper>
+      )}
     </>
   );
 };

@@ -1,6 +1,5 @@
 const fetch = require("isomorphic-fetch");
 require("dotenv").config();
-// const trails = require("../server/data/parc-sepaq.json");
 const querystring = require("querystring");
 const request = require("request");
 const rp = require("request-promise");
@@ -13,26 +12,43 @@ const URI = process.env.URI;
 const stateKey = "spotify_auth_state";
 let userInfo;
 let userId;
+let userHistorique;
 let access_token;
+let refresh_token;
 let playlist_id;
 let arrId = [];
 let name;
-if (name) {
-  name = JSON.stringify(name);
-  console.log(name);
-}
-let playlist;
 
-// if (userInfo && userInfo.id) {
-//   console.log(userId);
-// }
+async function handleGetHistorique(req, res) {
+  userHistorique = req.body.userId;
+  console.log("<<<<<", userHistorique);
+  // JSON.parse(userHistorique);
+  // console.log("<<<<<", userHistorique);
+
+  const URI = process.env.URI;
+  const client = new MongoClient(URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  });
+  try {
+    await client.connect();
+    const result = await client
+      .db("trailSync")
+      .collection("userplaylist")
+      .find({ "playlistInfo.owner.id": userHistorique })
+      .toArray();
+    result
+      ? res.status(200).send({ status: 200, result })
+      : res.send("Notting has been created yet");
+  } catch (e) {
+    console.error(e);
+  } finally {
+    await client.close();
+  }
+}
 
 async function handleTrailGeo(req, res) {
-  console.log(req.body);
-
   const trailId = req.body;
-  console.log("trailId", trailId);
-
   const URI = process.env.URI;
   const client = new MongoClient(URI, {
     useNewUrlParser: true,
@@ -47,7 +63,6 @@ async function handleTrailGeo(req, res) {
       .findOne({ _id: parseInt(trailId.id) });
     if (result) {
       let trailGeo = result;
-      console.log(trailGeo);
       res.status(200).send({ status: 200, trailGeo });
     }
   } catch (e) {
@@ -58,11 +73,7 @@ async function handleTrailGeo(req, res) {
 }
 
 async function handleTrailInfo(req, res) {
-  console.log(req.body);
-
   const trailId = req.body;
-  console.log("trailId", trailId);
-
   const URI = process.env.URI;
   const client = new MongoClient(URI, {
     useNewUrlParser: true,
@@ -77,7 +88,6 @@ async function handleTrailInfo(req, res) {
       .findOne({ _id: parseInt(trailId.id) });
     if (result) {
       let trailGeo = result;
-      console.log(trailGeo);
       res.status(200).send({ status: 200, trailGeo });
     }
   } catch (e) {
@@ -87,7 +97,7 @@ async function handleTrailInfo(req, res) {
   }
 }
 
-async function saveUserPlaylistInfo(req, res, playlistInfo) {
+async function saveUserPlaylistInfo(playlistInfo) {
   const URI = process.env.URI;
   const client = new MongoClient(URI, {
     useNewUrlParser: true,
@@ -100,11 +110,6 @@ async function saveUserPlaylistInfo(req, res, playlistInfo) {
       .db("trailSync")
       .collection("userplaylist")
       .insertOne({ playlistInfo });
-    if (result) {
-      let confirmation = result;
-      console.log(confirmation);
-      res.status(200).send({ status: 200, confirmation });
-    }
   } catch (e) {
     console.error(e);
   } finally {
@@ -136,7 +141,6 @@ const handleTrailsData = async (req, res) => {
       .toArray();
     if (result) {
       let trails = result;
-      // console.log(trails);
 
       res.status(200).send({ status: 200, trails });
     }
@@ -149,10 +153,10 @@ const handleTrailsData = async (req, res) => {
 
 // const handleImagesData = (req, res) => {
 //   fetch(`https://pixabay.com/api/?key=${pixabay_key}&q="forest"`)
-//     .then((res) => {
-//       return res.json();
-//     })
-//     .then((payload) => res.send(payload));
+// .then((res) => {
+//   return res.json();
+// })
+// .then((payload) => res.send(payload));
 // };
 
 const handleLogin = (req, res) => {
@@ -173,6 +177,7 @@ const handleLogin = (req, res) => {
       })
   );
 };
+
 const handleCallBack = (req, res) => {
   // your application requests refresh and access tokens
   // after checking the state parameter
@@ -206,10 +211,13 @@ const handleCallBack = (req, res) => {
     };
 
     request.post(authOptions, function (error, response, body) {
+      // console.log("<<<<<", body, response);
+
       if (!error && response.statusCode === 200) {
-        (access_token = body.access_token),
-          (refresh_token = body.refresh_token);
-        console.log("<<<<", access_token);
+        console.log("body login", body.access_token);
+        access_token = body.access_token;
+        console.log(access_token);
+        refresh_token = body.refresh_token;
         var options = {
           url: "https://api.spotify.com/v1/me",
           headers: { Authorization: "Bearer " + access_token },
@@ -218,22 +226,11 @@ const handleCallBack = (req, res) => {
 
         // use the access token to access the Spotify Web API
         request.get(options, function (error, response, body) {
-          console.log(body);
           userInfo = body;
           userId = body.id;
-          // console.log(userId);
           // we can also pass the token to the browser to make requests from there
           //res.send instead of redirect
-          res.redirect(
-            "http://localhost:3000/init"
-
-            //         +
-            //           querystring.stringify({
-            //             access_token: access_token,
-            //             refresh_token: refresh_token,
-            // })
-          );
-          // return userId;
+          res.redirect("http://localhost:3000/init");
         });
       } else {
         res.redirect(
@@ -246,57 +243,12 @@ const handleCallBack = (req, res) => {
     });
   }
 };
-// const handleCreatePlaylist = (req, res) => {
-
-//   var createPlaylist = {
-//     method: "POST",
-//     url: "https://api.spotify.com/v1/users/12121769867/playlists",
-//     headers: {
-//       Accept: "application/json",
-//       "Content-Type": "application/json",
-//       Authorization: "Bearer " + access_token,
-//     },
-//     body: {
-//       name: "New Playlist",
-//       description: "New playlist description",
-//       public: false,
-//     },
-//     json: true,
-//   };
-
-//   request(createPlaylist, function (error, response, body) {
-//     // playlist_id = body.id;
-//     res.send(body);
-//     console.log("<<<<<<<", body.id);
-//     playlist_id = body.id;
-//     return playlist_id;
-//   });
-
-// };
-// const handleAddSongs = (req, res) => {
-//   const addsongs = {
-//     method: "POST",
-//     url: `https://api.spotify.com/v1/playlists/${playlist_id}/tracks`,
-//     qs: {
-//       uris: `${arrId}`,
-//     },
-//     headers: {
-//       authorization: "Bearer " + access_token,
-//       accept: "application/json",
-//     },
-//   };
-
-//   request(addsongs, function (error, response, body) {
-//     res.send(body);
-//   });
-// };
 
 const handleUserInfo = (req, res) => {
   return res.json(userInfo);
 };
-const handleRefreshToken = (req, res) => {
+const handleRefreshToken = () => {
   // requesting access token from refresh token
-  var refresh_token = req.params.token;
   var authOptions = {
     url: "https://accounts.spotify.com/api/token",
     headers: {
@@ -313,20 +265,19 @@ const handleRefreshToken = (req, res) => {
 
   request.post(authOptions, function (error, response, body) {
     if (!error && response.statusCode === 200) {
-      var access_token = body.access_token;
-      console.log(body.access_token);
+      // console.log("log 4", body);
 
-      res.send({
-        access_token: access_token,
-      });
+      access_token = body.access_token;
+      // return {acces_token, body.referesh_token}
+      // res.send({
+      //   access_token: access_token,
+      // });
     }
   });
 };
 
 const handleCreatePlaylist = (req, res) => {
   name = req.body.name;
-  console.log(name);
-
   const {
     seed_genres,
     limit,
@@ -335,15 +286,6 @@ const handleCreatePlaylist = (req, res) => {
     target_energy,
     target_tempo,
   } = req.body.qs;
-
-  console.log(
-    seed_genres,
-    limit,
-    target_acousticness,
-    target_danceability,
-    target_energy,
-    target_tempo
-  );
 
   var recommendations = {
     url: "https://api.spotify.com/v1/recommendations",
@@ -362,7 +304,6 @@ const handleCreatePlaylist = (req, res) => {
     },
     json: true,
   };
-
   rp(recommendations)
     .then((body) => {
       arrId = [];
@@ -370,10 +311,8 @@ const handleCreatePlaylist = (req, res) => {
         arrId.push(song.uri);
       });
       console.log(arrId);
-      // return arrId;
     })
     .then(() => {
-      console.log(userId);
       var createPlaylist = {
         url: `https://api.spotify.com/v1/users/${userId}/playlists`,
         method: "POST",
@@ -392,9 +331,6 @@ const handleCreatePlaylist = (req, res) => {
       rp(createPlaylist)
         .then((body) => {
           playlist_id = body.id;
-          playlist = body;
-          // res.json();
-          // playlist_id;
         })
         .then(() => {
           const addsongs = {
@@ -408,29 +344,50 @@ const handleCreatePlaylist = (req, res) => {
               accept: "application/json",
             },
           };
-          rp(addsongs)
-            // .then((res) => {
-            //   return res.json();
-            // })
-            .then(() => {
-              console.log("<<<<<<<<<", playlist_id);
-              const getplaylistInfo = {
-                url: `https://api.spotify.com/v1/playlists/${playlist_id}`,
-                headers: {
-                  authorization: "Bearer " + access_token,
-                  accept: "application/json",
-                },
-                json: true,
-              };
-              rp(getplaylistInfo)
-                // .then((res) => res.json())
-                .then((res) => saveUserPlaylistInfo(res));
+          rp(addsongs).then(() => {
+            const getplaylistInfo = {
+              url: `https://api.spotify.com/v1/playlists/${playlist_id}`,
+              headers: {
+                authorization: "Bearer " + access_token,
+                accept: "application/json",
+              },
+              json: true,
+            };
+            rp(getplaylistInfo).then((playlistInfo) => {
+              saveUserPlaylistInfo(playlistInfo);
+              res.send(playlistInfo);
             });
-          // .then((payload) => res.send(payload))
-
-          // .then(() => saveUserPlaylistInfo());
+          });
         });
+    })
+    .catch((err) => {
+      let errorMessage = err.error.error.message;
+      if (errorMessage === "Invalid access token") {
+        handleRefreshToken();
+        console.log("log 5", access_token);
+      }
     });
+};
+
+const handleGetPlaying = (req, res) => {
+  const getCurrentPlaying = {
+    url: "https://api.spotify.com/v1/me/player/currently-playing",
+    method: "GET",
+    headers: {
+      authorization: "Bearer " + access_token,
+      accept: "application/json",
+    },
+  };
+  rp(getCurrentPlaying).then((result) => {
+    console.log(typeof result, result);
+    // let parsedresult = JSON.parse(result);
+    // console.log(typeof parsedresult, parsedresult);
+    if (result.length) {
+      res.send(result);
+    } else {
+      res.json("Notting is playing at the moment");
+    }
+  });
 };
 
 module.exports = {
@@ -442,4 +399,6 @@ module.exports = {
   handleRefreshToken,
   handleTrailGeo,
   handleTrailInfo,
+  handleGetHistorique,
+  handleGetPlaying,
 };
