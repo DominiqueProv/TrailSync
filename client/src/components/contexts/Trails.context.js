@@ -7,6 +7,7 @@ const initialState = {
   isLoaded: false,
   trails: [],
   storage: false,
+  isDay: true,
 };
 
 function currentAppReducer(state, action) {
@@ -31,6 +32,10 @@ function currentAppReducer(state, action) {
         isLoaded: false,
         storage: false,
       };
+    case "day-night":
+      return { ...state, isDay: true };
+    case "night-day":
+      return { ...state, isDay: false };
     default:
       throw new Error("Should not get there!");
   }
@@ -64,6 +69,16 @@ export function CurrentAppProvider({ children }) {
       type: "logout",
     });
   };
+  const toggleDay = () => {
+    dispatch({
+      type: "day-night",
+    });
+  };
+  const toggleNight = () => {
+    dispatch({
+      type: "night-day",
+    });
+  };
 
   return (
     <CurrentAppContext.Provider
@@ -74,6 +89,8 @@ export function CurrentAppProvider({ children }) {
           handlelogginUser,
           saveLocalStorage,
           logout,
+          toggleDay,
+          toggleNight,
         },
       }}
     >

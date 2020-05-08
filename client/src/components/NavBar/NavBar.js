@@ -10,12 +10,13 @@ import { ReactComponent as Logo } from "../../assets/trailSync-hor-05.svg";
 import { useHistory } from "react-router-dom";
 import ExploreIcon from "@material-ui/icons/Explore";
 import SearchBar from "../SearchBar";
+import Brightness4Icon from "@material-ui/icons/Brightness4";
 
 const NavBar = () => {
   const history = useHistory();
   const {
     currentAppState,
-    actions: { logout },
+    actions: { logout, toggleDay, toggleNight },
   } = useContext(CurrentAppContext);
   let user;
   const [searchModalOpenFlag, setSearchModalOpenFlag] = useState(false);
@@ -39,6 +40,15 @@ const NavBar = () => {
           <SearchNav data-css="SearchNav" onClick={() => ToggleModal()}>
             <SearchOutlinedIcon />
           </SearchNav>
+          <IconNav data-css="IconNav">
+            <Brightness4Icon
+              onClick={(ev) => {
+                currentAppState.isDay === true
+                  ? toggleNight(ev)
+                  : toggleDay(ev);
+              }}
+            />
+          </IconNav>
           <Link to="/map">
             <IconNav data-css="IconNav">
               <ExploreIcon />

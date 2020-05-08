@@ -5,6 +5,7 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import { Link } from "react-router-dom";
 import Iframe from "react-iframe";
 import Footer from "../Footer";
+import PlaylistAddIcon from "@material-ui/icons/PlaylistAdd";
 
 let name;
 let email;
@@ -18,6 +19,7 @@ const Profile = () => {
   // const [isPlaying, setIsPlaying] = useState(false);
   console.log(playlistHistorique);
   console.log(userId);
+  console.log(currentlyPlaying);
   const { currentAppState } = useContext(CurrentAppContext);
 
   useEffect(() => {
@@ -106,14 +108,18 @@ const Profile = () => {
                     </p>
                   </div>
                 ) : (
-                  <div>
+                  <CurrentInfoWrapper>
                     <img
-                      style={{ borderRadius: "0px" }}
+                      style={{ borderRadius: "0px", marginBottom: "20px" }}
                       src={currentlyPlaying.item.album.images[1].url}
                       alt={"artist"}
                     />
-                    <p>{}</p>
-                  </div>
+                    <p>Artist: {currentlyPlaying.item.artists[0].name}</p>
+                    <p>Album: {currentlyPlaying.item.album.name}</p>
+                    <p>
+                      Release date: {currentlyPlaying.item.album.release_date}
+                    </p>
+                  </CurrentInfoWrapper>
                 )}
 
                 <Button
@@ -132,7 +138,7 @@ const Profile = () => {
               />
             ) : (
               <WrapperHistory>
-                <h2>Created playlists history</h2>
+                <h2>Playlist created</h2>
                 <WrapGrid>
                   {playlistHistorique.result.map((playlist) => (
                     <PlayListInfoWrapper>
@@ -142,7 +148,17 @@ const Profile = () => {
                           alt={playlist.playlistInfo.decription}
                         />
                         <h3>{playlist.playlistInfo.name}</h3>
-                        <p>{playlist.playlistInfo.tracks.total} tracks</p>
+                        <div
+                          style={{
+                            display: "flex",
+                            justifyContent: "space-between",
+                            width: "200px",
+                            alignItems: "flex-end",
+                          }}
+                        >
+                          <p>{playlist.playlistInfo.tracks.total} tracks</p>
+                          <PlaylistAddIcon />
+                        </div>
                       </div>
                     </PlayListInfoWrapper>
                   ))}
@@ -163,8 +179,15 @@ const Profile = () => {
   );
 };
 
+const CurrentInfoWrapper = styled.div`
+  p {
+    font-weight: 400;
+    padding-bottom: 12px;
+  }
+`;
+
 const CurrentlyPlayingWrap = styled.div`
-  background-color: #e6ecf0;
+  background-color: #ebf5ff;
   padding: 30px;
   height: calc(100vh - 570px);
   display: flex;
@@ -192,19 +215,20 @@ const WrapperUser = styled.div`
   }
 `;
 const PlayListInfoWrapper = styled.div`
-  /* width: 300px; */
+  margin-bottom: 30px;
   div {
     h3 {
       padding-top: 20px;
-      font-size: 2em;
+      font-size: 1.2em;
+      font-weight: 400;
       color: black;
     }
     p {
       padding-top: 15px;
     }
     img {
-      width: 150px;
-      height: 150px;
+      width: 200px;
+      height: 200px;
       /* margin-bottom: 30px; */
     }
     h2 {

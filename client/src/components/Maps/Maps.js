@@ -28,6 +28,7 @@ dotenv.config();
 
 const Maps = () => {
   const { currentAppState } = useContext(CurrentAppContext);
+
   let trails;
   let history = useHistory();
 
@@ -127,7 +128,11 @@ const Maps = () => {
           }}
           {...viewport}
           accessToken={process.env.REACT_APP_MAPBOX_TOKEN}
-          mapStyle="mapbox://styles/dominiqueprov/ck9usv5wd0e011ipbweu3fvp3"
+          mapStyle={
+            currentAppState.isDay
+              ? "mapbox://styles/dominiqueprov/ck9usv5wd0e011ipbweu3fvp3"
+              : "mapbox://styles/dominiqueprov/ck9mwpfn702ee1inr2yibugcp"
+          }
           latitude={viewport.latitude}
           longitude={viewport.longitude}
           zoom={viewport.zoom}
@@ -137,6 +142,7 @@ const Maps = () => {
             <FullScreenCtl data-css="FullscreenControl" />
             <NavCtl data-css="NavigationControl" showCompass showZoom />
           </WrapperControle>
+
           <>
             <Cluster
               radius={40}
@@ -173,9 +179,17 @@ const Maps = () => {
                     }}
                   >
                     {trail.Usager === "Piste cyclable" ? (
-                      <DirectionsBikeIcon style={{ color: "dodgerblue" }} />
+                      <DirectionsBikeIcon
+                        style={{
+                          color: currentAppState.isDay ? "dodgerblue" : "blue",
+                        }}
+                      />
                     ) : (
-                      <DirectionsWalkIcon style={{ color: "dodgerblue" }} />
+                      <DirectionsWalkIcon
+                        style={{
+                          color: currentAppState.isDay ? "dodgerblue" : "blue",
+                        }}
+                      />
                     )}
                   </ButtonPin>
                 </Marker>
