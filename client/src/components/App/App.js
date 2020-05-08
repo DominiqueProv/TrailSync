@@ -15,20 +15,30 @@ import NavBar from "../NavBar";
 import Init from "../Init";
 import Maps from "../Maps";
 import Profile from "../Profile";
-
+import PopUpModalIntro from "../PopUpModalIntro";
 function App() {
   const { currentAppState } = useContext(CurrentAppContext);
   let isLoggedIn;
   let storage;
-
+  let isFirstVisit;
+  const [open, setOpen] = useState(true);
   if (currentAppState.storage || localStorage.getItem("isLoggedIn")) {
     isLoggedIn = JSON.parse(localStorage.getItem("isLoggedIn"));
     storage = JSON.parse(localStorage.getItem("storage"));
+    isFirstVisit = JSON.parse(localStorage.getItem("firstVisit"));
+    console.log(isFirstVisit);
   }
+
+  const toggle = () => {
+    setOpen(false);
+    window.localStorage.setItem("firstVisit", JSON.stringify(false));
+  };
+
   return (
     <Router>
       <GlobalStyles />
-      {isLoggedIn && <NavBar />}
+      {isLoggedIn === true && <NavBar />}
+      {isFirstVisit && <PopUpModalIntro open={open} toggle={toggle} />}
       <Switch>
         <Route path="/" exact>
           <Home />

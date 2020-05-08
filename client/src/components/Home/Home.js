@@ -50,11 +50,17 @@ const Wrapper = styled.div`
   h1 {
     font-size: 2vw;
     margin-bottom: 15px;
+    @media (max-width: 750px) {
+      font-size: 1.2em;
+    }
   }
 `;
 
 const BrandImage = styled(Logo)`
   width: 20vw;
+  @media (max-width: 750px) {
+    width: 200px;
+  }
 `;
 
 const Button = styled.button`

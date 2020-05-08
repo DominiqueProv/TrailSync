@@ -31,9 +31,15 @@ const Wrapper = styled.div`
   p {
     font-weight: 400;
     font-size: 0.9em;
+    @media (max-width: 750px) {
+      font-size: 0.7em;
+    }
   }
   i {
     margin-left: 20px;
+    @media (max-width: 750px) {
+      margin-left: 10px;
+    }
   }
 `;
 

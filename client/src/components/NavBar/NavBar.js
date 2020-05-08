@@ -11,18 +11,25 @@ import { useHistory } from "react-router-dom";
 import ExploreIcon from "@material-ui/icons/Explore";
 import SearchBar from "../SearchBar";
 import Brightness4Icon from "@material-ui/icons/Brightness4";
+import MenuMobile from "../MenuMobile";
 
 const NavBar = () => {
   const history = useHistory();
   const {
     currentAppState,
-    actions: { logout, toggleDay, toggleNight },
+    actions: { logout, toggleDay, toggleNight, removeNotificationPill },
   } = useContext(CurrentAppContext);
   let user;
   const [searchModalOpenFlag, setSearchModalOpenFlag] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const ToggleModal = () => {
     setSearchModalOpenFlag(!searchModalOpenFlag);
   };
+
+  const ToggleMenuDisplay = () => {
+    setMobileMenuOpen(!mobileMenuOpen);
+  };
+
   if (currentAppState.storage || localStorage.getItem("currentUser")) {
     user = JSON.parse(localStorage.getItem("currentUser"));
   }
@@ -33,7 +40,7 @@ const NavBar = () => {
         <Link to={"/map"}>
           <ContainerLeft data-css="ContainerLeft">
             <BrandImage>Logo</BrandImage>
-            <h1>Custom playlists on the go </h1>
+            <h1 style={{ width: "170px" }}>Custom playlists on the go </h1>
           </ContainerLeft>
         </Link>
         <ContainerRight data-css="ContainerRigth">
@@ -43,6 +50,7 @@ const NavBar = () => {
           <IconNav data-css="IconNav">
             <Brightness4Icon
               onClick={(ev) => {
+                ev.preventDefault();
                 currentAppState.isDay === true
                   ? toggleNight(ev)
                   : toggleDay(ev);
@@ -57,9 +65,20 @@ const NavBar = () => {
           {currentAppState.currentUser || localStorage.getItem("isLoggedIn") ? (
             <>
               <Link to="/Profile">
-                <IconNav data-css="IconNav">
+                <IconNav
+                  onClick={(ev) => {
+                    ev.preventDefault(ev);
+                    removeNotificationPill();
+                    history.push("/Profile");
+                  }}
+                  data-css="IconNav"
+                  style={{ position: "relative" }}
+                >
                   <Name>{user.data.display_name}</Name>
                   <Avatar src={user.data.images[0].url} alt="avatar" />
+                  {currentAppState.isNotification && (
+                    <Notification></Notification>
+                  )}
                 </IconNav>
               </Link>
               <IconNav
@@ -75,12 +94,20 @@ const NavBar = () => {
           ) : (
             <p></p>
           )}
-          <MenuNav data-css="MenuNav">
+          <MenuNav data-css="MenuNav" onClick={() => ToggleMenuDisplay()}>
             <MenuIcon />
           </MenuNav>
         </ContainerRight>
       </Wrapper>
       <SearchBar open={searchModalOpenFlag} toggle={ToggleModal} />
+      <MenuMobile
+        open={mobileMenuOpen}
+        toggle={ToggleMenuDisplay}
+        user={user}
+        toggleNight={toggleNight}
+        toggleDay={toggleDay}
+        toggleModal={ToggleModal}
+      />
     </>
   );
 };
@@ -98,6 +125,7 @@ const Wrapper = styled.div`
   height: 60px;
   background-color: white;
   border-bottom: 1px solid #e6ecf0;
+  z-index: 100;
   h2 {
     font-weight: 400;
   }
@@ -188,4 +216,21 @@ const ContainerRight = styled.div`
   align-items: center;
   justify-content: flex-end;
   height: 80px;
+`;
+
+const Notification = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  background-color: red;
+  border-radius: 50%;
+  color: white;
+  font-size: 0.7em;
+  height: 12px;
+  width: 12px;
+  padding-top: 2px;
+  text-align: center;
+  top: 15px;
+  right: 15px;
 `;

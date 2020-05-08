@@ -14,11 +14,20 @@ const SearchBar = ({ open, toggle }) => {
     const suggestions1 = [];
     totalOptions.forEach((option) => {
       if (
-        option.properties.Toponyme1.toLowerCase().includes(input.toLowerCase())
+        option.properties.Toponyme1.toLowerCase().includes(
+          input.toLowerCase()
+        ) ||
+        option.properties.Niv_diff.toLowerCase().includes(
+          input.toLowerCase()
+        ) ||
+        option.properties.Nom_etab.toLowerCase().includes(input.toLowerCase())
       )
         suggestions1.push({
           id: option._id,
           name: option.properties.Toponyme1,
+          diff: option.properties.Niv_diff,
+          reseau: option.properties.Reseau,
+          etablissement: option.properties.Nom_etab,
         });
     });
     return suggestions1;
@@ -33,7 +42,7 @@ const SearchBar = ({ open, toggle }) => {
   };
 
   useEffect(() => {
-    searchInputVal.length >= 3 && typaheadItems
+    searchInputVal.length >= 1 && typaheadItems
       ? setSuggestions(typeaheadSuggestion(searchInputVal, typaheadItems))
       : setSuggestions([]);
   }, [searchInputVal]);
@@ -43,8 +52,10 @@ const SearchBar = ({ open, toggle }) => {
     typaheadItems = JSON.parse(localStorage.getItem("trails"));
     typaheadItems = typaheadItems.trails;
   }
+  console.log(typaheadItems);
 
   const wrapperRef = useRef(null);
+
   return (
     <WrapperSearch ref={wrapperRef} data-css="Typehead-Wrapper" open={open}>
       <SearchForm open={open}>
@@ -69,14 +80,52 @@ const SearchBar = ({ open, toggle }) => {
                     handleClickOnItemInSuggestionDropdown(ev, suggestion)
                   }
                 >
-                  <RoomOutlinedIcon
+                  <div
                     style={{
-                      color: "white",
-                      paddingRight: "15px",
-                      fontSize: "40px",
+                      display: "flex",
+                      alignItems: "center",
+                      paddingBottom: "15px",
                     }}
-                  />
-                  <p>{suggestion.name}</p>
+                  >
+                    <RoomOutlinedIcon
+                      style={{
+                        color: "white",
+                        paddingRight: "15px",
+                        fontSize: "35px",
+                      }}
+                    />
+                    <p>{suggestion.name}</p>
+                  </div>
+                  <p
+                    style={{
+                      paddingBottom: "15px",
+                      fontWeight: "400",
+                      textAlign: "center",
+                    }}
+                  >
+                    {suggestion.reseau} {suggestion.etablissement}
+                  </p>
+                  <div style={{ display: "flex" }}>
+                    <p style={{ fontWeight: "400" }}>
+                      Level : {suggestion.diff}
+                    </p>
+                    <div
+                      style={{
+                        backgroundColor:
+                          suggestion.diff === "Facile"
+                            ? "green"
+                            : suggestion.diff === "Intermédiaire"
+                            ? "yellow"
+                            : suggestion.diff === "Difficile"
+                            ? "orange"
+                            : "red",
+                        width: "15px",
+                        height: "15px",
+                        borderRadius: "50%",
+                        marginLeft: "15px",
+                      }}
+                    ></div>
+                  </div>
                   <Button>Go</Button>
                 </DropDownItem>
               )
@@ -96,17 +145,19 @@ const WrapperSearch = styled.div`
   justify-content: flex-start;
   display: none;
   background-color: rgb(0, 0, 0);
-  background-color: rgba(0, 0, 0, 0.85);
+  background-color: rgba(0, 0, 0, 0.9);
   transition: ease-in-out 0.2s all;
+  @media (max-width: 750px) {
+  }
   ${(props) =>
     props.open
-      ? `background-color: background-color: rgba(0, 0, 0, 0.85); display: flex; z-index: 4;`
+      ? `background-color: background-color: rgba(0, 0, 0, 0.9); display: flex; z-index: 4;`
       : `background-color: transparent; display : none;`};
 `;
 
 const SearchForm = styled.form`
   display: inline-block;
-  padding-right: 60px;
+  width: 100%;
   ${(props) => (props.open ? `display: inline-block;` : `display: none;`)};
 `;
 
@@ -121,7 +172,7 @@ const Button = styled.button`
 `;
 
 const InputField = styled.input`
-  height: 15vh;
+  width: 100%;
   margin-top: 30px;
   background: transparent;
   border: none;
@@ -131,6 +182,8 @@ const InputField = styled.input`
   display: inline-block;
   color: #ffffff;
   font-size: 7vw;
+  @media (max-width: 750px) {
+  }
   ${(props) => (props.open ? `display: inline-block;` : `display: none;`)};
 
   ::placeholder {
@@ -142,9 +195,13 @@ const InputField = styled.input`
 const TypeaheadSuggestions = styled.div`
   position: absolute;
   padding-right: 120px;
-  top: 300px;
+  top: 250px;
   background-color: transparent;
   width: 100%;
+  @media (max-width: 750px) {
+    top: 200px;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr, 1fr));
+  }
   display: grid;
   gap: 2rem;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -155,11 +212,18 @@ const TypeaheadSuggestions = styled.div`
 
 const DropDownItem = styled.div`
   color: white;
+  background-color: #1c2126;
+  border-radius: 10px;
   display: flex;
+  flex-direction: column;
   align-items: center;
   padding: 30px;
   transition: all 0.2s ease-in;
-  border: 1px solid #fff;
+  /* border: 1px solid #fff; */
+  @media (max-width: 750px) {
+    align-items: flex-start;
+    padding: 10px;
+  }
   &:hover {
     background-color: black;
     cursor: pointer;

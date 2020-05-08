@@ -24,15 +24,11 @@ const useStyles = makeStyles((theme) => ({
 
 export default function PopUpModalPlaylist({ playlistInfo, toggle, open }) {
   const classes = useStyles();
-  // const [open, setOpen] = React.useState(false);
-  // const [fullWidth, setFullWidth] = React.useState(true);
-  // const [maxWidth, setMaxWidth] = React.useState("sm");
+
   return (
     <Dialog
-      // fullWidth={fullWidth}
       maxWidth={"md"}
       open={open}
-      // onClose={toggle}
       aria-labelledby="max-width-dialog-title"
     >
       <Wrapper>

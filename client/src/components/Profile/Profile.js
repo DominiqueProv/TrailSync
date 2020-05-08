@@ -114,7 +114,9 @@ const Profile = () => {
                       src={currentlyPlaying.item.album.images[1].url}
                       alt={"artist"}
                     />
-                    <p>Artist: {currentlyPlaying.item.artists[0].name}</p>
+                    <p style={{ fontWeight: "700" }}>
+                      {currentlyPlaying.item.artists[0].name}
+                    </p>
                     <p>Album: {currentlyPlaying.item.album.name}</p>
                     <p>
                       Release date: {currentlyPlaying.item.album.release_date}
@@ -139,6 +141,7 @@ const Profile = () => {
             ) : (
               <WrapperHistory>
                 <h2>Playlist created</h2>
+
                 <WrapGrid>
                   {playlistHistorique.result.map((playlist) => (
                     <PlayListInfoWrapper>

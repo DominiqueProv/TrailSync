@@ -1,17 +1,15 @@
 import React, { useEffect, useContext, useState } from "react";
-// import { useParams, Redirect } from "react-router-dom";
 import { CurrentAppContext } from "../contexts/Trails.context";
 import _ from "lodash";
 import styled from "styled-components";
 import { withStyles } from "@material-ui/core/styles";
 import Slider from "@material-ui/core/Slider";
-import SpotifyLogo from "../../assets/spotify.png";
 import PopUpModalPlaylist from "../PopUpModalPlaylist";
 const Create = ({ info, trailName }) => {
-  const { Niv_diff, Shape_Leng, Usager, Toponyme1 } = info;
-  // const { actions: handleModalOpen, handleModalClose } = useContext(
-  //   CurrentAppContext
-  // );
+  const { Niv_diff, Shape_Leng, Toponyme1 } = info;
+  const {
+    actions: { addNotificationPill },
+  } = useContext(CurrentAppContext);
   let acousticness;
   let danceability;
   let energy;
@@ -233,6 +231,7 @@ const Create = ({ info, trailName }) => {
       .then((res) => res.json())
       .then((res) => {
         setPlaylistInfo(res);
+        addNotificationPill();
         console.log(res);
       });
   };

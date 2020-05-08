@@ -2,8 +2,6 @@ import React, { useState, useEffect, useContext } from "react";
 import dotenv from "dotenv";
 import { CurrentAppContext } from "../contexts/Trails.context";
 import styled from "styled-components";
-import RoomOutlinedIcon from "@material-ui/icons/RoomOutlined";
-// import { SvgIcon } from "@material-ui/core";
 import { useHistory } from "react-router-dom";
 import "mapbox-gl/dist/mapbox-gl.css";
 import Cluster from "@urbica/react-map-gl-cluster";
@@ -14,20 +12,18 @@ import Footer from "../Footer";
 import ReactMapGL, {
   Marker,
   FullscreenControl,
-  // GeolocateControl,
   Source,
   Layer,
-  // SVGOverlay,
-  // HTMLOverlay,
   NavigationControl,
-  // LinearInterpolator,
-  // CanvasOverlay,
   Popup,
 } from "@urbica/react-map-gl";
 dotenv.config();
 
 const Maps = () => {
-  const { currentAppState } = useContext(CurrentAppContext);
+  const {
+    currentAppState,
+    actions: { popUpModalIntro },
+  } = useContext(CurrentAppContext);
 
   let trails;
   let history = useHistory();
@@ -77,20 +73,6 @@ const Maps = () => {
       )}
     </Marker>
   );
-
-  const style = {
-    width: "20px",
-    height: "20px",
-    color: "dodgerblue",
-    background: "#ffffff",
-    borderRadius: "50%",
-    textAlign: "center",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    border: "1px solid #ff0000",
-    boxShadow: "11px 10px 9px -6px rgba(0,0,0,0.12)",
-  };
 
   const [viewport, setViewport] = useState({
     latitude: 47.837752,
@@ -257,9 +239,27 @@ const Maps = () => {
                     {selectedTrail.properties.Nom_etab}
                   </h2>
                   <h3>Trail: {selectedTrail.properties.Toponyme1}</h3>
-                  <h4>
-                    Niveau de difficulté : {selectedTrail.properties.Niv_diff}
-                  </h4>
+                  <div style={{ display: "flex", alignItems: "center" }}>
+                    {" "}
+                    <h4>Level : {selectedTrail.properties.Niv_diff}</h4>
+                    <div
+                      style={{
+                        backgroundColor:
+                          selectedTrail.properties.Niv_diff === "Facile"
+                            ? "green"
+                            : selectedTrail.properties.Niv_diff ===
+                              "Intermédiaire"
+                            ? "yellow"
+                            : selectedTrail.properties.Niv_diff === "Difficile"
+                            ? "orange"
+                            : "red",
+                        width: "10px",
+                        height: "10px",
+                        borderRadius: "50%",
+                        marginLeft: "15px",
+                      }}
+                    ></div>
+                  </div>
                   <Button
                     onClick={(ev) => {
                       ev.preventDefault();
@@ -274,9 +274,24 @@ const Maps = () => {
           )}
         </ReactMapGL>
       )}
+
       <Footer style={{ zIndex: "100" }} />
     </>
   );
+};
+
+const style = {
+  width: "20px",
+  height: "20px",
+  color: "dodgerblue",
+  background: "#ffffff",
+  borderRadius: "50%",
+  textAlign: "center",
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+  border: "1px solid #ff0000",
+  boxShadow: "11px 10px 9px -6px rgba(0,0,0,0.12)",
 };
 
 const WrapperControle = styled.div`

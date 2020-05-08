@@ -90,7 +90,7 @@ const Trail = () => {
                 {trailInfo.trailGeo.properties.Nom_etab}
               </h2>
               <ReactMapGL
-                style={{ width: "100%", height: "350px", marginBottom: "30px" }}
+                style={{ width: "100%", height: "400px", marginBottom: "30px" }}
                 {...viewport}
                 accessToken={process.env.REACT_APP_MAPBOX_TOKEN}
                 mapStyle="mapbox://styles/dominiqueprov/ck9usv5wd0e011ipbweu3fvp3"

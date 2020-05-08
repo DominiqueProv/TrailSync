@@ -8,6 +8,9 @@ const initialState = {
   trails: [],
   storage: false,
   isDay: true,
+  isNotification: false,
+  isIntroModalOpen: false,
+  fistVisit: true,
 };
 
 function currentAppReducer(state, action) {
@@ -36,6 +39,14 @@ function currentAppReducer(state, action) {
       return { ...state, isDay: true };
     case "night-day":
       return { ...state, isDay: false };
+    case "add-notification-pill":
+      return { ...state, isNotification: true };
+    case "remove-notification-pill":
+      return { ...state, isNotification: false };
+    case "open-intro-modal":
+      return { ...state, isIntroModalOpen: true };
+    case "close-intro-modal":
+      return { ...state, isIntroModalOpen: false };
     default:
       throw new Error("Should not get there!");
   }
@@ -79,6 +90,23 @@ export function CurrentAppProvider({ children }) {
       type: "night-day",
     });
   };
+  const addNotificationPill = () => {
+    dispatch({
+      type: "add-notification-pill",
+    });
+  };
+  const removeNotificationPill = () => {
+    dispatch({
+      type: "remove-notification-pill",
+    });
+  };
+
+  const popUpModalIntro = () => {
+    window.localStorage.setItem("firstVisit", JSON.stringify(false));
+    dispatch({
+      type: "open-intro-modal",
+    });
+  };
 
   return (
     <CurrentAppContext.Provider
@@ -91,6 +119,9 @@ export function CurrentAppProvider({ children }) {
           logout,
           toggleDay,
           toggleNight,
+          addNotificationPill,
+          removeNotificationPill,
+          popUpModalIntro,
         },
       }}
     >

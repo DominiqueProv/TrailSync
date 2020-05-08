@@ -48,8 +48,8 @@ const Init = () => {
         JSON.stringify(currentAppState.storage)
       );
       await window.localStorage.setItem(
-        "storage",
-        JSON.stringify(currentAppState.storage)
+        "firstVisit",
+        JSON.stringify(currentAppState.fistVisit)
       );
     } catch (err) {
       return console.log(err);
@@ -93,6 +93,9 @@ const Wrapper = styled.div`
     padding-bottom: 30px;
     text-align: center;
     line-height: 1.5em;
+    @media (max-width: 750px) {
+      font-size: 1.8em;
+    }
   }
 `;
 
