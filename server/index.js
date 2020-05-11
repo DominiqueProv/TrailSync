@@ -15,8 +15,14 @@ const {
   handleGetPlaying,
 } = require("./hanlders");
 
+let port = process.env.PORT;
+if (port == null || port == "") {
+  port = 8888;
+}
+
 app
-  .use(express.static(__dirname + "/public"))
+  .use(express.static(__dirname + "build"))
+  // .use(express.static(__dirname + "/public"))
   .use(express.json())
   .use(cors())
   .use(cookieParser())
@@ -31,4 +37,4 @@ app
   .post("/trailinfo", handleTrailInfo)
   .post("/getHistorique", handleGetHistorique);
 console.log("Listening on 8888");
-app.listen(8888);
+app.listen(port);
