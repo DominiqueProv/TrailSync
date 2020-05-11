@@ -32,7 +32,6 @@ const Create = ({ info, trailName }) => {
   const TogglePlaylistModal = () => {
     setIsOpen(!isOpen);
   };
-
   const analyseTrack = () => {
     let qs = {};
     switch (Niv_diff) {
@@ -201,14 +200,9 @@ const Create = ({ info, trailName }) => {
       default:
     }
   };
-
   useEffect(() => {
     analyseTrack();
   }, []);
-
-  if (genre !== null) {
-  }
-
   const createPlaylist = (ev) => {
     ev.preventDefault();
     setIsOpen(true);
@@ -235,43 +229,6 @@ const Create = ({ info, trailName }) => {
         console.log(res);
       });
   };
-
-  const marks = [
-    {
-      value: 0,
-    },
-    {
-      value: 10,
-    },
-    {
-      value: 20,
-    },
-    {
-      value: 30,
-    },
-    {
-      value: 40,
-    },
-    {
-      value: 50,
-    },
-    {
-      value: 60,
-    },
-    {
-      value: 70,
-    },
-    {
-      value: 80,
-    },
-    {
-      value: 90,
-    },
-    {
-      value: 100,
-    },
-  ];
-
   const handleChange = (ev) => {
     setGenre({ ...genre, seed_genres: ev.target.value });
   };
@@ -387,7 +344,6 @@ const Create = ({ info, trailName }) => {
               aria-label="pretto slider"
               max={100}
               min={0}
-              // marks={marks}
               step={10}
               value={
                 genre.target_danceability ? genre.target_danceability * 100 : 0
@@ -400,7 +356,6 @@ const Create = ({ info, trailName }) => {
                 });
               }}
             />
-
             <p
               style={{
                 fontWeight: "400",
@@ -410,12 +365,10 @@ const Create = ({ info, trailName }) => {
             >
               Energy
             </p>
-
             <PrettoSlider
               valueLabelDisplay="off"
               aria-label="pretto slider"
               max={100}
-              // marks={marks}
               step={10}
               min={0}
               value={genre.target_energy ? genre.target_energy * 100 : 0}
@@ -438,11 +391,9 @@ const Create = ({ info, trailName }) => {
             >
               Tempo
             </p>
-
             <PrettoSlider
               valueLabelDisplay="off"
               aria-label="pretto slider"
-              // marks={marks}
               max={100}
               step={10}
               min={0}

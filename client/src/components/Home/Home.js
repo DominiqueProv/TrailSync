@@ -1,5 +1,4 @@
-import React, { useContext, useEffect } from "react";
-import { Link } from "react-router-dom";
+import React from "react";
 import styled from "styled-components";
 import { ReactComponent as Logo } from "../../assets/trailSync.svg";
 import SpotifyLogo from "../../assets/spotify-red.png";
@@ -36,11 +35,6 @@ const Home = () => {
 
 const Wrapper = styled.div`
   background: #ebf5ff;
-  /* background: linear-gradient(
-    63deg,
-    rgba(0, 152, 172, 1) 0%,
-    rgba(0, 16, 255, 1) 100%
-  ); */
   display: flex;
   justify-content: center;
   align-items: center;

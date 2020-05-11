@@ -182,9 +182,9 @@ const handleCallBack = (req, res) => {
   // your application requests refresh and access tokens
   // after checking the state parameter
 
-  var code = req.query.code || null;
-  var state = req.query.state || null;
-  var storedState = req.cookies ? req.cookies[stateKey] : null;
+  let code = req.query.code || null;
+  let state = req.query.state || null;
+  let storedState = req.cookies ? req.cookies[stateKey] : null;
 
   if (state === null || state !== storedState) {
     res.redirect(
@@ -195,7 +195,7 @@ const handleCallBack = (req, res) => {
     );
   } else {
     res.clearCookie(stateKey);
-    var authOptions = {
+    let authOptions = {
       url: "https://accounts.spotify.com/api/token",
       form: {
         code: code,
@@ -211,14 +211,12 @@ const handleCallBack = (req, res) => {
     };
 
     request.post(authOptions, function (error, response, body) {
-      // console.log("<<<<<", body, response);
-
       if (!error && response.statusCode === 200) {
         console.log("body login", body.access_token);
         access_token = body.access_token;
         console.log(access_token);
         refresh_token = body.refresh_token;
-        var options = {
+        let options = {
           url: "https://api.spotify.com/v1/me",
           headers: { Authorization: "Bearer " + access_token },
           json: true,
@@ -249,7 +247,7 @@ const handleUserInfo = (req, res) => {
 };
 const handleRefreshToken = () => {
   // requesting access token from refresh token
-  var authOptions = {
+  let authOptions = {
     url: "https://accounts.spotify.com/api/token",
     headers: {
       Authorization:
@@ -287,7 +285,7 @@ const handleCreatePlaylist = (req, res) => {
     target_tempo,
   } = req.body.qs;
 
-  var recommendations = {
+  let recommendations = {
     url: "https://api.spotify.com/v1/recommendations",
     method: "GET",
     qs: {
@@ -313,7 +311,7 @@ const handleCreatePlaylist = (req, res) => {
       console.log(arrId);
     })
     .then(() => {
-      var createPlaylist = {
+      let createPlaylist = {
         url: `https://api.spotify.com/v1/users/${userId}/playlists`,
         method: "POST",
         headers: {

@@ -1,14 +1,8 @@
-import React, { useContext, useEffect, useState } from "react";
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Redirect,
-} from "react-router-dom";
+import React, { useContext, useState } from "react";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import Home from "../Home";
 import Create from "../Create";
 import GlobalStyles from "../GlobalStyles";
-// import ScrollToTop from "../../ScrollToTop";
 import Trail from "../Trail";
 import { CurrentAppContext } from "../contexts/Trails.context";
 import NavBar from "../NavBar";
@@ -28,7 +22,6 @@ function App() {
     isFirstVisit = JSON.parse(localStorage.getItem("firstVisit"));
     console.log(isFirstVisit);
   }
-
   const toggle = () => {
     setOpen(false);
     window.localStorage.setItem("firstVisit", JSON.stringify(false));

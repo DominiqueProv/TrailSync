@@ -1,16 +1,12 @@
-import React, { useState, useRef, useEffect, useContext } from "react";
+import React, { useRef, useContext } from "react";
 import { CurrentAppContext } from "../contexts/Trails.context";
 import styled from "styled-components";
 import { useHistory } from "react-router-dom";
-import RoomOutlinedIcon from "@material-ui/icons/RoomOutlined";
-// import { Button } from "@material-ui/core";
 import SearchOutlinedIcon from "@material-ui/icons/SearchOutlined";
-import ExploreIcon from "@material-ui/icons/Explore";
 import Vinyl from "../../assets/711.gif";
 
 const PopUpModalIntro = ({ open, toggle }) => {
   const { currentAppState } = useContext(CurrentAppContext);
-  let history = useHistory();
   let user;
 
   if (currentAppState.storage || localStorage.getItem("currentUser")) {
@@ -23,13 +19,11 @@ const PopUpModalIntro = ({ open, toggle }) => {
     <WrapperSearch ref={wrapperRef} data-css="Typehead-Wrapper" open={open}>
       <WrapperCenter>
         <h2>Welcome {user.data.display_name}</h2>
-        <p> We are happy to see you for the first time!</p>
-
         <p
           style={{
             textAlign: "center",
             paddingTop: "30px",
-            paddingBottom: "10px",
+            paddingBottom: "30px",
             fontWeight: "700",
           }}
         >
@@ -37,11 +31,11 @@ const PopUpModalIntro = ({ open, toggle }) => {
         </p>
         <Wrapperinfo>
           <div>
-            <SearchOutlinedIcon style={{ fontSize: "40px" }} />
+            <SearchOutlinedIcon style={{ fontSize: "50px" }} />
             <p>First, find a trail from the thousands offered by the Sepaq.</p>
           </div>
           <div>
-            <img src={Vinyl} style={{ width: "40px" }} />
+            <img src={Vinyl} style={{ width: "50px" }} />
             <p>
               Then let our djs create an playlist for you. Don't be afraid, you
               can always customize it to your taste.
@@ -81,8 +75,8 @@ const WrapperSearch = styled.div`
 `;
 
 const WrapperCenter = styled.div`
-  width: 60%;
-  padding: 40px;
+  width: 40%;
+  padding: 60px;
   background: white;
   display: flex;
   justify-content: center;
@@ -94,7 +88,6 @@ const WrapperCenter = styled.div`
     padding-bottom: 10px;
   }
   p {
-    padding-top: 10px;
     font-weight: 400;
   }
 `;
@@ -106,15 +99,16 @@ const Wrapperinfo = styled.div`
   align-items: center;
   padding-bottom: 30px;
   div {
-    padding: 0 20px;
-    height: 100px;
     width: 48%;
+    height: 180px;
     display: flex;
-    justify-content: flex-start;
+    justify-content: space-between;
     align-items: center;
     background-color: #ebf5ff;
+    padding: 20px;
     p {
-      margin-left: 15px;
+      margin: 15px 15px 15px 30px;
+      line-height: 1.5em;
     }
   }
 `;
@@ -135,65 +129,6 @@ const Button = styled.button`
   cursor: pointer;
   box-shadow: 11px 10px 9px -6px rgba(0, 0, 0, 0.12);
   transition: background-color 0.2s ease-in;
-`;
-
-const InputField = styled.input`
-  width: 100%;
-  margin-top: 30px;
-  background: transparent;
-  border: none;
-  border-bottom: 1px solid white;
-  outline: none;
-  margin: auto;
-  display: inline-block;
-  color: #ffffff;
-  font-size: 7vw;
-  @media (max-width: 750px) {
-  }
-  ${(props) => (props.open ? `display: inline-block;` : `display: none;`)};
-
-  ::placeholder {
-    color: #595959;
-    font-size: 7vw;
-  }
-`;
-
-const TypeaheadSuggestions = styled.div`
-  position: absolute;
-  padding-right: 120px;
-  top: 250px;
-  background-color: transparent;
-  width: 100%;
-  @media (max-width: 750px) {
-    top: 200px;
-    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr, 1fr));
-  }
-  display: grid;
-  gap: 2rem;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  @media (max-width: 1024px) {
-    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-  }
-`;
-
-const DropDownItem = styled.div`
-  color: white;
-  background-color: #1c2126;
-  border-radius: 10px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 30px;
-  transition: all 0.2s ease-in;
-  /* border: 1px solid #fff; */
-  @media (max-width: 750px) {
-    align-items: flex-start;
-    padding: 10px;
-  }
-  &:hover {
-    background-color: black;
-    cursor: pointer;
-  }
 `;
 
 export default PopUpModalIntro;

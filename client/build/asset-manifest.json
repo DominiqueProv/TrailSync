@@ -1,0 +1,26 @@
+{
+  "files": {
+    "main.js": "/static/js/main.b19dbd45.chunk.js",
+    "main.js.map": "/static/js/main.b19dbd45.chunk.js.map",
+    "runtime-main.js": "/static/js/runtime-main.3ebb465e.js",
+    "runtime-main.js.map": "/static/js/runtime-main.3ebb465e.js.map",
+    "static/css/2.75edc52f.chunk.css": "/static/css/2.75edc52f.chunk.css",
+    "static/js/2.d8f2d461.chunk.js": "/static/js/2.d8f2d461.chunk.js",
+    "static/js/2.d8f2d461.chunk.js.map": "/static/js/2.d8f2d461.chunk.js.map",
+    "index.html": "/index.html",
+    "precache-manifest.3337cf6fa1c2de85280ff98e168b20e5.js": "/precache-manifest.3337cf6fa1c2de85280ff98e168b20e5.js",
+    "service-worker.js": "/service-worker.js",
+    "static/css/2.75edc52f.chunk.css.map": "/static/css/2.75edc52f.chunk.css.map",
+    "static/js/2.d8f2d461.chunk.js.LICENSE.txt": "/static/js/2.d8f2d461.chunk.js.LICENSE.txt",
+    "static/media/711.gif": "/static/media/711.e396e065.gif",
+    "static/media/logo_sepaq.cd71b6df.svg": "/static/media/logo_sepaq.cd71b6df.svg",
+    "static/media/trailSync-hor-05.77430d3a.svg": "/static/media/trailSync-hor-05.77430d3a.svg",
+    "static/media/trailSync.5caeb882.svg": "/static/media/trailSync.5caeb882.svg"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.3ebb465e.js",
+    "static/css/2.75edc52f.chunk.css",
+    "static/js/2.d8f2d461.chunk.js",
+    "static/js/main.b19dbd45.chunk.js"
+  ]
+}

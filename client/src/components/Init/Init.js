@@ -1,7 +1,6 @@
 import React, { useEffect, useContext } from "react";
 import { CurrentAppContext } from "../contexts/Trails.context";
-import Maps from "../Maps";
-import { useHistory, Redirect } from "react-router-dom";
+import { Redirect } from "react-router-dom";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import styled from "styled-components";
 
@@ -26,7 +25,6 @@ const Init = () => {
 
   if (currentAppState.isLoggedIn && currentAppState.isLoaded) {
     handleSetData();
-    // console.log(currentAppState);
   }
 
   async function handleSetData() {

@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import dotenv from "dotenv";
-// import { CurrentAppContext } from "../contexts/Trails.context";
 import styled from "styled-components";
 import Create from "../Create";
 import "mapbox-gl/dist/mapbox-gl.css";
@@ -22,7 +21,6 @@ import ReactMapGL, {
   Popup,
 } from "@urbica/react-map-gl";
 dotenv.config();
-// let trailGeo;
 
 const Trail = () => {
   const [trailGeoData, setTrailGeoData] = useState(null);
@@ -40,7 +38,6 @@ const Trail = () => {
     })
       .then((res) => res.json())
       .then((data) => {
-        // console.log(data.trailGeo.geometry.coordinates);
         setTrailGeoData(data);
       });
 
