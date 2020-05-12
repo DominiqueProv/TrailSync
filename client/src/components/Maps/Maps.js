@@ -9,6 +9,7 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import DirectionsBikeIcon from "@material-ui/icons/DirectionsBike";
 import DirectionsWalkIcon from "@material-ui/icons/DirectionsWalk";
 import Footer from "../Footer";
+import { ip } from "../../constants";
 import ReactMapGL, {
   Marker,
   FullscreenControl,
@@ -145,7 +146,7 @@ const Maps = () => {
                       let num = trail._id;
                       let trailId = num.toString();
                       ev.preventDefault();
-                      fetch("/trailgeo", {
+                      fetch(`${ip}/trailgeo`, {
                         method: "POST",
                         headers: { "Content-Type": "application/json" },
                         body: JSON.stringify({

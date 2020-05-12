@@ -6,7 +6,7 @@ const rp = require("request-promise");
 const { MongoClient } = require("mongodb");
 const client_id = process.env.CLIENT_ID;
 const client_secret = process.env.CLIENT_SECRET;
-const redirect_uri = "http://localhost:8888/callback";
+const redirect_uri = "https://trailsync.herokuapp.com/callback";
 const URI = process.env.URI;
 // const pixabay_key = process.env.PIXABAY_KEY;
 const stateKey = "spotify_auth_state";
@@ -188,7 +188,7 @@ const handleCallBack = (req, res) => {
 
   if (state === null || state !== storedState) {
     res.redirect(
-      "http://localhost:3000/" +
+      "https://trailsync-a8b55.web.app/" +
         querystring.stringify({
           error: "state_mismatch",
         })
@@ -228,11 +228,11 @@ const handleCallBack = (req, res) => {
           userId = body.id;
           // we can also pass the token to the browser to make requests from there
           //res.send instead of redirect
-          res.redirect("http://localhost:3000/init");
+          res.redirect("https://trailsync-a8b55.web.app/init");
         });
       } else {
         res.redirect(
-          "http://localhost:3000/" +
+          "https://trailsync-a8b55.web.app/" +
             querystring.stringify({
               error: "invalid_token",
             })

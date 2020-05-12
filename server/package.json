@@ -1,10 +1,11 @@
 {
-  "author": "Spotify",
-  "name": "web-api-auth-examples",
-  "description": "Basic examples of the Spotify authorization flows through OAuth 2",
+  "author": "trailSync",
+  "name": "trailsync",
+  "description": "Playlist on the go",
   "version": "0.0.2",
   "scripts": {
-    "dev": "nodemon index.js"
+    "dev": "nodemon index.js",
+    "start": "node index.js"
   },
   "dependencies": {
     "@urbica/react-map-gl": "^1.13.1",
@@ -21,8 +22,5 @@
     "querystring": "~0.2.0",
     "request": "~2.83.0",
     "request-promise": "^4.2.5"
-  },
-  "engines": {
-    "node": "10.x"
   }
 }

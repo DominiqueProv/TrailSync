@@ -3,7 +3,7 @@ import { CurrentAppContext } from "../contexts/Trails.context";
 import { Redirect } from "react-router-dom";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import styled from "styled-components";
-
+import { ip } from "../../constants";
 const Init = () => {
   const {
     currentAppState,
@@ -11,12 +11,12 @@ const Init = () => {
   } = useContext(CurrentAppContext);
 
   useEffect(() => {
-    fetch("/getUserInfo")
+    fetch(`${ip}/getUserInfo`)
       .then((res) => res.json())
       .then((data) => {
         handlelogginUser(data);
       });
-    fetch("/trails")
+    fetch(`${ip}/trails`)
       .then((res) => res.json())
       .then((payload) => {
         handleFetchTrail(payload);

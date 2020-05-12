@@ -21,8 +21,7 @@ if (port == null || port == "") {
 }
 
 app
-  .use(express.static(__dirname + "build"))
-  // .use(express.static(__dirname + "/public"))
+  .use(express.static(__dirname + "/public"))
   .use(express.json())
   .use(cors())
   .use(cookieParser())

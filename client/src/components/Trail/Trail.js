@@ -7,6 +7,7 @@ import "mapbox-gl/dist/mapbox-gl.css";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import { ReactComponent as Logo } from "../../assets/logo_sepaq.svg";
 import Footer from "../Footer";
+import { ip } from "../../constants";
 import ReactMapGL, {
   Marker,
   FullscreenControl,
@@ -28,7 +29,7 @@ const Trail = () => {
   const { trailId } = useParams();
 
   useEffect(() => {
-    fetch("/trailgeo", {
+    fetch(`${ip}/trailgeo`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -41,7 +42,7 @@ const Trail = () => {
         setTrailGeoData(data);
       });
 
-    fetch("/trailinfo", {
+    fetch(`${ip}/trailinfo`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({

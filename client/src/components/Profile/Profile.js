@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 import Iframe from "react-iframe";
 import Footer from "../Footer";
 import PlaylistAddIcon from "@material-ui/icons/PlaylistAdd";
+import { ip } from "../../constants";
 
 let name;
 let email;
@@ -35,7 +36,7 @@ const Profile = () => {
 
     async function loadHistorique(body) {
       try {
-        const res = await fetch("/getHistorique", {
+        const res = await fetch(`${ip}/getHistorique`, {
           method: "POST",
           headers: {
             accept: "application/json",
@@ -52,7 +53,7 @@ const Profile = () => {
   }, []);
 
   async function getCurrentlyPlaying() {
-    const res = await fetch("/getcurrentlyplaying");
+    const res = await fetch(`${ip}/getcurrentlyplaying`);
     const currentlyPlaying = await res.json();
     setCurrentlyPlaying(currentlyPlaying);
     console.log(currentlyPlaying);

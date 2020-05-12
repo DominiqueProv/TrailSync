@@ -52,7 +52,6 @@ const SearchBar = ({ open, toggle }) => {
     typaheadItems = JSON.parse(localStorage.getItem("trails"));
     typaheadItems = typaheadItems.trails;
   }
-  console.log(typaheadItems);
 
   const wrapperRef = useRef(null);
 

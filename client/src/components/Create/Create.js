@@ -5,6 +5,7 @@ import styled from "styled-components";
 import { withStyles } from "@material-ui/core/styles";
 import Slider from "@material-ui/core/Slider";
 import PopUpModalPlaylist from "../PopUpModalPlaylist";
+import { ip } from "../../constants.js";
 const Create = ({ info, trailName }) => {
   const { Niv_diff, Shape_Leng, Toponyme1 } = info;
   const {
@@ -213,7 +214,7 @@ const Create = ({ info, trailName }) => {
         return value;
       }
     });
-    fetch("/createplaylist", {
+    fetch(`${ip}/createplaylist`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -374,7 +375,6 @@ const Create = ({ info, trailName }) => {
               value={genre.target_energy ? genre.target_energy * 100 : 0}
               onChange={(ev, val) => {
                 ev.preventDefault();
-                console.log(val);
                 setGenre({
                   ...genre,
                   target_energy: val / 100,
@@ -400,7 +400,6 @@ const Create = ({ info, trailName }) => {
               value={genre.target_tempo ? genre.target_tempo * 100 : 0}
               onChange={(ev, val) => {
                 ev.preventDefault();
-                console.log(val);
                 setGenre({
                   ...genre,
                   target_tempo: val / 100,

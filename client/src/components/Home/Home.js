@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { ReactComponent as Logo } from "../../assets/trailSync.svg";
+import { Link } from "react-router-dom";
 import SpotifyLogo from "../../assets/spotify-red.png";
 const Home = () => {
   let loggedIn = window.localStorage.getItem("isLoggedIn");
@@ -12,11 +13,11 @@ const Home = () => {
         <h1 style={{ color: "#ff0000" }}>Welcome to</h1>
         <BrandImage>Logo</BrandImage>
         {loggedIn ? (
-          <a href="http://localhost:3000/map">
+          <Link to="/map">
             <Button>Let's explore</Button>
-          </a>
+          </Link>
         ) : (
-          <a href="http://localhost:8888/login">
+          <a href="https://trailsync.herokuapp.com/login">
             <Button>
               Login with Spotify{" "}
               <img

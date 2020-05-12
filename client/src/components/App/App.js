@@ -20,7 +20,6 @@ function App() {
     isLoggedIn = JSON.parse(localStorage.getItem("isLoggedIn"));
     storage = JSON.parse(localStorage.getItem("storage"));
     isFirstVisit = JSON.parse(localStorage.getItem("firstVisit"));
-    console.log(isFirstVisit);
   }
   const toggle = () => {
     setOpen(false);
