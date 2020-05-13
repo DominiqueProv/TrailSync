@@ -24,7 +24,6 @@ const Create = ({ info, trailName }) => {
   const [playlistInfo, setPlaylistInfo] = useState(null);
   const [isOpen, setIsOpen] = useState(false);
   const [genre, setGenre] = useState({
-    // null
     seed_genres: null,
     limit: null,
     seed_genres: null,

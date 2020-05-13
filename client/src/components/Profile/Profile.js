@@ -197,7 +197,7 @@ const CurrentInfoWrapper = styled.div`
 const CurrentlyPlayingWrap = styled.div`
   background-color: #ebf5ff;
   padding: 30px;
-  height: calc(100vh - 570px);
+  height: calc(100vh - 450px);
   display: flex;
   flex-direction: column;
   justify-content: space-between;

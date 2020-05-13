@@ -7,6 +7,7 @@ const { MongoClient } = require("mongodb");
 const client_id = process.env.CLIENT_ID;
 const client_secret = process.env.CLIENT_SECRET;
 const redirect_uri = "https://trailsync.herokuapp.com/callback";
+const redirect_uri = "https://trailsync.herokuapp.com/callback";
 const URI = process.env.URI;
 // const pixabay_key = process.env.PIXABAY_KEY;
 const stateKey = "spotify_auth_state";
@@ -221,6 +222,7 @@ const handleCallBack = (req, res) => {
         //res.send instead of redirect
         res.redirect(
           "https://trailsync-a8b55.web.app/init#" +
+            // "http://localhost:3000/init#" +
             querystring.stringify({
               access_token: access_token,
               refresh_token: refresh_token,
