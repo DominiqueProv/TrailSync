@@ -75,7 +75,10 @@ const NavBar = () => {
                   style={{ position: "relative" }}
                 >
                   <Name>{user.data.display_name}</Name>
-                  <Avatar src={user.data.images[0].url} alt="avatar" />
+                  <Avatar
+                    src={user.data.images[0] ? user.data.images[0].url : ""}
+                    // alt="avatar"
+                  />
                   {currentAppState.isNotification && (
                     <Notification></Notification>
                   )}

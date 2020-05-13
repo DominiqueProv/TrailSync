@@ -21,8 +21,5 @@
     "querystring": "~0.2.0",
     "request": "~2.83.0",
     "request-promise": "^4.2.5"
-  },
-  "engines": {
-    "node": "10.x"
   }
 }

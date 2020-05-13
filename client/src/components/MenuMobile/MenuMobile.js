@@ -28,7 +28,7 @@ const MenuMobile = ({
       <WrapperTopPart>
         <WrapperAvartarClose>
           <div>
-            <Avatar src={user.data.images[0].url} />
+            <Avatar src={user.data.images[0] ? user.data.images[0].url : ""} />
             <p>{user.data.display_name}</p>
           </div>
           <div>

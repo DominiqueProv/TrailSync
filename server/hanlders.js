@@ -10,11 +10,11 @@ const redirect_uri = "http://localhost:8888/callback";
 const URI = process.env.URI;
 // const pixabay_key = process.env.PIXABAY_KEY;
 const stateKey = "spotify_auth_state";
-let userInfo;
-let userId;
+// let userInfo;
+// let userId;
 let userHistorique;
-let access_token;
-let refresh_token;
+// let access_token;
+// let refresh_token;
 let playlist_id;
 let arrId = [];
 let name;
@@ -212,24 +212,20 @@ const handleCallBack = (req, res) => {
 
     request.post(authOptions, function (error, response, body) {
       if (!error && response.statusCode === 200) {
-        console.log("body login", body.access_token);
+        // console.log("body login", body.access_token);
         access_token = body.access_token;
-        console.log(access_token);
+        // console.log(access_token);
         refresh_token = body.refresh_token;
-        let options = {
-          url: "https://api.spotify.com/v1/me",
-          headers: { Authorization: "Bearer " + access_token },
-          json: true,
-        };
 
-        // use the access token to access the Spotify Web API
-        request.get(options, function (error, response, body) {
-          userInfo = body;
-          userId = body.id;
-          // we can also pass the token to the browser to make requests from there
-          //res.send instead of redirect
-          res.redirect("http://localhost:3000/init");
-        });
+        // we can also pass the token to the browser to make requests from there
+        //res.send instead of redirect
+        res.redirect(
+          "http://localhost:3000/init#" +
+            querystring.stringify({
+              access_token: access_token,
+              refresh_token: refresh_token,
+            })
+        );
       } else {
         res.redirect(
           "http://localhost:3000/" +
@@ -243,7 +239,23 @@ const handleCallBack = (req, res) => {
 };
 
 const handleUserInfo = (req, res) => {
-  return res.json(userInfo);
+  let token = req.body.access_token;
+  console.log("<><><><><>", token);
+
+  let options = {
+    url: "https://api.spotify.com/v1/me",
+    headers: { Authorization: "Bearer " + token },
+    json: true,
+  };
+
+  // use the access token to access the Spotify Web API
+  request.get(options, function (error, response, body) {
+    let userInfo = body;
+    // userId = body.id;
+    console.log(userInfo);
+    res.send(userInfo);
+  });
+  // return res.send(userInfo);
 };
 const handleRefreshToken = () => {
   // requesting access token from refresh token
@@ -275,6 +287,10 @@ const handleRefreshToken = () => {
 };
 
 const handleCreatePlaylist = (req, res) => {
+  let token = req.body.token;
+  let userId = req.body.userId;
+  console.log(userId);
+
   name = req.body.name;
   const {
     seed_genres,
@@ -297,7 +313,7 @@ const handleCreatePlaylist = (req, res) => {
       target_tempo: `${target_tempo}`,
     },
     headers: {
-      authorization: "Bearer " + access_token,
+      authorization: "Bearer " + token,
       accept: "application/json",
     },
     json: true,
@@ -368,6 +384,10 @@ const handleCreatePlaylist = (req, res) => {
 };
 
 const handleGetPlaying = (req, res) => {
+  let access_token = req.body.access_token;
+  console.log(access_token);
+
+  // console.log(access_token);
   const getCurrentPlaying = {
     url: "https://api.spotify.com/v1/me/player/currently-playing",
     method: "GET",

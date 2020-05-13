@@ -247,6 +247,8 @@ const Maps = () => {
                         backgroundColor:
                           selectedTrail.properties.Niv_diff === "Facile"
                             ? "green"
+                            : selectedTrail.properties.Niv_diff === "Moyen"
+                            ? "yellow"
                             : selectedTrail.properties.Niv_diff ===
                               "Intermédiaire"
                             ? "yellow"

@@ -17,9 +17,9 @@ const Profile = () => {
   const [playlistHistorique, setPlaylistHistorique] = useState(null);
   const [currentlyPlaying, setCurrentlyPlaying] = useState(null);
   // const [isPlaying, setIsPlaying] = useState(false);
-  console.log(playlistHistorique);
-  console.log(userId);
-  console.log(currentlyPlaying);
+  // console.log(playlistHistorique);
+  // console.log(userId);
+  // console.log(currentlyPlaying);
   const { currentAppState } = useContext(CurrentAppContext);
 
   useEffect(() => {
@@ -29,7 +29,7 @@ const Profile = () => {
       name = userId.data.display_name;
       email = userId.data.email;
       avatar = userId.data.images[0].url;
-      console.log(body);
+      // console.log(body);
       loadHistorique(body);
     }
 
@@ -52,7 +52,17 @@ const Profile = () => {
   }, []);
 
   async function getCurrentlyPlaying() {
-    const res = await fetch("/getcurrentlyplaying");
+    let token = localStorage.getItem("tokens");
+    console.log("<<<<<", token);
+    const res = await fetch("/getcurrentlyplaying", {
+      method: "POST",
+      headers: {
+        accept: "application/json",
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({ access_token: token }),
+    });
+
     const currentlyPlaying = await res.json();
     setCurrentlyPlaying(currentlyPlaying);
     console.log(currentlyPlaying);

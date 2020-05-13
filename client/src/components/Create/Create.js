@@ -7,6 +7,8 @@ import Slider from "@material-ui/core/Slider";
 import PopUpModalPlaylist from "../PopUpModalPlaylist";
 const Create = ({ info, trailName }) => {
   const { Niv_diff, Shape_Leng, Toponyme1 } = info;
+  // console.log(Niv_diff);
+
   const {
     actions: { addNotificationPill },
   } = useContext(CurrentAppContext);
@@ -21,6 +23,7 @@ const Create = ({ info, trailName }) => {
   const [playlistInfo, setPlaylistInfo] = useState(null);
   const [isOpen, setIsOpen] = useState(false);
   const [genre, setGenre] = useState({
+    // null
     seed_genres: null,
     limit: null,
     seed_genres: null,
@@ -29,13 +32,68 @@ const Create = ({ info, trailName }) => {
     target_energy: null,
     target_tempo: null,
   });
+  const access_token = localStorage.getItem("tokens");
+  const userInfo = JSON.parse(localStorage.getItem("currentUser"));
+  const userId = userInfo.data.id;
+  // console.log("<<<<>>>>", userId);
   const TogglePlaylistModal = () => {
     setIsOpen(!isOpen);
   };
-  const analyseTrack = () => {
+
+  useEffect(() => {
     let qs = {};
     switch (Niv_diff) {
       case "Facile":
+        acousticness = (Math.random() * (1 - 0.7) + 0.7).toFixed(1);
+        acousticness = parseFloat(acousticness);
+        if (acousticness === 1.0) {
+          acousticness = Math.trunc(acousticness);
+        }
+        // console.log(acousticness);
+        danceability = (Math.random() * (0.3 - 0) + 0).toFixed(1);
+        danceability = parseFloat(danceability);
+        if (danceability === 0.0) {
+          danceability = Math.trunc(danceability);
+        }
+        // console.log(danceability);
+        energy = (Math.random() * (0.3 - 0) + 0).toFixed(1);
+        energy = parseFloat(energy);
+        if (energy === 0.0) {
+          energy = Math.trunc(energy);
+        }
+        // console.log(energy);
+        tempo = (Math.random() * (0.3 - 0) + 0).toFixed(1);
+        tempo = parseFloat(tempo);
+        if (tempo === 0.0) {
+          tempo = Math.trunc(tempo);
+        }
+
+        if (songLength > 0 && songLength < 500) {
+          limit = 10;
+          qs.limit = limit;
+        } else if (songLength > 500 && songLength < 2000) {
+          limit = 15;
+          qs.limit = limit;
+        } else if (songLength > 2000 && songLength < 4000) {
+          limit = 20;
+          qs.limit = limit;
+        } else {
+          limit = 25;
+          qs.limit = limit;
+        }
+        qs.target_tempo = tempo;
+        qs.seed_genres = "rock,classical,hiphop,latin,country";
+        qs.target_acousticness = acousticness;
+        qs.target_energy = energy;
+        qs.target_danceability = danceability;
+        setGenre({
+          ...genre,
+          ...qs,
+        });
+
+        break;
+
+      case "Moyen":
         acousticness = (Math.random() * (1 - 0.7) + 0.7).toFixed(1);
         acousticness = parseFloat(acousticness);
         if (acousticness === 1.0) {
@@ -199,9 +257,6 @@ const Create = ({ info, trailName }) => {
         break;
       default:
     }
-  };
-  useEffect(() => {
-    analyseTrack();
   }, []);
   const createPlaylist = (ev) => {
     ev.preventDefault();
@@ -217,6 +272,8 @@ const Create = ({ info, trailName }) => {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
+        token: access_token,
+        userId: userId,
         name: Toponyme1 === "" ? trailName : Toponyme1,
         qs: newGenre,
         json: true,
