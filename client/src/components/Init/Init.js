@@ -4,23 +4,37 @@ import { Redirect } from "react-router-dom";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import styled from "styled-components";
 import { ip } from "../../constants";
+import queryString from "query-string";
+
 const Init = () => {
   const {
     currentAppState,
     actions: { handlelogginUser, handleFetchTrail, saveLocalStorage },
   } = useContext(CurrentAppContext);
+  let parsed = queryString.parse(window.location.hash);
+  let access_token = parsed.access_token;
+  window.localStorage.setItem("tokens", access_token);
 
   useEffect(() => {
-    fetch(`${ip}/getUserInfo`)
-      .then((res) => res.json())
-      .then((data) => {
-        handlelogginUser(data);
-      });
-    fetch(`${ip}/trails`)
-      .then((res) => res.json())
-      .then((payload) => {
-        handleFetchTrail(payload);
-      });
+    if (access_token) {
+      fetch(`${ip}/getUserInfo`, {
+        method: "POST",
+        headers: {
+          accept: "application/json",
+          "content-type": "application/json",
+        },
+        body: JSON.stringify({ access_token: access_token }),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          handlelogginUser(data);
+        });
+      fetch(`${ip}/trails`)
+        .then((res) => res.json())
+        .then((payload) => {
+          handleFetchTrail(payload);
+        });
+    }
   }, []);
 
   if (currentAppState.isLoggedIn && currentAppState.isLoaded) {

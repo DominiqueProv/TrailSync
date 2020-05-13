@@ -35,8 +35,11 @@ const SearchBar = ({ open, toggle }) => {
 
   const handleClickOnItemInSuggestionDropdown = (ev, suggestion) => {
     ev.preventDefault();
-    ev.stopPropagation();
-    history.push(`/trail/${suggestion.id}`);
+    // ev.stopPropagation();
+    console.log(typeof suggestion.id);
+    let trailNum = suggestion.id.toString();
+    console.log(typeof trailNum);
+    history.push(`/trail/${trailNum}`);
     toggle();
     window.location.reload(true);
   };
@@ -52,6 +55,10 @@ const SearchBar = ({ open, toggle }) => {
     typaheadItems = JSON.parse(localStorage.getItem("trails"));
     typaheadItems = typaheadItems.trails;
   }
+<<<<<<< HEAD
+=======
+  // console.log(typaheadItems);
+>>>>>>> localDev
 
   const wrapperRef = useRef(null);
 
@@ -125,7 +132,7 @@ const SearchBar = ({ open, toggle }) => {
                       }}
                     ></div>
                   </div>
-                  <Button>Go</Button>
+                  {/* <Button>Go</Button> */}
                 </DropDownItem>
               )
           )}
@@ -157,18 +164,19 @@ const WrapperSearch = styled.div`
 const SearchForm = styled.form`
   display: inline-block;
   width: 100%;
+  position: relative;
   ${(props) => (props.open ? `display: inline-block;` : `display: none;`)};
 `;
 
-const Button = styled.button`
-  padding: 15px;
-  background: #ddd;
-  font-size: 17px;
-  border: none;
-  display: none;
-  cursor: pointer;
-  ${(props) => (props.open ? `display: block;` : `display: none;`)}
-`;
+// const Button = styled.button`
+//   padding: 15px;
+//   background: #ddd;
+//   font-size: 17px;
+//   border: none;
+//   display: none;
+//   cursor: pointer;
+//   ${(props) => (props.open ? `display: block;` : `display: none;`)}
+// `;
 
 const InputField = styled.input`
   width: 100%;
@@ -193,12 +201,12 @@ const InputField = styled.input`
 
 const TypeaheadSuggestions = styled.div`
   position: absolute;
-  padding-right: 120px;
-  top: 250px;
+  /* padding-right: 120px; */
+  top: 200px;
   background-color: transparent;
   width: 100%;
-  @media (max-width: 750px) {
-    top: 200px;
+  @media (max-width: 900px) {
+    top: 100px;
     grid-template-columns: repeat(auto-fill, minmax(140px, 1fr, 1fr));
   }
   display: grid;

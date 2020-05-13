@@ -17,10 +17,6 @@ const Profile = () => {
   const [isDashboard, setIsDashboard] = useState(false);
   const [playlistHistorique, setPlaylistHistorique] = useState(null);
   const [currentlyPlaying, setCurrentlyPlaying] = useState(null);
-  // const [isPlaying, setIsPlaying] = useState(false);
-  console.log(playlistHistorique);
-  console.log(userId);
-  console.log(currentlyPlaying);
   const { currentAppState } = useContext(CurrentAppContext);
 
   useEffect(() => {
@@ -30,7 +26,6 @@ const Profile = () => {
       name = userId.data.display_name;
       email = userId.data.email;
       avatar = userId.data.images[0].url;
-      console.log(body);
       loadHistorique(body);
     }
 
@@ -53,7 +48,16 @@ const Profile = () => {
   }, []);
 
   async function getCurrentlyPlaying() {
-    const res = await fetch(`${ip}/getcurrentlyplaying`);
+    let token = localStorage.getItem("tokens");
+    const res = await fetch(`${ip}/getcurrentlyplaying`, {
+      method: "POST",
+      headers: {
+        accept: "application/json",
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({ access_token: token }),
+    });
+
     const currentlyPlaying = await res.json();
     setCurrentlyPlaying(currentlyPlaying);
     console.log(currentlyPlaying);
@@ -233,7 +237,6 @@ const PlayListInfoWrapper = styled.div`
     img {
       width: 200px;
       height: 200px;
-      /* margin-bottom: 30px; */
     }
     h2 {
       padding-bottom: 30px;
@@ -254,7 +257,6 @@ const Wrapper = styled.div`
 const MainWrapper = styled.div`
   display: flex;
   margin: 60px;
-  /* padding: 30px; */
   width: calc(100vw - 120px);
   height: calc(100vh - 230px);
   border: 1px solid #e6ecf0;
@@ -269,7 +271,6 @@ const WrapperInfo = styled.div`
 const WrapGrid = styled.div`
   width: 100%;
   display: grid;
-  /* gap: 2rem; */
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
 `;
 
@@ -280,8 +281,6 @@ const WrapperHistory = styled.div`
     font-size: 2em;
     padding-bottom: 40px;
   }
-  /* display: flex;
-  flex-direction: column; */
 `;
 
 const Button = styled.button`
@@ -303,18 +302,3 @@ const Button = styled.button`
   transition: background-color 0.2s ease-in;
 `;
 export default Profile;
-
-// "{"data":
-//   {"country":"CA",
-//   "display_name":"DomBonhomme",
-//   "email":"troispointzero@hotmail.com",
-//   "explicit_content":{
-//       "filter_enabled":false,
-//       "filter_locked":false
-//     },
-//   "external_urls":{
-//       "spotify":"https://open.spotify.com/user/12121769867"},
-//   "followers":{"href":null,"total":5},
-//   "href":"https://api.spotify.com/v1/users/12121769867",
-//   "id":"12121769867",
-//   "images":[{"height":null,"url":"https://i.scdn.co/image/ab6775700000ee85438eef2f8390404fc5d07fb4","width":null}],
