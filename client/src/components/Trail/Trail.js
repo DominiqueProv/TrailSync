@@ -185,7 +185,7 @@ const MainWrapper = styled.div`
   width: 100%;
   min-height: calc(100vh - 110px);
   display: flex;
-  @media (max-width: 750px) {
+  @media (max-width: 950px) {
     flex-direction: column;
   }
 `;
@@ -208,8 +208,11 @@ const TrailInfo = styled.div`
   h3 {
     margin-bottom: 30px;
   }
-  @media (max-width: 750px) {
+  @media (max-width: 950px) {
     width: 100%;
+  }
+  @media (max-width: 600px) {
+    padding: 30px;
   }
 `;
 
@@ -217,7 +220,7 @@ const SpotifyInfo = styled.div`
   width: 50%;
   background: #f4f4f4;
   padding: 40px;
-  @media (max-width: 750px) {
+  @media (max-width: 950px) {
     width: 100%;
   }
 `;

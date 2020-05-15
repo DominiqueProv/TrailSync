@@ -153,7 +153,7 @@ const Create = ({ info, trailName }) => {
         tempo = parseFloat(tempo);
         if (songLength > 0 && songLength < 500) {
           limit = 10;
-          console.log(limit);
+          // console.log(limit);
           qs.limit = limit;
         } else if (songLength > 500 && songLength < 2000) {
           limit = 15;
@@ -283,7 +283,7 @@ const Create = ({ info, trailName }) => {
       .then((res) => {
         setPlaylistInfo(res);
         addNotificationPill();
-        console.log(res);
+        // console.log(res);
       });
   };
   const handleChange = (ev) => {
@@ -324,10 +324,7 @@ const Create = ({ info, trailName }) => {
             Get creative with Spotify!
           </h2>
 
-          <form
-            style={{ width: "400px" }}
-            onSubmit={(ev) => createPlaylist(ev)}
-          >
+          <FormSlider onSubmit={(ev) => createPlaylist(ev)}>
             <p
               style={{
                 fontWeight: "400",
@@ -463,7 +460,7 @@ const Create = ({ info, trailName }) => {
               }}
             />
             <ButtonInput type="submit" value="Create your playlist" />
-          </form>
+          </FormSlider>
         </Wrapper>
       )}
     </>
@@ -491,6 +488,14 @@ const Select = styled.select`
     padding: 0px 2px 1px;
   }
 `;
+
+const FormSlider = styled.form`
+  width: 400px;
+  @media (max-width: 750px) {
+    width: 100%;
+  }
+`;
+
 const PrettoSlider = withStyles({
   root: {
     color: "red",

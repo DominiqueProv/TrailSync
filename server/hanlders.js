@@ -7,21 +7,21 @@ const { MongoClient } = require("mongodb");
 const client_id = process.env.CLIENT_ID;
 const client_secret = process.env.CLIENT_SECRET;
 const redirect_uri = "https://trailsync.herokuapp.com/callback";
-const redirect_uri = "https://trailsync.herokuapp.com/callback";
+// const redirect_uri = "http://localhost:8888/callback";
 const URI = process.env.URI;
 // const pixabay_key = process.env.PIXABAY_KEY;
 const stateKey = "spotify_auth_state";
 // let userInfo;
 // let userId;
-let userHistorique;
+// let userHistorique;
 // let access_token;
 // let refresh_token;
 let playlist_id;
 let arrId = [];
-let name;
+// let name;
 
 async function handleGetHistorique(req, res) {
-  userHistorique = req.body.userId;
+  let userHistorique = req.body.userId;
   console.log("<<<<<", userHistorique);
   // JSON.parse(userHistorique);
   // console.log("<<<<<", userHistorique);
@@ -292,8 +292,7 @@ const handleCreatePlaylist = (req, res) => {
   let token = req.body.token;
   let userId = req.body.userId;
   console.log(userId);
-
-  name = req.body.name;
+  let name = req.body.name;
   const {
     seed_genres,
     limit,
@@ -339,7 +338,7 @@ const handleCreatePlaylist = (req, res) => {
         },
         body: {
           name: name,
-          description: "Playlist make with love by Dominique Provencher",
+          description: "Playlist made with love by trailSync",
           public: false,
         },
         json: true,

@@ -25,13 +25,30 @@ const Profile = () => {
       body = JSON.stringify({ userId: userId.data.id });
       name = userId.data.display_name;
       email = userId.data.email;
-      avatar = userId.data.images[0].url;
+      if (userId.data.images[0]) {
+        avatar = userId.data.images[0].url;
+      }
+      // getCurrentlyPlaying();
       loadHistorique(body);
     }
 
     async function loadHistorique(body) {
       try {
-        const res = await fetch(`${ip}/getHistorique`, {
+        let token = localStorage.getItem("tokens");
+        const res = await fetch(`${ip}/getcurrentlyplaying`, {
+          method: "POST",
+          headers: {
+            accept: "application/json",
+            "content-type": "application/json",
+          },
+          body: JSON.stringify({ access_token: token }),
+        });
+
+        const currentlyPlaying = await res.json();
+        setCurrentlyPlaying(currentlyPlaying);
+        console.log(currentlyPlaying);
+
+        const result = await fetch(`${ip}/getHistorique`, {
           method: "POST",
           headers: {
             accept: "application/json",
@@ -39,7 +56,7 @@ const Profile = () => {
           },
           body: body,
         });
-        const data = await res.json();
+        const data = await result.json();
         setPlaylistHistorique(data);
       } catch (e) {
         console.error(e);
@@ -63,9 +80,9 @@ const Profile = () => {
     console.log(currentlyPlaying);
   }
 
-  useEffect(() => {
-    getCurrentlyPlaying();
-  }, []);
+  // useEffect(() => {
+  //   getCurrentlyPlaying();
+  // }, []);
 
   return (
     <>
@@ -74,27 +91,35 @@ const Profile = () => {
           <>
             <WrapperInfo>
               <WrapperUser>
-                <img src={avatar} alt="Profile" />
-                <h2>{name}</h2>
-                <p>{email}</p>
-                {userId.data.id === "12121769867" ? (
-                  isDashboard ? (
-                    <Button onClick={() => setIsDashboard(false)}>
-                      {" "}
-                      My History
-                    </Button>
+                <div>
+                  {avatar ? (
+                    <img src={avatar} alt="Profile" />
                   ) : (
-                    <Button onClick={() => setIsDashboard(true)}>
-                      {" "}
-                      Dashboard
-                    </Button>
-                  )
-                ) : (
-                  <p></p>
-                )}
+                    <div>User face</div>
+                  )}
+                </div>
+                <div>
+                  <h2>{name}</h2>
+                  <p>{email}</p>
+                  {userId.data.id === "12121769867" ? (
+                    isDashboard ? (
+                      <Button onClick={() => setIsDashboard(false)}>
+                        {" "}
+                        My History
+                      </Button>
+                    ) : (
+                      <Button onClick={() => setIsDashboard(true)}>
+                        {" "}
+                        Dashboard
+                      </Button>
+                    )
+                  ) : (
+                    <p></p>
+                  )}
+                </div>
               </WrapperUser>
               <CurrentlyPlayingWrap>
-                {currentlyPlaying === "Notting is playing at the moment" ? (
+                {currentlyPlaying === `Notting is playing at the moment` ? (
                   <div
                     style={{
                       height: "205px",
@@ -119,20 +144,19 @@ const Profile = () => {
                       src={currentlyPlaying.item.album.images[1].url}
                       alt={"artist"}
                     />
-                    <p style={{ fontWeight: "700" }}>
-                      {currentlyPlaying.item.artists[0].name}
-                    </p>
-                    <p>Album: {currentlyPlaying.item.album.name}</p>
-                    <p>
-                      Release date: {currentlyPlaying.item.album.release_date}
-                    </p>
+                    <div>
+                      <p style={{ fontWeight: "700" }}>
+                        {currentlyPlaying.item.artists[0].name}
+                      </p>
+                      <p>Album: {currentlyPlaying.item.album.name}</p>
+                      <p>
+                        Release date: {currentlyPlaying.item.album.release_date}
+                      </p>
+                    </div>
                   </CurrentInfoWrapper>
                 )}
 
-                <Button
-                  style={{ width: "100%", marginTop: "40px" }}
-                  onClick={() => getCurrentlyPlaying()}
-                >
+                <Button onClick={() => getCurrentlyPlaying()}>
                   Currently playing
                 </Button>
               </CurrentlyPlayingWrap>
@@ -146,31 +170,34 @@ const Profile = () => {
             ) : (
               <WrapperHistory>
                 <h2>Playlist created</h2>
-
-                <WrapGrid>
-                  {playlistHistorique.result.map((playlist) => (
-                    <PlayListInfoWrapper>
-                      <div>
-                        <img
-                          src={playlist.playlistInfo.images[1].url}
-                          alt={playlist.playlistInfo.decription}
-                        />
-                        <h3>{playlist.playlistInfo.name}</h3>
-                        <div
-                          style={{
-                            display: "flex",
-                            justifyContent: "space-between",
-                            width: "200px",
-                            alignItems: "flex-end",
-                          }}
-                        >
-                          <p>{playlist.playlistInfo.tracks.total} tracks</p>
-                          <PlaylistAddIcon />
+                {playlistHistorique !== null && playlistHistorique !== [] ? (
+                  <WrapGrid>
+                    {playlistHistorique.result.map((playlist) => (
+                      <PlayListInfoWrapper>
+                        <div>
+                          <img
+                            src={playlist.playlistInfo.images[1].url}
+                            alt={playlist.playlistInfo.decription}
+                          />
+                          <h3>{playlist.playlistInfo.name}</h3>
+                          <div
+                            style={{
+                              display: "flex",
+                              justifyContent: "space-between",
+                              width: "200px",
+                              alignItems: "flex-end",
+                            }}
+                          >
+                            <p>{playlist.playlistInfo.tracks.total} tracks</p>
+                            <PlaylistAddIcon />
+                          </div>
                         </div>
-                      </div>
-                    </PlayListInfoWrapper>
-                  ))}
-                </WrapGrid>
+                      </PlayListInfoWrapper>
+                    ))}
+                  </WrapGrid>
+                ) : (
+                  <div></div>
+                )}
               </WrapperHistory>
             )}
           </>
@@ -188,16 +215,24 @@ const Profile = () => {
 };
 
 const CurrentInfoWrapper = styled.div`
-  p {
-    font-weight: 400;
-    padding-bottom: 12px;
+  div {
+    p {
+      font-weight: 400;
+      padding-bottom: 12px;
+    }
+  }
+  @media (max-width: 1005px) {
+    div {
+      display: flex;
+      flex-direction: column;
+    }
   }
 `;
 
 const CurrentlyPlayingWrap = styled.div`
   background-color: #ebf5ff;
   padding: 30px;
-  height: calc(100vh - 450px);
+  /* height: calc(100vh - 450px); */
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -205,6 +240,22 @@ const CurrentlyPlayingWrap = styled.div`
     padding: 0px;
     img {
       width: 100%;
+    }
+    @media (max-width: 1005px) {
+      flex-direction: flex-start;
+    }
+  }
+  @media (max-width: 1005px) {
+    height: auto;
+    justify-content: flex-start;
+    width: inherit;
+    div {
+      display: flex;
+      /* flex-direction: column; */
+      img {
+        width: 100px;
+        margin-right: 20px;
+      }
     }
   }
 `;
@@ -220,6 +271,38 @@ const WrapperUser = styled.div`
   h2 {
     padding-bottom: 12px;
     font-weight: 400;
+  }
+  @media (max-width: 1005px) {
+    display: flex;
+    flex-direction: column;
+    div {
+      display: flex;
+      flex-direction: column;
+      img {
+        width: 60px;
+        height: 60px;
+        margin-right: 25px;
+      }
+    }
+  }
+  @media (max-width: 750px) {
+    /* div { */
+    /* display: flex; */
+    flex-direction: row;
+    /* } */
+    img {
+      margin-bottom: 0px;
+    }
+  }
+  @media (max-width: 500px) {
+    div {
+      h2 {
+        font-size: 3vw;
+      }
+      p {
+        font-size: 3vw;
+      }
+    }
   }
 `;
 const PlayListInfoWrapper = styled.div`
@@ -237,12 +320,19 @@ const PlayListInfoWrapper = styled.div`
     img {
       width: 200px;
       height: 200px;
+      @media (max-width: 750px) {
+        width: 80%;
+        height: 80%;
+      }
     }
     h2 {
       padding-bottom: 30px;
       font-weight: 400;
       font-size: 2em;
     }
+  }
+  @media (max-width: 750px) {
+    margin-bottom: 60px;
   }
 `;
 
@@ -258,20 +348,40 @@ const MainWrapper = styled.div`
   display: flex;
   margin: 60px;
   width: calc(100vw - 120px);
-  height: calc(100vh - 230px);
+  min-height: calc(100vh - 240px);
   border: 1px solid #e6ecf0;
+  @media (max-width: 1005px) {
+    flex-direction: column;
+  }
+  @media (max-width: 600px) {
+    margin: 20px;
+    width: calc(100vw - 40px);
+  }
 `;
 const WrapperInfo = styled.div`
   display: flex;
   justify-content: flex-start;
   flex-direction: column;
   border-right: 1px solid #e6ecf0;
+  width: 265px;
+  @media (max-width: 1005px) {
+    width: 100%;
+    flex-direction: flex-start;
+    border-bottom: 1px solid #e6ecf0;
+    border-right: none;
+  }
+  @media (max-width: 750px) {
+    flex-direction: column;
+  }
 `;
 
 const WrapGrid = styled.div`
   width: 100%;
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  @media (max-width: 750px) {
+    grid-template-columns: repeat(auto-fill, 1fr);
+  }
 `;
 
 const WrapperHistory = styled.div`
@@ -280,6 +390,9 @@ const WrapperHistory = styled.div`
   h2 {
     font-size: 2em;
     padding-bottom: 40px;
+  }
+  @media (max-width: 500px) {
+    padding: 20px;
   }
 `;
 
@@ -300,5 +413,10 @@ const Button = styled.button`
   cursor: pointer;
   box-shadow: 11px 10px 9px -6px rgba(0, 0, 0, 0.12);
   transition: background-color 0.2s ease-in;
+  width: 100%;
+  @media (max-width: 1005px) {
+    margin-top: 15px;
+    width: fit-content;
+  }
 `;
 export default Profile;

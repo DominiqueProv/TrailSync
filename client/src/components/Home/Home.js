@@ -18,6 +18,7 @@ const Home = () => {
           </Link>
         ) : (
           <a href="https://trailsync.herokuapp.com/login">
+            {/* <a href="http://localhost:8888/login"> */}
             <Button>
               Login with Spotify{" "}
               <img

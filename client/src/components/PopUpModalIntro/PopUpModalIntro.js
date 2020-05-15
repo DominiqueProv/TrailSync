@@ -19,16 +19,7 @@ const PopUpModalIntro = ({ open, toggle }) => {
     <WrapperSearch ref={wrapperRef} data-css="Typehead-Wrapper" open={open}>
       <WrapperCenter>
         <h2>Welcome {user.data.display_name}</h2>
-        <p
-          style={{
-            textAlign: "center",
-            paddingTop: "30px",
-            paddingBottom: "30px",
-            fontWeight: "700",
-          }}
-        >
-          Explore the outdoors as you discover new music
-        </p>
+        <h3>Explore the outdoors as you discover new music</h3>
         <Wrapperinfo>
           <div>
             <SearchOutlinedIcon style={{ fontSize: "50px" }} />
@@ -37,8 +28,8 @@ const PopUpModalIntro = ({ open, toggle }) => {
           <div>
             <img src={Vinyl} style={{ width: "50px" }} />
             <p>
-              Then let our djs create an playlist for you. Don't be afraid, you
-              can always customize it to your taste.
+              Let our djs create an playlist for you or customize one to your
+              taste.
             </p>
           </div>
         </Wrapperinfo>
@@ -75,7 +66,7 @@ const WrapperSearch = styled.div`
 `;
 
 const WrapperCenter = styled.div`
-  width: 40%;
+  width: 670px;
   padding: 60px;
   background: white;
   display: flex;
@@ -87,8 +78,30 @@ const WrapperCenter = styled.div`
     font-size: 1.5em;
     padding-bottom: 10px;
   }
+  h3 {
+    text-align: center;
+    padding-top: 30px;
+    padding-bottom: 30px;
+    font-weight: 700;
+  }
   p {
     font-weight: 400;
+    text-align: center;
+  }
+  @media (max-width: 750px) {
+    padding: 30px;
+    width: 80%;
+  }
+  @media (max-width: 500px) {
+    h2 {
+      font-size: 5vw;
+    }
+  }
+  @media (max-width: 375) {
+    h3 {
+      padding-top: 15px;
+      padding-bottom: 15px;
+    }
   }
 `;
 
@@ -111,6 +124,30 @@ const Wrapperinfo = styled.div`
       line-height: 1.5em;
     }
   }
+  @media (max-width: 750px) {
+    flex-direction: column;
+    div {
+      width: 100%;
+      height: auto;
+      p {
+        text-align: left;
+      }
+    }
+  }
+  @media (max-width: 450px) {
+    div {
+      padding: 0px;
+    }
+  }
+  @media (max-width: 375px) {
+    padding-bottom: 15px;
+    div {
+      p {
+        font-size: 0.8em;
+        line-height: 1.4em;
+      }
+    }
+  }
 `;
 const Button = styled.button`
   color: dodgerblue;
@@ -129,6 +166,9 @@ const Button = styled.button`
   cursor: pointer;
   box-shadow: 11px 10px 9px -6px rgba(0, 0, 0, 0.12);
   transition: background-color 0.2s ease-in;
+  @media (max-width: 375px) {
+    margin-top: 15px;
+  }
 `;
 
 export default PopUpModalIntro;

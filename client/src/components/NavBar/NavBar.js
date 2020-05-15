@@ -12,6 +12,7 @@ import ExploreIcon from "@material-ui/icons/Explore";
 import SearchBar from "../SearchBar";
 import Brightness4Icon from "@material-ui/icons/Brightness4";
 import MenuMobile from "../MenuMobile";
+// import {ip} from '../../constants';
 
 const NavBar = () => {
   const history = useHistory();
@@ -54,6 +55,7 @@ const NavBar = () => {
                 currentAppState.isDay === true
                   ? toggleNight(ev)
                   : toggleDay(ev);
+                history.push("/map");
               }}
             />
           </IconNav>
@@ -212,6 +214,11 @@ const ContainerLeft = styled.div`
   h1 {
     padding-left: 15px;
     font-size: 0.8em;
+  }
+  @media (max-width: 850px) {
+    h1 {
+      display: none;
+    }
   }
 `;
 const ContainerRight = styled.div`

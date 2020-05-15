@@ -41,6 +41,11 @@ const Wrapper = styled.div`
       margin-left: 10px;
     }
   }
+  @media (max-width: 450px) {
+    p {
+      width: 200px;
+    }
+  }
 `;
 
 export default Footer;

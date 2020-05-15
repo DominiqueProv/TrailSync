@@ -1,5 +1,4 @@
 import React from "react";
-import { makeStyles } from "@material-ui/core/styles";
 import Dialog from "@material-ui/core/Dialog";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import styled from "styled-components";
@@ -25,13 +24,12 @@ export default function PopUpModalPlaylist({ playlistInfo, toggle, open }) {
           </>
         ) : (
           <WrapperInfo>
-            <div style={{ marginRight: "60px" }}>
+            <WrapperImg>
               <img
                 src={playlistInfo.images[0].url}
                 alt={playlistInfo.description}
-                width={"250px"}
               />
-            </div>
+            </WrapperImg>
             <div>
               <p>
                 Playlist <br />
@@ -65,6 +63,33 @@ const WrapperInfo = styled.div`
       }
     }
   }
+  @media (max-width: 850px) {
+    flex-direction: column;
+  }
+  @media (max-width: 530px) {
+    margin-left: 50px;
+  }
+  @media (max-width: 475px) {
+    margin-left: 100px;
+  }
+  @media (max-width: 400px) {
+    width: 250px;
+    margin-left: 0px;
+    padding: 20px;
+  }
+`;
+
+const WrapperImg = styled.div`
+  margin-right: 60px;
+  img {
+    width: 250px;
+  }
+  @media (max-width: 400px) {
+    margin-right: 0px;
+    img {
+      width: 100%;
+    }
+  }
 `;
 
 const Wrapper = styled.div`
@@ -77,6 +102,12 @@ const Wrapper = styled.div`
     padding-top: 20px;
     width: 400px;
     /* padding-bottom: 30px; */
+  }
+  @media (max-width: 400px) {
+    padding: 30px;
+    p {
+      width: 220px;
+    }
   }
 `;
 
@@ -97,4 +128,7 @@ const Button = styled.button`
   cursor: pointer;
   box-shadow: 11px 10px 9px -6px rgba(0, 0, 0, 0.12);
   transition: background-color 0.2s ease-in;
+  @media (max-width: 400px) {
+    margin-top: 30px;
+  }
 `;
