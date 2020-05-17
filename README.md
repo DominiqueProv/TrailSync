@@ -8,10 +8,12 @@
 <li>Node.js</a></li>
 <li>Express</li>
 <li>MongoDb</li>
-<ul>
+</ul>
 
 ##### Features
-Spotify API
-Sepaq API
-MapBox - GeoJson
+<ul>
+  <li>Spotify API</li>
+  <li>Sepaq API</li>
+  <li>MapBox - GeoJson</li>
+</ul>
 
