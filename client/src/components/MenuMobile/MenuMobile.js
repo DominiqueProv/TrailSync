@@ -28,7 +28,11 @@ const MenuMobile = ({
       <WrapperTopPart>
         <WrapperAvartarClose>
           <div>
-            <Avatar src={user.data.images[0] ? user.data.images[0].url : ""} />
+            {user.data.images[0] ? (
+              <Avatar src={user.data.images[0].url} />
+            ) : (
+              <NoProfilePic>{user.data.display_name.charAt(0)}</NoProfilePic>
+            )}
             <p>{user.data.display_name}</p>
           </div>
           <div>
@@ -149,6 +153,18 @@ const Avatar = styled.img`
   height: 35px;
   border-radius: 50%;
   border: 2px solid white;
+`;
+const NoProfilePic = styled.div`
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background-color: #ebf5ff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-transform: uppercase;
+  font-size: 0.9em;
+  border: 2px solid dodgerblue;
 `;
 const Button = styled.button`
   background: transparent;

@@ -8,8 +8,6 @@ import PopUpModalPlaylist from "../PopUpModalPlaylist";
 import { ip } from "../../constants.js";
 const Create = ({ info, trailName }) => {
   const { Niv_diff, Shape_Leng, Toponyme1 } = info;
-  // console.log(Niv_diff);
-
   const {
     actions: { addNotificationPill },
   } = useContext(CurrentAppContext);
@@ -26,7 +24,6 @@ const Create = ({ info, trailName }) => {
   const [genre, setGenre] = useState({
     seed_genres: null,
     limit: null,
-    seed_genres: null,
     target_acousticness: null,
     target_danceability: null,
     target_energy: null,
@@ -35,7 +32,6 @@ const Create = ({ info, trailName }) => {
   const access_token = localStorage.getItem("tokens");
   const userInfo = JSON.parse(localStorage.getItem("currentUser"));
   const userId = userInfo.data.id;
-  // console.log("<<<<>>>>", userId);
   const TogglePlaylistModal = () => {
     setIsOpen(!isOpen);
   };
@@ -49,18 +45,21 @@ const Create = ({ info, trailName }) => {
         if (acousticness === 1.0) {
           acousticness = Math.trunc(acousticness);
         }
+
         // console.log(acousticness);
         danceability = (Math.random() * (0.3 - 0) + 0).toFixed(1);
         danceability = parseFloat(danceability);
         if (danceability === 0.0) {
           danceability = Math.trunc(danceability);
         }
+
         // console.log(danceability);
         energy = (Math.random() * (0.3 - 0) + 0).toFixed(1);
         energy = parseFloat(energy);
         if (energy === 0.0) {
           energy = Math.trunc(energy);
         }
+
         // console.log(energy);
         tempo = (Math.random() * (0.3 - 0) + 0).toFixed(1);
         tempo = parseFloat(tempo);
@@ -81,11 +80,13 @@ const Create = ({ info, trailName }) => {
           limit = 25;
           qs.limit = limit;
         }
+
         qs.target_tempo = tempo;
         qs.seed_genres = "rock,classical,hiphop,latin,country";
         qs.target_acousticness = acousticness;
         qs.target_energy = energy;
         qs.target_danceability = danceability;
+
         setGenre({
           ...genre,
           ...qs,
@@ -99,18 +100,21 @@ const Create = ({ info, trailName }) => {
         if (acousticness === 1.0) {
           acousticness = Math.trunc(acousticness);
         }
+
         // console.log(acousticness);
         danceability = (Math.random() * (0.3 - 0) + 0).toFixed(1);
         danceability = parseFloat(danceability);
         if (danceability === 0.0) {
           danceability = Math.trunc(danceability);
         }
+
         // console.log(danceability);
         energy = (Math.random() * (0.3 - 0) + 0).toFixed(1);
         energy = parseFloat(energy);
         if (energy === 0.0) {
           energy = Math.trunc(energy);
         }
+
         // console.log(energy);
         tempo = (Math.random() * (0.3 - 0) + 0).toFixed(1);
         tempo = parseFloat(tempo);
@@ -167,7 +171,7 @@ const Create = ({ info, trailName }) => {
           qs.limit = limit;
         }
         qs.target_tempo = tempo;
-        qs.seed_genres = "rock,classical,hiphop,latin,edm";
+        qs.seed_genres = "rock,pop,hiphop,latin,edm";
         qs.target_acousticness = acousticness;
         qs.target_energy = energy;
         qs.target_danceability = danceability;
@@ -246,7 +250,7 @@ const Create = ({ info, trailName }) => {
           qs.limit = limit;
         }
         qs.target_tempo = tempo;
-        qs.seed_genres = "rock,hiphop,rap,edm";
+        qs.seed_genres = "rock,hiphop,latin,edm";
         qs.target_acousticness = acousticness;
         qs.target_energy = energy;
         qs.target_danceability = danceability;
@@ -258,6 +262,7 @@ const Create = ({ info, trailName }) => {
       default:
     }
   }, []);
+
   const createPlaylist = (ev) => {
     ev.preventDefault();
     setIsOpen(true);
@@ -281,11 +286,15 @@ const Create = ({ info, trailName }) => {
     })
       .then((res) => res.json())
       .then((res) => {
+        console.log(res);
         setPlaylistInfo(res);
-        addNotificationPill();
+        if (res.collaborative === false) {
+          addNotificationPill();
+        }
         // console.log(res);
       });
   };
+
   const handleChange = (ev) => {
     setGenre({ ...genre, seed_genres: ev.target.value });
   };
@@ -320,9 +329,7 @@ const Create = ({ info, trailName }) => {
               Playlist setup
             </p>
           </div>
-          <h2 style={{ fontSize: "3vw", marginBottom: "30px" }}>
-            Get creative with Spotify!
-          </h2>
+          <h2 style={{ marginBottom: "30px" }}>Get creative with Spotify!</h2>
 
           <FormSlider onSubmit={(ev) => createPlaylist(ev)}>
             <p
@@ -358,7 +365,6 @@ const Create = ({ info, trailName }) => {
                 <option value="country">Country</option>
                 <option value="pop">Pop</option>
                 <option value="rock">Rock</option>
-                <option value="electropop">Electropop</option>
               </Select>
             </label>
             <p style={{ marginBottom: "20px" }}>Personalize your mood</p>
@@ -530,6 +536,13 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   padding: 20px;
+
+  h2 {
+    font-size: 3vw;
+    @media (max-width: 550px) {
+      font-size: 1.3em;
+    }
+  }
 `;
 const ButtonInput = styled.input`
   color: dodgerblue;

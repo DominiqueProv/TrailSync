@@ -13,6 +13,7 @@ let email;
 let avatar;
 let userId;
 let body;
+let initialNoProfile;
 const Profile = () => {
   const [isDashboard, setIsDashboard] = useState(false);
   const [playlistHistorique, setPlaylistHistorique] = useState(null);
@@ -24,6 +25,8 @@ const Profile = () => {
       userId = JSON.parse(localStorage.getItem("currentUser"));
       body = JSON.stringify({ userId: userId.data.id });
       name = userId.data.display_name;
+      initialNoProfile = name.charAt(0);
+
       email = userId.data.email;
       if (userId.data.images[0]) {
         avatar = userId.data.images[0].url;
@@ -46,7 +49,7 @@ const Profile = () => {
 
         const currentlyPlaying = await res.json();
         setCurrentlyPlaying(currentlyPlaying);
-        console.log(currentlyPlaying);
+        // console.log(currentlyPlaying);
 
         const result = await fetch(`${ip}/getHistorique`, {
           method: "POST",
@@ -77,7 +80,7 @@ const Profile = () => {
 
     const currentlyPlaying = await res.json();
     setCurrentlyPlaying(currentlyPlaying);
-    console.log(currentlyPlaying);
+    // console.log(currentlyPlaying);
   }
 
   // useEffect(() => {
@@ -95,7 +98,7 @@ const Profile = () => {
                   {avatar ? (
                     <img src={avatar} alt="Profile" />
                   ) : (
-                    <div>User face</div>
+                    <NoProfilePic>{initialNoProfile}</NoProfilePic>
                   )}
                 </div>
                 <div>
@@ -119,7 +122,7 @@ const Profile = () => {
                 </div>
               </WrapperUser>
               <CurrentlyPlayingWrap>
-                {currentlyPlaying === `Notting is playing at the moment` ? (
+                {currentlyPlaying === `Nothing is playing at the moment` ? (
                   <div
                     style={{
                       height: "205px",
@@ -156,7 +159,10 @@ const Profile = () => {
                   </CurrentInfoWrapper>
                 )}
 
-                <Button onClick={() => getCurrentlyPlaying()}>
+                <Button
+                  onClick={() => getCurrentlyPlaying()}
+                  style={{ width: "max-content" }}
+                >
                   Currently playing
                 </Button>
               </CurrentlyPlayingWrap>
@@ -214,6 +220,27 @@ const Profile = () => {
   );
 };
 
+const NoProfilePic = styled.div`
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background-color: #ebf5ff;
+  margin-bottom: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-transform: uppercase;
+  font-size: 1.5em;
+  border: 2px solid dodgerblue;
+
+  @media (max-width: 1005px) {
+    width: 60px;
+    height: 60px;
+    margin-right: 25px;
+    font-size: 1em;
+  }
+`;
+
 const CurrentInfoWrapper = styled.div`
   div {
     p {
@@ -262,6 +289,7 @@ const CurrentlyPlayingWrap = styled.div`
 
 const WrapperUser = styled.div`
   padding: 30px;
+  width: 400px;
   img {
     width: 100px;
     height: 100px;
@@ -288,6 +316,7 @@ const WrapperUser = styled.div`
   @media (max-width: 750px) {
     /* div { */
     /* display: flex; */
+    width: 100%;
     flex-direction: row;
     /* } */
     img {
@@ -413,10 +442,10 @@ const Button = styled.button`
   cursor: pointer;
   box-shadow: 11px 10px 9px -6px rgba(0, 0, 0, 0.12);
   transition: background-color 0.2s ease-in;
-  width: 100%;
+  /* width: 100%; */
   @media (max-width: 1005px) {
     margin-top: 15px;
-    width: fit-content;
+    /* width: fit-content; */
   }
 `;
 export default Profile;

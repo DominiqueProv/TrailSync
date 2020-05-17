@@ -118,6 +118,8 @@ const SearchBar = ({ open, toggle }) => {
                             ? "green"
                             : suggestion.diff === "Intermédiaire"
                             ? "yellow"
+                            : suggestion.diff === "Moyen"
+                            ? "yellow"
                             : suggestion.diff === "Difficile"
                             ? "orange"
                             : "red",
@@ -198,6 +200,18 @@ const TypeaheadSuggestions = styled.div`
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   @media (max-width: 1024px) {
     grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  }
+  @media (max-width: 1405px) {
+    height: calc(100vh - 400px);
+    overflow: scroll;
+  }
+  @media (max-width: 900px) {
+    height: calc(100vh - 300px);
+    overflow: scroll;
+  }
+  @media (max-width: 620px) {
+    height: calc(100vh - 280px);
+    overflow: scroll;
   }
 `;
 

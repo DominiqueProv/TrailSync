@@ -22,7 +22,7 @@ let arrId = [];
 
 async function handleGetHistorique(req, res) {
   let userHistorique = req.body.userId;
-  console.log("<<<<<", userHistorique);
+  // console.log("<<<<<", userHistorique);
   // JSON.parse(userHistorique);
   // console.log("<<<<<", userHistorique);
 
@@ -40,7 +40,7 @@ async function handleGetHistorique(req, res) {
       .toArray();
     result
       ? res.status(200).send({ status: 200, result })
-      : res.send("Notting has been created yet");
+      : res.send("Nothing has been created yet");
   } catch (e) {
     console.error(e);
   } finally {
@@ -291,7 +291,7 @@ const handleRefreshToken = () => {
 const handleCreatePlaylist = (req, res) => {
   let token = req.body.token;
   let userId = req.body.userId;
-  console.log(userId);
+  console.log(req.body.qs);
   let name = req.body.name;
   const {
     seed_genres,
@@ -321,6 +321,7 @@ const handleCreatePlaylist = (req, res) => {
   };
   rp(recommendations)
     .then((body) => {
+      console.log("body rec", body);
       arrId = [];
       body.tracks.map((song) => {
         arrId.push(song.uri);
@@ -334,7 +335,7 @@ const handleCreatePlaylist = (req, res) => {
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
-          Authorization: "Bearer " + access_token,
+          Authorization: "Bearer " + token,
         },
         body: {
           name: name,
@@ -355,37 +356,38 @@ const handleCreatePlaylist = (req, res) => {
               uris: `${arrId}`,
             },
             headers: {
-              authorization: "Bearer " + access_token,
+              authorization: "Bearer " + token,
               accept: "application/json",
             },
           };
-          rp(addsongs).then(() => {
-            const getplaylistInfo = {
-              url: `https://api.spotify.com/v1/playlists/${playlist_id}`,
-              headers: {
-                authorization: "Bearer " + access_token,
-                accept: "application/json",
-              },
-              json: true,
-            };
-            rp(getplaylistInfo).then((playlistInfo) => {
-              saveUserPlaylistInfo(playlistInfo);
-              res.send(playlistInfo);
+          rp(addsongs)
+            .then(() => {
+              const getplaylistInfo = {
+                url: `https://api.spotify.com/v1/playlists/${playlist_id}`,
+                headers: {
+                  authorization: "Bearer " + token,
+                  accept: "application/json",
+                },
+                json: true,
+              };
+              return rp(getplaylistInfo).then((playlistInfo) => {
+                saveUserPlaylistInfo(playlistInfo);
+                res.send(playlistInfo);
+              });
+            })
+            .catch((err) => {
+              res
+                // .status(status)
+                .json(
+                  "Oups... Look like our dj can't handle your request, maybe with different settings! "
+                );
             });
-          });
         });
-    })
-    .catch((err) => {
-      let errorMessage = err.error.error.message;
-      if (errorMessage === "Invalid access token") {
-        handleRefreshToken();
-        console.log("log 5", access_token);
-      }
     });
 };
 
 const handleGetPlaying = (req, res) => {
-  let access_token = req.body.access_token;
+  let token = req.body.access_token;
   console.log(access_token);
 
   // console.log(access_token);
@@ -393,7 +395,7 @@ const handleGetPlaying = (req, res) => {
     url: "https://api.spotify.com/v1/me/player/currently-playing",
     method: "GET",
     headers: {
-      authorization: "Bearer " + access_token,
+      authorization: "Bearer " + token,
       accept: "application/json",
     },
   };
@@ -404,7 +406,7 @@ const handleGetPlaying = (req, res) => {
     if (result.length) {
       res.send(result);
     } else {
-      res.json("Notting is playing at the moment");
+      res.json("Nothing is playing at the moment");
     }
   });
 };

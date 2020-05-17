@@ -86,9 +86,6 @@ const Maps = () => {
 
   useEffect(() => {
     const listener = (ev) => {
-      if (ev.key === "Escape") {
-        setSelectedTrail(null);
-      }
       if (ev.mousedown) {
         ev.preventDefault();
         history.push(`/trail/${selectedTrail._id}`);

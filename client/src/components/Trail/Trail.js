@@ -204,6 +204,9 @@ const TrailInfo = styled.div`
   h2 {
     margin-bottom: 30px;
     font-size: 3vw;
+    @media (max-width: 550px) {
+      font-size: 1.3em;
+    }
   }
   h3 {
     margin-bottom: 30px;

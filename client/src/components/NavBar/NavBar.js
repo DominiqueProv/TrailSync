@@ -1,6 +1,5 @@
 import React, { useContext, useState } from "react";
 import styled from "styled-components";
-import LanguageOutlinedIcon from "@material-ui/icons/LanguageOutlined";
 import ExitToAppOutlinedIcon from "@material-ui/icons/ExitToAppOutlined";
 import SearchOutlinedIcon from "@material-ui/icons/SearchOutlined";
 import MenuIcon from "@material-ui/icons/Menu";
@@ -77,10 +76,13 @@ const NavBar = () => {
                   style={{ position: "relative" }}
                 >
                   <Name>{user.data.display_name}</Name>
-                  <Avatar
-                    src={user.data.images[0] ? user.data.images[0].url : ""}
-                    // alt="avatar"
-                  />
+                  {user.data.images[0] ? (
+                    <Avatar src={user.data.images[0].url} alt="avatar" />
+                  ) : (
+                    <NoProfilePic>
+                      {user.data.display_name.charAt(0)}
+                    </NoProfilePic>
+                  )}
                   {currentAppState.isNotification && (
                     <Notification></Notification>
                   )}
@@ -140,6 +142,19 @@ const Name = styled.p`
   font-size: 0.8em;
   font-weight: 400;
   padding-right: 15px;
+`;
+
+const NoProfilePic = styled.div`
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background-color: #ebf5ff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-transform: uppercase;
+  font-size: 0.9em;
+  border: 2px solid dodgerblue;
 `;
 
 const Avatar = styled.img`
@@ -235,6 +250,7 @@ const Notification = styled.div`
   position: absolute;
   background-color: red;
   border-radius: 50%;
+  border: 2px solid white;
   color: white;
   font-size: 0.7em;
   height: 12px;

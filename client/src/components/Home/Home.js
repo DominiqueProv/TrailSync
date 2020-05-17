@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import SpotifyLogo from "../../assets/spotify-red.png";
 const Home = () => {
   let loggedIn = window.localStorage.getItem("isLoggedIn");
-  console.log(loggedIn);
+  // console.log(loggedIn);
 
   return (
     <>

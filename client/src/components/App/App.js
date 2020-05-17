@@ -10,6 +10,7 @@ import Init from "../Init";
 import Maps from "../Maps";
 import Profile from "../Profile";
 import PopUpModalIntro from "../PopUpModalIntro";
+import ScrollToTop from "../../ScrollToTop";
 function App() {
   const { currentAppState } = useContext(CurrentAppContext);
   let isLoggedIn;
@@ -29,6 +30,7 @@ function App() {
   return (
     <Router>
       <GlobalStyles />
+      <ScrollToTop />
       {isLoggedIn === true && <NavBar />}
       {isFirstVisit && <PopUpModalIntro open={open} toggle={toggle} />}
       <Switch>
