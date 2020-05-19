@@ -14,6 +14,7 @@
 <ul>
   <li>Spotify API</li>
   <li>Sepaq API</li>
-  <li>MapBox - GeoJson</li>
+  <li>MapBox API - GeoJson</li>
+  <li>Material-UI API</li>
 </ul>
 
