@@ -13,7 +13,13 @@
 <li>MongoDb</li>
 </ul>
 
-#####
+##### Setup
+
+<ul>
+<li>yarn install</li>
+<li>yarn start /client</li>
+<li>yarn start /server</li>
+</ul>
 
 ##### Features
 
