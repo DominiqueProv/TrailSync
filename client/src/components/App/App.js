@@ -1,16 +1,17 @@
 import React, { useContext, useState } from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import Home from "../Home";
-import Create from "../Create";
-import GlobalStyles from "../GlobalStyles";
-import Trail from "../Trail";
+
 import { CurrentAppContext } from "../contexts/Trails.context";
+import GlobalStyles from "../GlobalStyles";
+import Home from "../Home";
+import Trail from "../Trail";
 import NavBar from "../NavBar";
 import Init from "../Init";
 import Maps from "../Maps";
 import Profile from "../Profile";
 import PopUpModalIntro from "../PopUpModalIntro";
 import ScrollToTop from "../../ScrollToTop";
+
 function App() {
   const { currentAppState } = useContext(CurrentAppContext);
   let isLoggedIn;

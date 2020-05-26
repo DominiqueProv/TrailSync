@@ -1,11 +1,13 @@
 import React, { useEffect, useContext, useState } from "react";
-import { CurrentAppContext } from "../contexts/Trails.context";
 import _ from "lodash";
 import styled from "styled-components";
 import { withStyles } from "@material-ui/core/styles";
 import Slider from "@material-ui/core/Slider";
+
+import { CurrentAppContext } from "../contexts/Trails.context";
 import PopUpModalPlaylist from "../PopUpModalPlaylist";
 import { ip } from "../../constants.js";
+
 const Create = ({ info, trailName }) => {
   const { Niv_diff, Shape_Leng, Toponyme1 } = info;
   const {
@@ -45,28 +47,21 @@ const Create = ({ info, trailName }) => {
         if (acousticness === 1.0) {
           acousticness = Math.trunc(acousticness);
         }
-
-        // console.log(acousticness);
         danceability = (Math.random() * (0.3 - 0) + 0).toFixed(1);
         danceability = parseFloat(danceability);
         if (danceability === 0.0) {
           danceability = Math.trunc(danceability);
         }
-
-        // console.log(danceability);
         energy = (Math.random() * (0.3 - 0) + 0).toFixed(1);
         energy = parseFloat(energy);
         if (energy === 0.0) {
           energy = Math.trunc(energy);
         }
-
-        // console.log(energy);
         tempo = (Math.random() * (0.3 - 0) + 0).toFixed(1);
         tempo = parseFloat(tempo);
         if (tempo === 0.0) {
           tempo = Math.trunc(tempo);
         }
-
         if (songLength > 0 && songLength < 500) {
           limit = 10;
           qs.limit = limit;
@@ -80,18 +75,15 @@ const Create = ({ info, trailName }) => {
           limit = 25;
           qs.limit = limit;
         }
-
         qs.target_tempo = tempo;
         qs.seed_genres = "rock,classical,hiphop,latin,country";
         qs.target_acousticness = acousticness;
         qs.target_energy = energy;
         qs.target_danceability = danceability;
-
         setGenre({
           ...genre,
           ...qs,
         });
-
         break;
 
       case "Moyen":
@@ -100,28 +92,21 @@ const Create = ({ info, trailName }) => {
         if (acousticness === 1.0) {
           acousticness = Math.trunc(acousticness);
         }
-
-        // console.log(acousticness);
         danceability = (Math.random() * (0.3 - 0) + 0).toFixed(1);
         danceability = parseFloat(danceability);
         if (danceability === 0.0) {
           danceability = Math.trunc(danceability);
         }
-
-        // console.log(danceability);
         energy = (Math.random() * (0.3 - 0) + 0).toFixed(1);
         energy = parseFloat(energy);
         if (energy === 0.0) {
           energy = Math.trunc(energy);
         }
-
-        // console.log(energy);
         tempo = (Math.random() * (0.3 - 0) + 0).toFixed(1);
         tempo = parseFloat(tempo);
         if (tempo === 0.0) {
           tempo = Math.trunc(tempo);
         }
-
         if (songLength > 0 && songLength < 500) {
           limit = 10;
           qs.limit = limit;
@@ -144,8 +129,8 @@ const Create = ({ info, trailName }) => {
           ...genre,
           ...qs,
         });
-
         break;
+
       case "Intermédiaire":
         acousticness = (Math.random() * (0.7 - 0.4) + 0.4).toFixed(1);
         acousticness = parseFloat(acousticness);
@@ -157,7 +142,6 @@ const Create = ({ info, trailName }) => {
         tempo = parseFloat(tempo);
         if (songLength > 0 && songLength < 500) {
           limit = 10;
-          // console.log(limit);
           qs.limit = limit;
         } else if (songLength > 500 && songLength < 2000) {
           limit = 15;
@@ -180,6 +164,7 @@ const Create = ({ info, trailName }) => {
           ...qs,
         });
         break;
+
       case "Difficile":
         acousticness = (Math.random() * (0.3 - 0.1) + 0.1).toFixed(1);
         acousticness = parseFloat(acousticness);
@@ -286,12 +271,10 @@ const Create = ({ info, trailName }) => {
     })
       .then((res) => res.json())
       .then((res) => {
-        console.log(res);
         setPlaylistInfo(res);
         if (res.collaborative === false) {
           addNotificationPill();
         }
-        // console.log(res);
       });
   };
 
@@ -330,7 +313,6 @@ const Create = ({ info, trailName }) => {
             </p>
           </div>
           <h2 style={{ marginBottom: "30px" }}>Get creative with Spotify!</h2>
-
           <FormSlider onSubmit={(ev) => createPlaylist(ev)}>
             <p
               style={{
@@ -440,7 +422,6 @@ const Create = ({ info, trailName }) => {
                 });
               }}
             />
-
             <p
               style={{
                 fontWeight: "400",
@@ -502,6 +483,35 @@ const FormSlider = styled.form`
   }
 `;
 
+const Wrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+
+  h2 {
+    font-size: 3vw;
+    @media (max-width: 550px) {
+      font-size: 1.3em;
+    }
+  }
+`;
+const ButtonInput = styled.input`
+  color: dodgerblue;
+  display: flex;
+  align-items: center;
+  background-color: white;
+  padding: 10px 30px 10px 25px;
+  border-radius: 30px;
+  border: 1px solid #ff0000;
+  margin-top: 40px;
+  font-size: 1em;
+  font-weight: 700;
+  outline: none;
+  cursor: pointer;
+  box-shadow: 11px 10px 9px -6px rgba(0, 0, 0, 0.12);
+  transition: background-color 0.2s ease-in;
+`;
+
 const PrettoSlider = withStyles({
   root: {
     color: "red",
@@ -531,34 +541,5 @@ const PrettoSlider = withStyles({
     borderRadius: 4,
   },
 })(Slider);
-
-const Wrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  padding: 20px;
-
-  h2 {
-    font-size: 3vw;
-    @media (max-width: 550px) {
-      font-size: 1.3em;
-    }
-  }
-`;
-const ButtonInput = styled.input`
-  color: dodgerblue;
-  display: flex;
-  align-items: center;
-  background-color: white;
-  padding: 10px 30px 10px 25px;
-  border-radius: 30px;
-  border: 1px solid #ff0000;
-  margin-top: 40px;
-  font-size: 1em;
-  font-weight: 700;
-  outline: none;
-  cursor: pointer;
-  box-shadow: 11px 10px 9px -6px rgba(0, 0, 0, 0.12);
-  transition: background-color 0.2s ease-in;
-`;
 
 export default Create;

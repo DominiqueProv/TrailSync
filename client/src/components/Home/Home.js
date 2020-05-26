@@ -1,11 +1,12 @@
 import React from "react";
 import styled from "styled-components";
-import { ReactComponent as Logo } from "../../assets/trailSync.svg";
 import { Link } from "react-router-dom";
+
+import { ReactComponent as Logo } from "../../assets/trailSync.svg";
 import SpotifyLogo from "../../assets/spotify-red.png";
+
 const Home = () => {
   let loggedIn = window.localStorage.getItem("isLoggedIn");
-  // console.log(loggedIn);
 
   return (
     <>
@@ -18,7 +19,7 @@ const Home = () => {
           </Link>
         ) : (
           <a href="https://trailsync.herokuapp.com/login">
-            {/* <a href="http://localhost:8888/login"> */}
+            {/* // <a href="http://localhost:8888/login"> */}
             <Button>
               Login with Spotify{" "}
               <img

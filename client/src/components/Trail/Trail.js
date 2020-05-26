@@ -1,26 +1,16 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import dotenv from "dotenv";
 import styled from "styled-components";
-import Create from "../Create";
 import "mapbox-gl/dist/mapbox-gl.css";
 import CircularProgress from "@material-ui/core/CircularProgress";
-import { ReactComponent as Logo } from "../../assets/logo_sepaq.svg";
+import ReactMapGL, { Source, Layer } from "@urbica/react-map-gl";
+
 import Footer from "../Footer";
 import { ip } from "../../constants";
-import ReactMapGL, {
-  Marker,
-  FullscreenControl,
-  // GeolocateControl,
-  Source,
-  Layer,
-  // SVGOverlay,
-  // HTMLOverlay,
-  NavigationControl,
-  // LinearInterpolator,
-  // CanvasOverlay,
-  Popup,
-} from "@urbica/react-map-gl";
+import Create from "../Create";
+import { ReactComponent as Logo } from "../../assets/logo_sepaq.svg";
+
 dotenv.config();
 
 const Trail = () => {
@@ -175,12 +165,10 @@ const DetailWrapper = styled.div`
     margin-bottom: 15px;
   }
 `;
-
 const BrandImage = styled(Logo)`
   width: 150px;
   text-align: right;
 `;
-
 const MainWrapper = styled.div`
   width: 100%;
   min-height: calc(100vh - 110px);
@@ -189,7 +177,6 @@ const MainWrapper = styled.div`
     flex-direction: column;
   }
 `;
-
 const Wrapper = styled.div`
   width: 100%;
   height: 100vh;
@@ -197,7 +184,6 @@ const Wrapper = styled.div`
   justify-content: center;
   align-items: center;
 `;
-
 const TrailInfo = styled.div`
   width: 50%;
   padding: 60px;
@@ -218,7 +204,6 @@ const TrailInfo = styled.div`
     padding: 30px;
   }
 `;
-
 const SpotifyInfo = styled.div`
   width: 50%;
   background: #f4f4f4;

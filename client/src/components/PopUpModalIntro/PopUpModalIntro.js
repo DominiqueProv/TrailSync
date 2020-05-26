@@ -1,19 +1,18 @@
 import React, { useRef, useContext } from "react";
-import { CurrentAppContext } from "../contexts/Trails.context";
 import styled from "styled-components";
-import { useHistory } from "react-router-dom";
 import SearchOutlinedIcon from "@material-ui/icons/SearchOutlined";
+
 import Vinyl from "../../assets/711.gif";
+import { CurrentAppContext } from "../contexts/Trails.context";
 
 const PopUpModalIntro = ({ open, toggle }) => {
   const { currentAppState } = useContext(CurrentAppContext);
+  const wrapperRef = useRef(null);
   let user;
 
   if (currentAppState.storage || localStorage.getItem("currentUser")) {
     user = JSON.parse(localStorage.getItem("currentUser"));
   }
-
-  const wrapperRef = useRef(null);
 
   return (
     <WrapperSearch ref={wrapperRef} data-css="Typehead-Wrapper" open={open}>
@@ -54,7 +53,6 @@ const WrapperSearch = styled.div`
   justify-content: center;
   align-items: center;
   display: none;
-  /* background-color: rgb(0, 0, 0); */
   background-color: rgba(0, 0, 0, 0.5);
   transition: ease-in-out 0.8s all;
   @media (max-width: 750px) {

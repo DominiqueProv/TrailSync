@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
 import dotenv from "dotenv";
-import { CurrentAppContext } from "../contexts/Trails.context";
 import styled from "styled-components";
 import { useHistory } from "react-router-dom";
 import "mapbox-gl/dist/mapbox-gl.css";
@@ -8,24 +7,24 @@ import Cluster from "@urbica/react-map-gl-cluster";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import DirectionsBikeIcon from "@material-ui/icons/DirectionsBike";
 import DirectionsWalkIcon from "@material-ui/icons/DirectionsWalk";
-import Footer from "../Footer";
-import { ip } from "../../constants";
 import ReactMapGL, {
   Marker,
   FullscreenControl,
   Source,
   Layer,
   NavigationControl,
+  GeolocateControl,
   Popup,
 } from "@urbica/react-map-gl";
+
+import { CurrentAppContext } from "../contexts/Trails.context";
+import Footer from "../Footer";
+import { ip } from "../../constants";
+
 dotenv.config();
 
 const Maps = () => {
-  const {
-    currentAppState,
-    actions: { popUpModalIntro },
-  } = useContext(CurrentAppContext);
-
+  const { currentAppState } = useContext(CurrentAppContext);
   let trails;
   let history = useHistory();
 
@@ -80,7 +79,6 @@ const Maps = () => {
     longitude: -69.539082,
     zoom: 6,
   });
-
   const [selectedTrail, setSelectedTrail] = useState(null);
   const [trailGeoData, setTrailGeoData] = useState(null);
 
@@ -121,8 +119,13 @@ const Maps = () => {
           <WrapperControle>
             <FullScreenCtl data-css="FullscreenControl" />
             <NavCtl data-css="NavigationControl" showCompass showZoom />
+            <GeolocateControl
+              position="top-right"
+              showUserLocation={true}
+              fitBoundsOptions={{ maxZoom: 10 }}
+              trackUserLocation={true}
+            />
           </WrapperControle>
-
           <>
             <Cluster
               radius={40}
@@ -294,24 +297,9 @@ const style = {
   boxShadow: "11px 10px 9px -6px rgba(0,0,0,0.12)",
 };
 
-const WrapperControle = styled.div`
-  /* position: absolute; */
-  /* top: 25px;
-  right: 25px;
-  display: flex;
-  flex-direction: column; */
-`;
-const FullScreenCtl = styled(FullscreenControl)`
-  /* display: block;
-  width: 30px; */
-  /* margin-bottom: 10px; */
-`;
-
-const NavCtl = styled(NavigationControl)`
-  /* display: block;
-  width: 30px; */
-`;
-
+const WrapperControle = styled.div``;
+const FullScreenCtl = styled(FullscreenControl)``;
+const NavCtl = styled(NavigationControl)``;
 const ButtonPin = styled.button`
   background: #fff;
   border: 1px solid #ff0000;
@@ -324,7 +312,6 @@ const ButtonPin = styled.button`
   justify-content: center;
   align-items: center;
 `;
-
 const WrapperPopUp = styled(Popup)``;
 
 const Button = styled.button`

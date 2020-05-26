@@ -25,6 +25,7 @@ app
   .use(express.json())
   .use(cors())
   .use(cookieParser())
+
   .get("/trails", handleTrailsData)
   .post("/getUserInfo", handleUserInfo)
   .get("/login", handleLogin)

@@ -1,13 +1,13 @@
-import React, { useState, useRef, useEffect, useContext } from "react";
-import { CurrentAppContext } from "../contexts/Trails.context";
+import React, { useRef, useContext } from "react";
 import styled from "styled-components";
-import { useHistory, useParams } from "react-router-dom";
-import { Link } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import ExploreIcon from "@material-ui/icons/Explore";
 import Brightness4Icon from "@material-ui/icons/Brightness4";
 import AccountCircleOutlinedIcon from "@material-ui/icons/AccountCircleOutlined";
 import ExitToAppOutlinedIcon from "@material-ui/icons/ExitToAppOutlined";
 import SearchOutlinedIcon from "@material-ui/icons/SearchOutlined";
+
+import { CurrentAppContext } from "../contexts/Trails.context";
 
 const MenuMobile = ({
   open,
@@ -212,7 +212,6 @@ const Notification = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  /* position: absolute; */
   background-color: red;
   border-radius: 50%;
   color: white;

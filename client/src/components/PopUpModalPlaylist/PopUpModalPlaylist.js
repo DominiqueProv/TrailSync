@@ -5,8 +5,6 @@ import styled from "styled-components";
 import MusicOffOutlinedIcon from "@material-ui/icons/MusicOffOutlined";
 
 export default function PopUpModalPlaylist({ playlistInfo, toggle, open }) {
-  // console.log(playlistInfo, typeof playlistInfo);
-
   return (
     <Dialog
       maxWidth={"md"}

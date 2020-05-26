@@ -9,9 +9,7 @@ const Footer = () => {
       </div>
       <div>
         <i className="fab fa-twitter" style={{ paddingLeft: "20px" }}></i>
-
         <i className="fab fa-facebook"></i>
-
         <i className="fas fa-share-alt-square"></i>
       </div>
     </Wrapper>

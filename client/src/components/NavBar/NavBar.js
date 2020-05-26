@@ -1,17 +1,17 @@
 import React, { useContext, useState } from "react";
+import { useHistory } from "react-router-dom";
 import styled from "styled-components";
+import { Link } from "react-router-dom";
 import ExitToAppOutlinedIcon from "@material-ui/icons/ExitToAppOutlined";
 import SearchOutlinedIcon from "@material-ui/icons/SearchOutlined";
+import Brightness4Icon from "@material-ui/icons/Brightness4";
 import MenuIcon from "@material-ui/icons/Menu";
-import { Link } from "react-router-dom";
+import ExploreIcon from "@material-ui/icons/Explore";
+
 import { CurrentAppContext } from "../contexts/Trails.context";
 import { ReactComponent as Logo } from "../../assets/trailSync-hor-05.svg";
-import { useHistory } from "react-router-dom";
-import ExploreIcon from "@material-ui/icons/Explore";
 import SearchBar from "../SearchBar";
-import Brightness4Icon from "@material-ui/icons/Brightness4";
 import MenuMobile from "../MenuMobile";
-// import {ip} from '../../constants';
 
 const NavBar = () => {
   const history = useHistory();
@@ -25,7 +25,6 @@ const NavBar = () => {
   const ToggleModal = () => {
     setSearchModalOpenFlag(!searchModalOpenFlag);
   };
-
   const ToggleMenuDisplay = () => {
     setMobileMenuOpen(!mobileMenuOpen);
   };

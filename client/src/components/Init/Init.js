@@ -1,10 +1,11 @@
 import React, { useEffect, useContext } from "react";
-import { CurrentAppContext } from "../contexts/Trails.context";
 import { Redirect } from "react-router-dom";
-import CircularProgress from "@material-ui/core/CircularProgress";
 import styled from "styled-components";
-import { ip } from "../../constants";
 import queryString from "query-string";
+
+import { CurrentAppContext } from "../contexts/Trails.context";
+import CircularProgress from "@material-ui/core/CircularProgress";
+import { ip } from "../../constants";
 
 const Init = () => {
   const {
@@ -43,23 +44,23 @@ const Init = () => {
 
   async function handleSetData() {
     try {
-      await window.localStorage.setItem(
+      window.localStorage.setItem(
         "currentUser",
         JSON.stringify(currentAppState.currentUser)
       );
-      await window.localStorage.setItem(
+      window.localStorage.setItem(
         "isLoggedIn",
         JSON.stringify(currentAppState.isLoggedIn)
       );
-      await window.localStorage.setItem(
+      window.localStorage.setItem(
         "trails",
         JSON.stringify(currentAppState.trails)
       );
-      await window.localStorage.setItem(
+      window.localStorage.setItem(
         "storage",
         JSON.stringify(currentAppState.storage)
       );
-      await window.localStorage.setItem(
+      window.localStorage.setItem(
         "firstVisit",
         JSON.stringify(currentAppState.fistVisit)
       );

@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useContext } from "react";
 import styled from "styled-components";
-import { CurrentAppContext } from "../contexts/Trails.context";
 import CircularProgress from "@material-ui/core/CircularProgress";
-import { Link } from "react-router-dom";
 import Iframe from "react-iframe";
-import Footer from "../Footer";
 import PlaylistAddIcon from "@material-ui/icons/PlaylistAdd";
+
+import { CurrentAppContext } from "../contexts/Trails.context";
+import Footer from "../Footer";
 import { ip } from "../../constants";
 
 let name;
@@ -14,6 +14,7 @@ let avatar;
 let userId;
 let body;
 let initialNoProfile;
+
 const Profile = () => {
   const [isDashboard, setIsDashboard] = useState(false);
   const [playlistHistorique, setPlaylistHistorique] = useState(null);
@@ -31,7 +32,6 @@ const Profile = () => {
       if (userId.data.images[0]) {
         avatar = userId.data.images[0].url;
       }
-      // getCurrentlyPlaying();
       loadHistorique(body);
     }
 
@@ -49,7 +49,6 @@ const Profile = () => {
 
         const currentlyPlaying = await res.json();
         setCurrentlyPlaying(currentlyPlaying);
-        // console.log(currentlyPlaying);
 
         const result = await fetch(`${ip}/getHistorique`, {
           method: "POST",
@@ -80,12 +79,7 @@ const Profile = () => {
 
     const currentlyPlaying = await res.json();
     setCurrentlyPlaying(currentlyPlaying);
-    // console.log(currentlyPlaying);
   }
-
-  // useEffect(() => {
-  //   getCurrentlyPlaying();
-  // }, []);
 
   return (
     <>
@@ -178,28 +172,30 @@ const Profile = () => {
                 <h2>Playlist created</h2>
                 {playlistHistorique !== null && playlistHistorique !== [] ? (
                   <WrapGrid>
-                    {playlistHistorique.result.map((playlist) => (
-                      <PlayListInfoWrapper>
-                        <div>
-                          <img
-                            src={playlist.playlistInfo.images[1].url}
-                            alt={playlist.playlistInfo.decription}
-                          />
-                          <h3>{playlist.playlistInfo.name}</h3>
-                          <div
-                            style={{
-                              display: "flex",
-                              justifyContent: "space-between",
-                              width: "200px",
-                              alignItems: "flex-end",
-                            }}
-                          >
-                            <p>{playlist.playlistInfo.tracks.total} tracks</p>
-                            <PlaylistAddIcon />
+                    {playlistHistorique.result
+                      .map((playlist) => (
+                        <PlayListInfoWrapper>
+                          <div>
+                            <img
+                              src={playlist.playlistInfo.images[1].url}
+                              alt={playlist.playlistInfo.decription}
+                            />
+                            <h3>{playlist.playlistInfo.name}</h3>
+                            <div
+                              style={{
+                                display: "flex",
+                                justifyContent: "space-between",
+                                width: "200px",
+                                alignItems: "flex-end",
+                              }}
+                            >
+                              <p>{playlist.playlistInfo.tracks.total} tracks</p>
+                              <PlaylistAddIcon />
+                            </div>
                           </div>
-                        </div>
-                      </PlayListInfoWrapper>
-                    ))}
+                        </PlayListInfoWrapper>
+                      ))
+                      .reverse()}
                   </WrapGrid>
                 ) : (
                   <div></div>

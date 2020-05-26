@@ -1,8 +1,9 @@
 import React, { useState, useRef, useEffect, useContext } from "react";
-import { CurrentAppContext } from "../contexts/Trails.context";
 import styled from "styled-components";
 import { useHistory } from "react-router-dom";
 import RoomOutlinedIcon from "@material-ui/icons/RoomOutlined";
+
+import { CurrentAppContext } from "../contexts/Trails.context";
 
 const SearchBar = ({ open, toggle }) => {
   const MAX_NUMBER_OF_SUGGESTIONS = 8;
@@ -36,9 +37,6 @@ const SearchBar = ({ open, toggle }) => {
 
   const handleClickOnItemInSuggestionDropdown = (ev, suggestion) => {
     ev.preventDefault();
-    // console.log(typeof suggestion.id);
-    // let trailNum = suggestion.id.toString();
-    // console.log(typeof trailNum);
     history.push(`/trail/${suggestion.id}`);
     toggle();
     window.location.reload(true);
