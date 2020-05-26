@@ -1,9 +1,8 @@
 # TrailSync
 
-## Create custom playlist with Spotify based on your hike selection
+## Create custom playlist on your device with Spotify API based on your trail selection
 
-![TrailSync UI](../client/src/assets/TrailSync-UI.jpg)
-Format: ![Alt Text](url)
+![TrailSync UI](/client/src/assets/TrailSync-UI.jpg)
 
 ##### Built with
 
@@ -13,6 +12,8 @@ Format: ![Alt Text](url)
 <li>Express</li>
 <li>MongoDb</li>
 </ul>
+
+#####
 
 ##### Features
 
